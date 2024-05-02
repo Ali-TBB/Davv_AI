@@ -54,5 +54,13 @@
     {
         "role": "model",
         "parts": ["OK."]
+    },
+    {
+        "role": "user",
+        "parts": ["Please send the code without any error handling mechanisms such as try-except blocks or raise statements. The code should be sent as-is without any additional error checking. If you understand, say 'OK'."]
+    },
+    {
+        "role": "model",
+        "parts": ["OK."]
     }
 ]

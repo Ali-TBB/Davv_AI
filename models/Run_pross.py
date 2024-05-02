@@ -56,6 +56,7 @@ class Run_pross(BaseModel):
         return obj_dict
 
 
+"""
 while True:
     prompt = input(">>")
     if prompt == "exit":
@@ -68,3 +69,4 @@ while True:
         op = Run_pross(prompt, "command.py")
         op.Start()
         op.Run()
+"""

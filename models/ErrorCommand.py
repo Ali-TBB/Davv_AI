@@ -1,10 +1,4 @@
+import subprocess
 
-import os
-
-# Define the desired output path
-output_path = '/home/user/videos'  # Or any other path where you have write permissions
-
-# Create the directory with appropriate permissions
-os.makedirs(output_path, exist_ok=True)
-
-# Now you should be able to download videos to the specified path
+# Ensure 'code' is in the PATH or provide the full path 
+subprocess.run(['code', '--help'])  # Replace with your actual command
