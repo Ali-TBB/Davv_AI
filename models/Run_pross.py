@@ -7,7 +7,7 @@ import subprocess
 
 class Run_pross(BaseModel):
     def __init__(self, value, *args, **kwargs):
-        super().__init__("dataset/Run_pross.json", value, *args, **kwargs)
+        super().__init__("data.json", value, *args, **kwargs)
         self.number = kwargs.get("number", 1)
         self.is_problem = kwargs.get("is_problem", False)
         self.issue_name = kwargs.get("issue_name", None)
@@ -18,18 +18,28 @@ class Run_pross(BaseModel):
     def Error(self, issue):
         issue = f"#error {issue}"
         Fixer = FixError(issue)
+        Fixer.Start()
+        Fixer.Run()
         #re run the command
         self.Run()
 
     def Run(self):
+        print("Operation is runing ...")
         try:
-            # Read the command from the specified file
-            with open("command.py", "r") as file:
-                command_content = file.read().strip()
             # Execute the command using subprocess
-            subprocess.run(["python", "command.py"])
+            result = subprocess.run(["python", "command.py"], capture_output=True)
+            # Check the return code of the subprocess
+            if result.returncode != 0:
+                print(f"Command execution failed with return code {result.returncode}")
+                # If there is an error, pass it to the Error method
+                self.Error(result.stderr.decode("utf-8"))
+            else:
+                # Print the output of the executed script
+                RED = '\033[91m'
+                RESET = '\033[0m'
+                print("Output:\n", RED + result.stdout.decode("utf-8") + RESET)
         except Exception as e:
-            print(f"An error occurred while running the command: {e}")
+            print(f"on run An error occurred while running the command: {e}")
             # Pass the error to the Error method
             self.Error(str(e))
 
