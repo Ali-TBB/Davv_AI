@@ -18,13 +18,13 @@ DevDynamo interprets natural language commands and converts them into Python cod
 To install DevDynamo, follow these steps:
 
 1. **Clone the Repository**:
-bash```\ngit colne https://github.com/Ali-TBB/DevDynamo_AI.git\n```
+```bash\ngit colne https://github.com/Ali-TBB/DevDynamo_AI.git\n```
 
 2. **Navigate to the Project Directory**:
-bash```\ncd  DevDynamo_AI\n```
+```bash\ncd  DevDynamo_AI\n```
 
 2. **Install Dependencies**:
-bash```\npip install -r requirements.txt\n```
+```bash\npip install -r requirements.txt\n```
 
 3. **Setup Gemini AI API**:
 - Sign up for a Gemini AI API account and obtain your API key.
@@ -34,7 +34,7 @@ bash```\npip install -r requirements.txt\n```
 - Alternatively, you can enter your API key when prompted after running the program.
 
 4. **Run DevDynamo**:
-bash```\nsudo ./DevDynamo/n```
+```bash\nsudo ./DevDynamo/n```
 
 ## Future Development
 
