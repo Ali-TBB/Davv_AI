@@ -1,6 +1,3 @@
 uuid
-json
 shlex
-cmd
-google
-os
+google-generativeai
