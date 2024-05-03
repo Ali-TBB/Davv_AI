@@ -21,11 +21,17 @@ To install DevDynamo, follow these steps:
 ```bash\ngit colne https://github.com/Ali-TBB/DevDynamo_AI.git\n```
 
 2. **Navigate to the Project Directory**:
-```bash\ncd  DevDynamo_AI\n```
+```
+cd  DevDynamo_AI
+
+```
 
 2. **Install Dependencies**:
 
-```bash\npip install -r requirements.txt\n```
+```
+pip install -r requirements.txt
+
+```
 
 3. **Setup Gemini AI API**:
 - Sign up for a Gemini AI API account and obtain your API key.
