@@ -3,7 +3,8 @@ import os
 import google.generativeai as genai
 from FileHistory import ChatHistoryHandler
 
-genai.configure(api_key="AIzaSyCudvWsPkoKlcP2YUH4t3oup2K3dnyMob8")
+def configure_api_key(api_key):
+    genai.configure(api_key=api_key)
 
 generation_config = {
     "temperature": 1,
@@ -65,3 +66,4 @@ class BaseModel():
             history_handler.save_history()
 
         self.Split_output(outputme)
+
