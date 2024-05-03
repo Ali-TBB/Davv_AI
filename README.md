@@ -41,7 +41,9 @@ pip install -r requirements.txt
 - Alternatively, you can enter your API key when prompted after running the program.
 
 4. **Run DevDynamo**:
-```bash\nsudo ./DevDynamo/n```
+```
+sudo ./DevDynamo
+```
 
 ## Future Development
 
