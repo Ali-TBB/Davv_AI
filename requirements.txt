@@ -1,0 +1,6 @@
+uuid
+json
+shlex
+cmd
+google
+os
