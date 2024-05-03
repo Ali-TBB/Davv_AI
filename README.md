@@ -24,6 +24,7 @@ To install DevDynamo, follow these steps:
 ```bash\ncd  DevDynamo_AI\n```
 
 2. **Install Dependencies**:
+
 ```bash\npip install -r requirements.txt\n```
 
 3. **Setup Gemini AI API**:
