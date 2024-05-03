@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-'''module Run_pross'''
+'''module Run_process'''
 import uuid
 from BaseModel import BaseModel
 from FixError import FixError
 import subprocess
 
-class Run_pross(BaseModel):
+class Run_process(BaseModel):
     def __init__(self, value, *args, **kwargs):
         super().__init__("dataset/data.json", value, *args, **kwargs)
         self.number = kwargs.get("number", 1)
@@ -66,7 +66,7 @@ while True:
     elif prompt == "":
         print()
     else:
-        op = Run_pross(prompt, "command.py")
+        op = Run_process(prompt, "command.py")
         op.Start()
         op.Run()
 """

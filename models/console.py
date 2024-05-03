@@ -2,7 +2,7 @@ import cmd
 import shlex
 import os
 from BaseModel import configure_api_key
-from Run_pross import Run_pross
+from Run_process import Run_process
 
 class AICommand(cmd.Cmd):
     """ AI command prompt to access models data """
@@ -11,6 +11,7 @@ class AICommand(cmd.Cmd):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.current_dir = os.path.dirname(os.path.abspath(__file__))
+        self.dataset_dir = os.path.join(self.current_dir, "dataset")
         self.api_key_file = os.path.join(self.current_dir, "dataset/API_KEY")
         self.configure_api_key()
 
@@ -70,12 +71,34 @@ class AICommand(cmd.Cmd):
             if tokens[0] == "-H":
                 printHistory()
 
+    def replace_files(self):
+        try:
+            # Replace data.json
+            with open(os.path.join(self.dataset_dir, "Run_process.json"), 'r') as src_file:
+                data = src_file.read()
+                with open(os.path.join(self.dataset_dir, "data.json"), 'w') as dest_file:
+                    dest_file.write(data)
+
+            # Replace datafix.json
+            with open(os.path.join(self.dataset_dir, "FixError.json"), 'r') as src_file:
+                data = src_file.read()
+                with open(os.path.join(self.dataset_dir, "datafix.json"), 'w') as dest_file:
+                    dest_file.write(data)
+
+            print("New dataset created.")
+        except Exception as e:
+            print(f"An error occurred while replacing files: {e}")
+
     def default(self, arg):
         """ handle new ways of inputting data """
         # Assuming "prompt" is the command to execute
-        op = Run_pross(arg, "command.py")
-        op.Start()
-        op.Run()
+        if arg.strip() == "#new":
+            self.replace_files()
+        else:
+            # Assuming "prompt" is the command to execute
+            op = Run_process(arg, "command.py")
+            op.Start()
+            op.Run()
 
 if __name__ == '__main__':
     AICommand().cmdloop()
