@@ -7,7 +7,7 @@ import subprocess
 
 class Run_pross(BaseModel):
     def __init__(self, value, *args, **kwargs):
-        super().__init__("data.json", value, *args, **kwargs)
+        super().__init__("dataset/data.json", value, *args, **kwargs)
         self.number = kwargs.get("number", 1)
         self.is_problem = kwargs.get("is_problem", False)
         self.issue_name = kwargs.get("issue_name", None)

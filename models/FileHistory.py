@@ -1,13 +1,19 @@
 import json
+import os
 
 class ChatHistoryHandler:
     def __init__(self, filename):
         self.filename = filename
+        self.full_path = self.get_full_path()
         self.history = self.load_history()
+
+    def get_full_path(self):
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        return os.path.join(current_dir, self.filename)
 
     def load_history(self):
         try:
-            with open(self.filename, 'r') as file:
+            with open(self.full_path, 'r') as file:
                 history = json.load(file)
                 return history
         except FileNotFoundError:
@@ -17,7 +23,7 @@ class ChatHistoryHandler:
         self.history.append(chat_entry)
 
     def save_history(self):
-        with open(self.filename, 'w') as file:
+        with open(self.full_path, 'w') as file:
             json.dump(self.history, file)
 
 """

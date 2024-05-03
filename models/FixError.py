@@ -3,7 +3,7 @@ import subprocess
 
 class FixError(BaseModel):
     def __init__(self, value):
-        super().__init__("datafix.json", value, "ErrorCommand.py")
+        super().__init__("dataset/datafix.json", value, "ErrorCommand.py")
     def Run(self):
         print("trying to fix the Error ...")
         try:
