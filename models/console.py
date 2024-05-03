@@ -39,9 +39,9 @@ class AICommand(cmd.Cmd):
             return
         else:
             if tokens[0] == "-R":
-                removeHistory()  # Assuming this is defined elsewhere
+                removeHistory()
             if tokens[0] == "-H":
-                printHistory()  # Assuming this is defined elsewhere
+                printHistory()
 
     def default(self, arg):
         """ handle new ways of inputting data """
