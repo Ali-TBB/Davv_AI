@@ -13,7 +13,28 @@ DevDynamo interprets natural language commands and converts them into Python cod
 3. **Execution**: The generated code is executed within the Linux environment, seamlessly performing the requested task.
 
 4. **Error Handling**: If any errors occur during execution, DevDynamo attempts to diagnose and fix them automatically, ensuring a smoother user experience.
+## Installation
 
+To install DevDynamo, follow these steps:
+
+1. **Clone the Repository**:
+bash```\ngit colne https://github.com/Ali-TBB/DevDynamo_AI.git\n```
+
+2. **Navigate to the Project Directory**:
+bash```\ncd  DevDynamo_AI\n```
+
+2. **Install Dependencies**:
+bash```\npip install -r requirements.txt\n```
+
+3. **Setup Gemini AI API**:
+- Sign up for a Gemini AI API account and obtain your API key.
+- Sign up for a Gemini AI API account and obtain your API key.
+- Open the `API_KEY` file in the `models/dataset/` directory.
+- Set your API key as the content of the `API_KEY` file.
+- Alternatively, you can enter your API key when prompted after running the program.
+
+4. **Run DevDynamo**:
+bash```\nsudo ./DevDynamo/n```
 
 ## Future Development
 
