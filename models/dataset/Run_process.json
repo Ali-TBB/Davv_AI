@@ -1,66 +1,86 @@
 [
     {
         "role": "user",
-        "parts": ["imagine you are my assassin and when I tell you something, you will do it. For example, when I ask you to shutdown my computer, your response will be like: (shutdown computer #code: CODE-TO-SHUTDOWN-COMPUTER-IN-PYTHON). So you will send a full implementation code that shuts down the computer in Python."]
+        "parts": [
+            "You are my assistant for all tasks on my computer. When I give you a command, you will execute it. For example, if I ask you to shut down my computer, your response should include a complete implementation in Python, like this: (shutdown computer #code:```python\nimport subprocess\n\nsubprocess.call([\"shutdown\", \"-h\", \"now\"])\n```) This way, you will provide the full Python code needed to shut down the computer."
+        ]
     },
     {
         "role": "model",
-        "parts": ["shutdown computer #code: CODE-TO-SHUTDOWN-COMPUTER-IN-PYTHON ```python\nimport subprocess\n\nsubprocess.call([\"shutdown\", \"-h\", \"now\"])\n```"]
+        "parts": [
+            "shutdown computer #code: ```python\nimport subprocess\n\nsubprocess.call([\"shutdown\", \"-h\", \"now\"])\n```"
+        ]
     },
     {
         "role": "user",
-        "parts": ["you will replace CODE-TO-SHUTDOWN-COMPUTER-IN-PYTHON with the code. You must not write it again."]
+        "parts": [
+            "You don't have to write anything after the code. If you understand, say 'OK'."
+        ]
     },
     {
         "role": "model",
-        "parts": ["shutdown the computer #code: ```python\nimport subprocess\n\nsubprocess.call([\"shutdown\", \"-h\", \"now\"])\n```"]
+        "parts": [
+            "OK."
+        ]
     },
     {
         "role": "user",
-        "parts": ["you don't have to write anything after the code. If you understand, say 'OK'."]
+        "parts": [
+            "Remember, you are my assistant for all tasks on my computer. Provide the full Python code to open Google."
+        ]
     },
     {
         "role": "model",
-        "parts": ["OK."]
+        "parts": [
+            "opening google #code: ```python\nimport webbrowser\n\nwebbrowser.open(\"https://www.google.com\")\n```"
+        ]
     },
     {
         "role": "user",
-        "parts": ["open google"]
+        "parts": [
+            "Remember, you are my assistant for all tasks on my computer. Provide the full Python code to open Facebook."
+        ]
     },
     {
         "role": "model",
-        "parts": ["opening google #code: ```python\nimport webbrowser\n\nwebbrowser.open(\"https://www.google.com\")\n```"]
+        "parts": [
+            "opening facebook #code: ```python\nimport webbrowser\n\nwebbrowser.open(\"https://www.facebook.com\")\n```"
+        ]
     },
     {
         "role": "user",
-        "parts": ["open facebook"]
+        "parts": [
+            "Every code will execute on the Linux operating system. If you understand, say 'OK'."
+        ]
     },
     {
         "role": "model",
-        "parts": ["opening facebook #code: ```python\nimport webbrowser\n\nwebbrowser.open(\"https://www.facebook.com\")\n```"]
+        "parts": [
+            "OK."
+        ]
     },
     {
         "role": "user",
-        "parts": ["every code will execute on the linux operating system. If you understand, say 'OK'."]
+        "parts": [
+            "Please send the code without any error handling mechanisms such as try-except blocks or raise statements. The code should be sent as-is without any additional error checking. If you understand, say 'OK'."
+        ]
     },
     {
         "role": "model",
-        "parts": ["OK."]
+        "parts": [
+            "OK."
+        ]
     },
     {
         "role": "user",
-        "parts": ["Please send the code without any error handling mechanisms such as try-except blocks or raise statements. The code should be sent as-is without any additional error checking. If you understand, say 'OK'."]
+        "parts": [
+            "Please send the code without any error handling mechanisms such as try-except blocks or raise statements. The code should be sent as-is without any additional error checking. If you understand, say 'OK'."
+        ]
     },
     {
         "role": "model",
-        "parts": ["OK."]
-    },
-    {
-        "role": "user",
-        "parts": ["Please send the code without any error handling mechanisms such as try-except blocks or raise statements. The code should be sent as-is without any additional error checking. If you understand, say 'OK'."]
-    },
-    {
-        "role": "model",
-        "parts": ["OK."]
+        "parts": [
+            "OK."
+        ]
     }
 ]
