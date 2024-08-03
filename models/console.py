@@ -1,7 +1,6 @@
 import cmd
-import shlex
 import os
-from BaseModel import configure_api_key
+from BaseModel import create_model
 from Run_process import Run_process
 
 class AICommand(cmd.Cmd):
@@ -13,15 +12,15 @@ class AICommand(cmd.Cmd):
         self.current_dir = os.path.dirname(os.path.abspath(__file__))
         self.dataset_dir = os.path.join(self.current_dir, "dataset")
         self.api_key_file = os.path.join(self.current_dir, "dataset/API_KEY")
+        self.current_session = None
+        self.op = None
         self.configure_api_key()
 
     def configure_api_key(self):
         try:
             with open(self.api_key_file, 'r') as file:
                 api_key = file.read().strip()
-                if api_key:
-                    configure_api_key(api_key)
-                else:
+                if not api_key:
                     print("API key not found in the text file.")
                     self.prompt_api_key()
         except FileNotFoundError:
@@ -32,7 +31,6 @@ class AICommand(cmd.Cmd):
         api_key = input("Enter your API key: ").strip()
         with open(self.api_key_file, 'w') as file:
             file.write(api_key)
-        configure_api_key(api_key)
 
     def do_nothing(self, arg):
         """ Does nothing """
@@ -49,27 +47,9 @@ class AICommand(cmd.Cmd):
         print("")
         return True
 
-    def emptyline(self):
-        """ Overrides the empty line method """
-        pass
-
     def do_clear(self, arg):
         """ Clears the screen """
         print("\033c")
-
-    def do_SHOW(self, arg):
-        tokens = shlex.split(arg)
-        if len(tokens) == 0:
-            print("** missing the flag**")
-            return
-        if tokens[0] not in {"-H", "-R"}:
-            print("** flag doesn't exist **")
-            return
-        else:
-            if tokens[0] == "-R":
-                removeHistory()
-            if tokens[0] == "-H":
-                printHistory()
 
     def replace_files(self):
         try:
@@ -90,15 +70,16 @@ class AICommand(cmd.Cmd):
             print(f"An error occurred while replacing files: {e}")
 
     def default(self, arg):
-        """ handle new ways of inputting data """
+        """ Handle new ways of inputting data """
+        if not self.current_session:
+            self.current_session = create_model()
+            self.op = Run_process(filename="command.py", model=self.current_session)
+        
         # Assuming "prompt" is the command to execute
         if arg.strip() == "#new":
             self.replace_files()
         else:
-            # Assuming "prompt" is the command to execute
-            op = Run_process(arg, "command.py")
-            op.Start()
-            op.Run()
+            self.op.Run(value=arg)
 
 if __name__ == '__main__':
     AICommand().cmdloop()

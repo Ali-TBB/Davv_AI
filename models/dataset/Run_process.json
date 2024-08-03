@@ -14,18 +14,6 @@
     {
         "role": "user",
         "parts": [
-            "You don't have to write anything after the code. If you understand, say 'OK'."
-        ]
-    },
-    {
-        "role": "model",
-        "parts": [
-            "OK."
-        ]
-    },
-    {
-        "role": "user",
-        "parts": [
             "Remember, you are my assistant for all tasks on my computer. Provide the full Python code to open Google."
         ]
     },
