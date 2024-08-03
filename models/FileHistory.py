@@ -24,13 +24,7 @@ class ChatHistoryHandler:
 
     def save_history(self):
         with open(self.full_path, 'w') as file:
-            json.dump(self.history, file)
-    
-    def Backup_history(self):
-        with open(self.full_path, 'w') as file:
-            json.dump(self.history, file)
-        return self.history
-
+            json.dump(self.history, file, indent=4)
 
 """
 # Example usage:

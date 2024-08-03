@@ -38,7 +38,7 @@ def create_model():
 
 
 class BaseModel():
-    def __init__(self, JPath, filename, model):
+    def __init__(self, JPath, filename= None):
         """
         Initializes a BaseModel instance.
 
@@ -49,8 +49,6 @@ class BaseModel():
         """
         self.JPath = JPath
         self.filename = filename
-        self.model = model
-
 
     def save_command(self, command_content):
         """

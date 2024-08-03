@@ -1,6 +1,9 @@
 import cmd
 import os
+import time
+import pyautogui
 from BaseModel import create_model
+from Find_Requirements import Find_Requirements
 from Run_process import Run_process
 
 class AICommand(cmd.Cmd):
@@ -14,6 +17,7 @@ class AICommand(cmd.Cmd):
         self.api_key_file = os.path.join(self.current_dir, "dataset/API_KEY")
         self.current_session = None
         self.op = None
+        self.find = None
         self.configure_api_key()
 
     def configure_api_key(self):
@@ -50,6 +54,19 @@ class AICommand(cmd.Cmd):
     def do_clear(self, arg):
         """ Clears the screen """
         print("\033c")
+    def take_screenshot():
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        t = time.strftime("%y_%m_%d_%H%M%S")
+        full_path = os.path.join(current_dir, "screenshot_image/" + f"{t}.png")
+        try:
+            # Capture the screenshot
+            screenshot = pyautogui.screenshot()
+            # Save the screenshot to the specified file path
+            screenshot.save(full_path)
+            print("Screenshot saved successfully!")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+        return full_path
 
     def replace_files(self):
         try:
@@ -64,7 +81,11 @@ class AICommand(cmd.Cmd):
                 data = src_file.read()
                 with open(os.path.join(self.dataset_dir, "datafix.json"), 'w') as dest_file:
                     dest_file.write(data)
-
+        
+            with open(os.path.join(self.dataset_dir, "Find_Req.json"), 'r') as src_file:
+                data = src_file.read()
+                with open(os.path.join(self.dataset_dir, "data_find_req.json"), 'w') as dest_file:
+                    dest_file.write(data)
             print("New dataset created.")
         except Exception as e:
             print(f"An error occurred while replacing files: {e}")
@@ -74,12 +95,23 @@ class AICommand(cmd.Cmd):
         if not self.current_session:
             self.current_session = create_model()
             self.op = Run_process(filename="command.py", model=self.current_session)
+            find_model = create_model()
+            self.find = Find_Requirements(model=find_model)
+
         
         # Assuming "prompt" is the command to execute
         if arg.strip() == "#new":
             self.replace_files()
         else:
-            self.op.Run(value=arg)
-
+            result, value = self.find.Run(arg)
+            if result == "#screenshot":
+                screenshot_path = self.take_screenshot()
+                self.op.Run(value=value, with_screenshot=True)
+            elif result == "#simple":
+                self.op.Run(value=value)
+            elif result == "#big":
+                self.op.Run(value=value)
+            else:
+                print("Invalid command.")
 if __name__ == '__main__':
     AICommand().cmdloop()
