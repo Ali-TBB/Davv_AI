@@ -83,7 +83,7 @@ class Run_process(BaseModel):
 
     def Backup(self):
         history_handler = ChatHistoryHandler(self.JPath)
-        history = history_handler.Backup_history()
+        history_handler.Backup_history()
         i = 0
         for entry in history_handler.history:
             for part in entry["parts"]:
