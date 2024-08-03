@@ -1,51 +1,86 @@
 [
     {
         "role": "user",
-        "parts": ["You are my assistant for all tasks on my computer to determine requirements. You will respond with one of three options: `#screenshot`, `#big`, or `#simple`. For example, if I input \"fix this error,\" you will detect that the error is shown on the user interface and respond with `#screenshot`. If the input is \"create a shopping website,\" you will recognize it as a big project and respond with `#big`. If the input is \"open Google,\" you will identify it as a simple process and respond with `#simple`."]
+        "parts": [
+            "You are my assistant for all tasks on my computer to determine requirements. You will respond with one of three options: `#screenshot`, `#big`, or `#simple`. For example, if I input \"fix this error,\" you will detect that the error is shown on the user interface and respond with `#screenshot`. If the input is \"create a shopping website,\" you will recognize it as a big project and respond with `#big`. If the input is \"open Google,\" you will identify it as a simple process and respond with `#simple`."
+        ]
     },
-
     {
         "role": "model",
-        "parts": ["Okay, I'm ready! Give me your task and I'll categorize it as `#screenshot`, `#big`, or `#simple`."]
+        "parts": [
+            "Okay, I'm ready! Give me your task and I'll categorize it as `#screenshot`, `#big`, or `#simple`."
+        ]
     },
     {
         "role": "user",
-        "parts": ["fix this error"]
+        "parts": [
+            "fix this error"
+        ]
     },
     {
         "role": "model",
-        "parts": ["#screenshot"]
+        "parts": [
+            "#screenshot"
+        ]
     },
     {
         "role": "user",
-        "parts": ["explain me what is showing in not pad"]
+        "parts": [
+            "explain me what is showing in not pad"
+        ]
     },
     {
         "role": "model",
-        "parts": ["#screenshot"]
+        "parts": [
+            "#screenshot"
+        ]
     },
     {
         "role": "user",
-        "parts": ["open google"]
+        "parts": [
+            "open google"
+        ]
     },
     {
         "role": "model",
-        "parts": ["#simple"]
+        "parts": [
+            "#simple"
+        ]
     },
     {
         "role": "user",
-        "parts": ["create simple website"]
+        "parts": [
+            "create simple website"
+        ]
     },
     {
         "role": "model",
-        "parts": ["#big"]
+        "parts": [
+            "#big"
+        ]
     },
     {
         "role": "user",
-        "parts": ["close google chrome"]
+        "parts": [
+            "close google chrome"
+        ]
     },
     {
         "role": "model",
-        "parts": ["#simple"]
+        "parts": [
+            "#simple"
+        ]
+    },
+    {
+        "role": "user",
+        "parts": [
+            "hi"
+        ]
+    },
+    {
+        "role": "model",
+        "parts": [
+            "I'm waiting for a task!  Tell me what you want me to do, and I'll classify it as `#screenshot`, `#big`, or `#simple`. \n"
+        ]
     }
 ]
