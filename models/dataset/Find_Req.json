@@ -1,51 +1,50 @@
 [
     {
-        "role": "user",
-        "parts": ["You are my assistant for all tasks on my computer to determine requirements. You will respond with one of three options: `#screenshot`, `#big`, or `#simple`. For example, if I input \"fix this error,\" you will detect that the error is shown on the user interface and respond with `#screenshot`. If the input is \"create a shopping website,\" you will recognize it as a big project and respond with `#big`. If the input is \"open Google,\" you will identify it as a simple process and respond with `#simple`."]
-    },
-
-    {
-        "role": "model",
-        "parts": ["Okay, I'm ready! Give me your task and I'll categorize it as `#screenshot`, `#big`, or `#simple`."]
+      "role": "user",
+      "parts": [
+        "You are my assistant for all tasks on my computer to determine requirements. You will respond with one of three options in a JSON file: action : `#screenshot`, action : `#big`, or action : `#simple`. For example, if I input \"fix this error,\" you will detect that the error is shown on the user interface and respond with action : `#screenshot`. If the input is \"create a shopping website,\" you will recognize it as a big project and respond with action : `#big`. If the input is \"open Google,\" you will identify it as a simple process and respond with action : `#simple`.\\n\\n**Example:**\\n\\n**User Input:** Fix this error.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"#screenshot\"\\n}\\n```\\n\\n**User Input:** Create a shopping website.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"#big\"\\n}\\n```\\n\\n**User Input:** Open Google.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"#simple\"\\n}\\n```\\n**User Input:** hi.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"#response\",\\n    \"response\": \"Hi! \\ud83d\\ude0a  I'm here and ready to assist!  Let me know what computer tasks you have in mind, and I'll tell you if it's a `#screenshot`, `#big`, or `#simple` job. \\n\"\\n}\\n```"
+      ]
     },
     {
-        "role": "user",
-        "parts": ["fix this error"]
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"#response\", \"response\": \"Hi! 👋 I'm here and ready to assist!  Let me know what computer tasks you have in mind. \"}\n\n```"
+      ]
     },
     {
-        "role": "model",
-        "parts": ["#screenshot"]
+      "role": "user",
+      "parts": [
+        "hi how are you"
+      ]
     },
     {
-        "role": "user",
-        "parts": ["explain me what is showing in not pad"]
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"#response\", \"response\": \"I'm doing well, thanks for asking! How can I help you today?\"}\n\n```"
+      ]
     },
     {
-        "role": "model",
-        "parts": ["#screenshot"]
+      "role": "user",
+      "parts": [
+        "open google\n"
+      ]
     },
     {
-        "role": "user",
-        "parts": ["open google"]
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"#simple\"}\n\n\n```"
+      ]
     },
     {
-        "role": "model",
-        "parts": ["#simple"]
+      "role": "user",
+      "parts": [
+        "create simple shopping web page"
+      ]
     },
     {
-        "role": "user",
-        "parts": ["create simple website"]
-    },
-    {
-        "role": "model",
-        "parts": ["#big"]
-    },
-    {
-        "role": "user",
-        "parts": ["close google chrome"]
-    },
-    {
-        "role": "model",
-        "parts": ["#simple"]
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"#big\"}\n\n```"
+      ]
     }
-]
+  ]

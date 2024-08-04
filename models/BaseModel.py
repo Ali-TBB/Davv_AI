@@ -66,36 +66,7 @@ class BaseModel():
         except Exception as e:
             print(f"An error occurred while saving the command: {e}")
 
-    def Split_output(self, input_str):
-        """
-        Splits the input string and saves the code block to a file.
-
-        Args:
-            input_str (str): The input string to split.
-
-        Returns:
-            bool: True if code block is found and saved, False otherwise.
-        """
-        code_start_index = input_str.find("#code")
-        if code_start_index != -1: # Found code
-            start_index = input_str.find("```", code_start_index)
-            end_index = input_str.find("```", start_index + 3)
-            if start_index != -1 and end_index != -1:
-                code_block = input_str[start_index:end_index + 3]
-                code = code_block.replace("```python\n", "")
-                code = code.replace("```", "")
-                if code:
-                    self.save_command(code)
-                    return True # Found code
-                else:
-                    print("No code to save.")
-        else:
-            BLUE = '\033[94m'
-            RESET = '\033[0m'
-            print(f"{BLUE}{input_str}{RESET}")
-            return False # No code found
-
-    def split_output_2(self, output):
+    def split_output(self, output):
         json_data = output.replace("```json\n", "")
         json_data = json_data.replace("```", "")
         return json_data
@@ -133,7 +104,7 @@ class BaseModel():
         print("Operation is running ...")
         try:
             # Execute the command using subprocess
-            result = subprocess.run(["python", "command.py"], capture_output=True)
+            result = subprocess.run(["python", self.filename], capture_output=True)
             # Check the return code of the subprocess
             if result.returncode != 0:
                 print(f"Command execution failed with return code {result.returncode}")

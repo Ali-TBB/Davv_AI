@@ -5,6 +5,7 @@ import pyautogui
 from BaseModel import create_model
 from Find_Requirements import Find_Requirements
 from Run_process import Run_process
+from Divide_to_sim import Divide_to_sim
 
 class AICommand(cmd.Cmd):
     """ AI command prompt to access models data """
@@ -18,6 +19,7 @@ class AICommand(cmd.Cmd):
         self.current_session = None
         self.op = None
         self.find = None
+        self.divide= None
         self.configure_api_key()
 
     def configure_api_key(self):
@@ -54,7 +56,7 @@ class AICommand(cmd.Cmd):
     def do_clear(self, arg):
         """ Clears the screen """
         print("\033c")
-    def take_screenshot():
+    def take_screenshot(self):
         current_dir = os.path.dirname(os.path.abspath(__file__))
         t = time.strftime("%y_%m_%d_%H%M%S")
         full_path = os.path.join(current_dir, "screenshot_image/" + f"{t}.png")
@@ -97,12 +99,11 @@ class AICommand(cmd.Cmd):
     def default(self, arg):
         """ Handle new ways of inputting data """
         if not self.current_session:
-            self.current_session = create_model("text/plain", "gemini-1.5-flash")
+            self.current_session = create_model("application/json", "gemini-1.5-pro-exp-0801")
             self.op = Run_process(filename="command.py", model=self.current_session)
-            find_model = create_model("text/plain", "gemini-1.5-flash")
+            find_model = create_model("application/json", "gemini-1.5-pro-exp-0801")
             self.find = Find_Requirements(model=find_model)
-
-        
+            self.divide = Divide_to_sim(create_model("application/json", "gemini-1.5-pro-exp-0801"), "command.py")
         # Assuming "prompt" is the command to execute
         if arg.strip() == "#new":
             self.replace_files()
@@ -110,11 +111,13 @@ class AICommand(cmd.Cmd):
             result, input_msg = self.find.Run(arg)
             if result == "#screenshot":
                 screenshot_path = self.take_screenshot()
-                self.op.Run(input_msg=input_msg, screenshot_path=screenshot_path)
+                self.op.Run(input_msg=input_msg, image_path=screenshot_path)
             elif result == "#simple":
                 self.op.Run(input_msg=input_msg)
             elif result == "#big":
-                self.op.Run(input_msg=input_msg)
+                self.divide.Run(input_msg=input_msg)
+            elif result == "#response":
+                print(input_msg)
             else:
                 print("Invalid command.")
 if __name__ == '__main__':

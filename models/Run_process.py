@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 '''module Run_process'''
+import json
 from BaseModel import BaseModel, create_model
 from FixError import FixError
 import google.generativeai as genai
@@ -31,10 +32,12 @@ class Run_process(BaseModel):
             else:
                 self.convo.send_message(input_msg)
             output_msg = self.convo.last.text
-            found_code = self.Split_output(output_msg)
             self.update_history(input_msg, output_msg, image_path, voice_path)
-        else:
-            found_code = True
-
-        if found_code:
-            self.Run_command()
+        json_data = json.loads(self.split_output(output_msg))
+        if json_data["action"] == "execute":
+            if json_data["language"] == "python":
+                self.save_command(json_data["code"])
+                self.Run_command()
+        elif json_data["action"] == "response":
+            response =  json_data["response"]
+            print(response)

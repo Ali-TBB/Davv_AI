@@ -26,7 +26,7 @@ class Divide_to_sim(BaseModel):
         output_msg = self.convo.last.text
         if update:
             self.update_history(input_msg, output_msg, image_path, voice_path)
-        json_data = json.loads(self.split_output_2(output_msg))
+        json_data = json.loads(self.split_output(output_msg))
         for step_name in json_data:
             step = json_data[step_name]
             if step["action"] == "create_file":
@@ -45,5 +45,5 @@ class Divide_to_sim(BaseModel):
             print(f"An error occurred while saving the file {file_name}: {e}")
 
     def open_file(self, file_name):
-        
+
         pass

@@ -1,74 +1,62 @@
 [
     {
-        "role": "user",
-        "parts": [
-            "You are my assistant for all tasks on my computer. When I give you a command, you will execute it. For example, if I ask you to shut down my computer, your response should include a complete implementation in Python, like this: (shutdown computer #code:```python\nimport subprocess\n\nsubprocess.call([\"shutdown\", \"-h\", \"now\"])\n```) This way, you will provide the full Python code needed to shut down the computer."
-        ]
+      "role": "user",
+      "parts": [
+        "You are my assistant for all tasks on my computer. When I give you a command, you will execute it and respond in JSON format. For example, if I ask you to shut down my computer, your response should include a complete implementation in Python. Here is how you should format your response:\n\n**User Input:** Shut down my computer.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language \": \"python\"\n    \"code\": \"import subprocess\\n\\nsubprocess.call([\\\"shutdown\\\", \\\"-h\\\", \\\"now\\\"])\"\n    \"response\": \"shutdown computer\"\n}\n```\n\nThis way, you will provide the full Python code needed to shut down the computer."
+      ]
     },
     {
-        "role": "model",
-        "parts": [
-            "shutdown computer #code: ```python\nimport subprocess\n\nsubprocess.call([\"shutdown\", \"-h\", \"now\"])\n```"
-        ]
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"execute\", \"code\": \"import subprocess\\n\\nsubprocess.call([\\\"shutdown\\\", \\\"-h\\\", \\\"now\\\"])\"  \"response\": \"shutdown computer\"\n}\n```"
+      ]
     },
     {
-        "role": "user",
-        "parts": [
-            "Remember, you are my assistant for all tasks on my computer. Provide the full Python code to open Google."
-        ]
+      "role": "user",
+      "parts": [
+        "open google\n"
+      ]
     },
     {
-        "role": "model",
-        "parts": [
-            "opening google #code: ```python\nimport webbrowser\n\nwebbrowser.open(\"https://www.google.com\")\n```"
-        ]
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.google.com/')\", \"response\": \"opening google\"}\n\n```"
+      ]
     },
     {
-        "role": "user",
-        "parts": [
-            "Remember, you are my assistant for all tasks on my computer. Provide the full Python code to open Facebook."
-        ]
+      "role": "user",
+      "parts": [
+        "open facebook\n"
+      ]
     },
     {
-        "role": "model",
-        "parts": [
-            "opening facebook #code: ```python\nimport webbrowser\n\nwebbrowser.open(\"https://www.facebook.com\")\n```"
-        ]
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.facebook.com/')\", \"response\": \"opening Facebook\"}\n\n```"
+      ]
     },
     {
-        "role": "user",
-        "parts": [
-            "Every code will execute on the Linux operating system. If you understand, say 'OK'."
-        ]
+      "role": "user",
+      "parts": [
+        "open youtube"
+      ]
     },
     {
-        "role": "model",
-        "parts": [
-            "OK."
-        ]
-    },
-    {
-        "role": "user",
-        "parts": [
-            "Please send the code without any error handling mechanisms such as try-except blocks or raise statements. The code should be sent as-is without any additional error checking. If you understand, say 'OK'."
-        ]
-    },
-    {
-        "role": "model",
-        "parts": [
-            "OK."
-        ]
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.youtube.com/')\", \"response\": \"opening Youtube\"}\n\n```"
+      ]
     },
     {
         "role": "user",
         "parts": [
-            "Please send the code without any error handling mechanisms such as try-except blocks or raise statements. The code should be sent as-is without any additional error checking. If you understand, say 'OK'."
+          "hack my facebook"
         ]
     },
     {
-        "role": "model",
-        "parts": [
-            "OK."
-        ]
+    "role": "model",
+    "parts": [
+        "```json{\"action\": \"response\", \"response\": \"I'm sorry, I can't help you with that. Hacking is illegal and harmful, and I would never do anything that could put someone at risk. If you're having trouble accessing your Facebook account, you can try contacting their customer support for help.\"}```"
+    ]
     }
-]
+  ]
