@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 import os
+import subprocess
 from FileHistory import ChatHistoryHandler
 import google.generativeai as genai
 
-def create_model():
+def create_model(mim_type, model_type):
     """
     Creates and configures the generative model.
 
@@ -24,13 +25,13 @@ def create_model():
         "top_p": 1,
         "top_k": 1,
         "max_output_tokens": 2048,
-        "response_mime_type": "text/plain",
+        "response_mime_type": mim_type,
     }
 
     safety_settings = ChatHistoryHandler("dataset/safety_setting.json").history
 
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash",
+        model_name=model_type,
         generation_config=generation_config,
         safety_settings=safety_settings
     )
@@ -93,3 +94,57 @@ class BaseModel():
             RESET = '\033[0m'
             print(f"{BLUE}{input_str}{RESET}")
             return False # No code found
+
+    def split_output_2(self, output):
+        json_data = output.replace("```json\n", "")
+        json_data = json_data.replace("```", "")
+        return json_data
+
+    def update_history(self, input_msg, output_msg, image_path, voice_path):
+        history_handler = ChatHistoryHandler(self.JPath)
+        if image_path:
+            new_chat_entry = {"role": "user", "parts": ["{}".format(input_msg), f"image : {image_path}"]}
+        elif voice_path:
+            new_chat_entry = {"role": "user", "parts": ["{}".format(input_msg), f"voice : {voice_path}"]}
+        new_chat_entry = {"role": "user", "parts": ["{}".format(input_msg)]}
+        history_handler.update_history(new_chat_entry)
+        new_chat_entry = {"role": "model", "parts": ["{}".format(output_msg)]}
+        history_handler.update_history(new_chat_entry)
+        history_handler.save_history()
+
+
+    def Backup(self):
+        history_handler = ChatHistoryHandler(self.JPath)
+        i = 0
+        for entry in history_handler.history:
+            for part in entry["parts"]:
+                if "image :" in part:
+                    image_path = part.split("image : ")[-1].strip()
+                    upload_file = genai.upload_file(image_path, mime_type="image/png")
+                    history_handler.history[i]["parts"][1] = upload_file
+                if "voice :" in part:
+                    voice_path = part.split("voice : ")[-1].strip()
+                    upload_file = genai.upload_file(voice_path, mime_type="voice/wav")
+                    history_handler.history[i]["parts"][1] = upload_file 
+            i += 1
+        return history_handler
+
+    def Run_command(self):
+        print("Operation is running ...")
+        try:
+            # Execute the command using subprocess
+            result = subprocess.run(["python", "command.py"], capture_output=True)
+            # Check the return code of the subprocess
+            if result.returncode != 0:
+                print(f"Command execution failed with return code {result.returncode}")
+                # If there is an error, pass it to the Error method
+                self.Error(result.stderr.decode("utf-8"))
+            else:
+                # Print the output of the executed script
+                RED = '\033[91m'
+                RESET = '\033[0m'
+                print("Output:\n", RED + result.stdout.decode("utf-8") + RESET)
+        except Exception as e:
+            print(f"on run An error occurred while running the command: {e}")
+            # Pass the error to the Error method
+            self.Error(str(e))

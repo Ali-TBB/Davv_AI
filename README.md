@@ -19,7 +19,7 @@ To install DevDynamo, follow these steps:
 
 1. **Clone the Repository**:
 ```
-git colne https://github.com/Ali-TBB/DevDynamo_AI.git
+git clone https://github.com/Ali-TBB/DevDynamo_AI.git
 ```
 
 3. **Navigate to the Project Directory**:

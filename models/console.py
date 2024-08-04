@@ -86,6 +86,10 @@ class AICommand(cmd.Cmd):
                 data = src_file.read()
                 with open(os.path.join(self.dataset_dir, "data_find_req.json"), 'w') as dest_file:
                     dest_file.write(data)
+            with open(os.path.join(self.dataset_dir, "Divide_to_sm.json"), 'r') as src_file:
+                data = src_file.read()
+                with open(os.path.join(self.dataset_dir, "Data_Divide_to_sm.json"), 'w') as dest_file:
+                    dest_file.write(data)
             print("New dataset created.")
         except Exception as e:
             print(f"An error occurred while replacing files: {e}")
@@ -93,9 +97,9 @@ class AICommand(cmd.Cmd):
     def default(self, arg):
         """ Handle new ways of inputting data """
         if not self.current_session:
-            self.current_session = create_model()
+            self.current_session = create_model("text/plain", "gemini-1.5-flash")
             self.op = Run_process(filename="command.py", model=self.current_session)
-            find_model = create_model()
+            find_model = create_model("text/plain", "gemini-1.5-flash")
             self.find = Find_Requirements(model=find_model)
 
         
@@ -103,14 +107,14 @@ class AICommand(cmd.Cmd):
         if arg.strip() == "#new":
             self.replace_files()
         else:
-            result, value = self.find.Run(arg)
+            result, input_msg = self.find.Run(arg)
             if result == "#screenshot":
                 screenshot_path = self.take_screenshot()
-                self.op.Run(value=value, with_screenshot=True)
+                self.op.Run(input_msg=input_msg, screenshot_path=screenshot_path)
             elif result == "#simple":
-                self.op.Run(value=value)
+                self.op.Run(input_msg=input_msg)
             elif result == "#big":
-                self.op.Run(value=value)
+                self.op.Run(input_msg=input_msg)
             else:
                 print("Invalid command.")
 if __name__ == '__main__':
