@@ -19,7 +19,7 @@ def arg(index, default=None):
 
 
 if __name__ == "__main__":
-    target = arg(1, "browser")
+    target = arg(1, "console")
     if target == "console":
         from run import console
 

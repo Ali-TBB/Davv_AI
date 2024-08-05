@@ -4,7 +4,6 @@ import subprocess
 import google.generativeai as genai
 
 from src.file_history import ChatHistoryHandler
-from src.fix_error import FixError
 
 
 def create_model(mim_type, model_type):
@@ -21,7 +20,7 @@ def create_model(mim_type, model_type):
     # Read the API key from the file
     current_dir = os.path.dirname(os.path.abspath(__file__))
     api_key_path = os.path.join(current_dir, "dataset/API_KEY")
-    with open(api_key_path, 'r') as file:
+    with open(api_key_path, "r") as file:
         api_key = file.read().strip()
 
     # Configure the model with the API key
@@ -40,12 +39,12 @@ def create_model(mim_type, model_type):
     model = genai.GenerativeModel(
         model_name=model_type,
         generation_config=generation_config,
-        safety_settings=safety_settings
+        safety_settings=safety_settings,
     )
     return model
 
 
-class BaseModel():
+class BaseModel:
     """
     Represents a base model for executing commands and managing chat history.
 
@@ -135,7 +134,7 @@ class BaseModel():
                 if part.startswith("<-voice->:"):
                     voice_path = part.split("<-voice->: ")[-1].strip()
                     upload_file = genai.upload_file(voice_path, mime_type="voice/wav")
-                    history_handler.history[i]["parts"][1] = upload_file 
+                    history_handler.history[i]["parts"][1] = upload_file
             i += 1
         return history_handler
 
@@ -158,8 +157,8 @@ class BaseModel():
             self.fix_error(result.stderr.decode("utf-8"))
         else:
             # Print the output of the executed script
-            RED = '\033[91m'
-            RESET = '\033[0m'
+            RED = "\033[91m"
+            RESET = "\033[0m"
             print("Output:\n", RED + result.stdout.decode("utf-8") + RESET)
 
     def fix_error(self, issue):
@@ -169,7 +168,9 @@ class BaseModel():
         Args:
             issue (str): The error message.
         """
+        from src.fix_error import FixError
+
         fixer = FixError()
         fixer.run(issue)
-        #re run the command
+        # re run the command
         self.run(error_fixed=True)
