@@ -1,0 +1,277 @@
+{
+  "table": "dataset_items",
+  "items": [
+    {
+      "id": 1,
+      "dataset_id": 1,
+      "role": "user",
+      "parts": [
+        "You are my assistant for all tasks on my computer. When I give you a command, you will execute it and respond in JSON format. For example, if I ask you to shut down my computer, your response should include a complete implementation in Python. Here is how you should format your response:\n\n**User Input:** Shut down my computer.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language \": \"python\"\n    \"code\": \"import subprocess\\n\\nsubprocess.call([\\\"shutdown\\\", \\\"-h\\\", \\\"now\\\"])\"\n    \"response\": \"shutdown computer\"\n}\n```\n\nThis way, you will provide the full Python code needed to shut down the computer."
+      ]
+    },
+    {
+      "id": 2,
+      "dataset_id": 1,
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"execute\", \"code\": \"import subprocess\\n\\nsubprocess.call([\\\"shutdown\\\", \\\"-h\\\", \\\"now\\\"])\"  \"response\": \"shutdown computer\"\n}\n```"
+      ]
+    },
+    {
+      "id": 3,
+      "dataset_id": 1,
+      "role": "user",
+      "parts": [
+        "open google\n"
+      ]
+    },
+    {
+      "id": 4,
+      "dataset_id": 1,
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.google.com/')\", \"response\": \"opening google\"}\n\n```"
+      ]
+    },
+    {
+      "id": 5,
+      "dataset_id": 1,
+      "role": "user",
+      "parts": [
+        "open facebook\n"
+      ]
+    },
+    {
+      "id": 6,
+      "dataset_id": 1,
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.facebook.com/')\", \"response\": \"opening Facebook\"}\n\n```"
+      ]
+    },
+    {
+      "id": 7,
+      "dataset_id": 1,
+      "role": "user",
+      "parts": [
+        "open youtube"
+      ]
+    },
+    {
+      "id": 8,
+      "dataset_id": 1,
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.youtube.com/')\", \"response\": \"opening Youtube\"}\n\n```"
+      ]
+    },
+    {
+      "id": 9,
+      "dataset_id": 1,
+      "role": "user",
+      "parts": [
+        "hack my facebook"
+      ]
+    },
+    {
+      "id": 10,
+      "dataset_id": 1,
+      "role": "model",
+      "parts": [
+        "```json{\"action\": \"response\", \"response\": \"I'm sorry, I can't help you with that. Hacking is illegal and harmful, and I would never do anything that could put someone at risk. If you're having trouble accessing your Facebook account, you can try contacting their customer support for help.\"}```"
+      ]
+    },
+    {
+      "id": 11,
+      "dataset_id": 2,
+      "role": "user",
+      "parts": [
+        "You are my assistant for all tasks on my computer to determine requirements. You will respond with one of three options in a JSON file: action : `#screenshot`, action : `#big`, or action : `#simple`. For example, if I input \"fix this error,\" you will detect that the error is shown on the user interface and respond with action : `#screenshot`. If the input is \"create a shopping website,\" you will recognize it as a big project and respond with action : `#big`. If the input is \"open Google,\" you will identify it as a simple process and respond with action : `#simple`.\\n\\n**Example:**\\n\\n**User Input:** Fix this error.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"#screenshot\"\\n}\\n```\\n\\n**User Input:** Create a shopping website.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"#big\"\\n}\\n```\\n\\n**User Input:** Open Google.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"#simple\"\\n}\\n```\\n**User Input:** hi.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"#response\",\\n    \"response\": \"Hi! \\ud83d\\ude0a  I'm here and ready to assist!  Let me know what computer tasks you have in mind, and I'll tell you if it's a `#screenshot`, `#big`, or `#simple` job. \\n\"\\n}\\n```"
+      ]
+    },
+    {
+      "id": 12,
+      "dataset_id": 2,
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"#response\", \"response\": \"Hi! \ud83d\udc4b I'm here and ready to assist!  Let me know what computer tasks you have in mind. \"}\n\n```"
+      ]
+    },
+    {
+      "id": 13,
+      "dataset_id": 2,
+      "role": "user",
+      "parts": [
+        "hi how are you"
+      ]
+    },
+    {
+      "id": 14,
+      "dataset_id": 2,
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"#response\", \"response\": \"I'm doing well, thanks for asking! How can I help you today?\"}\n\n```"
+      ]
+    },
+    {
+      "id": 15,
+      "dataset_id": 2,
+      "role": "user",
+      "parts": [
+        "open google\n"
+      ]
+    },
+    {
+      "id": 16,
+      "dataset_id": 2,
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"#simple\"}\n\n\n```"
+      ]
+    },
+    {
+      "id": 17,
+      "dataset_id": 2,
+      "role": "user",
+      "parts": [
+        "create simple shopping web page"
+      ]
+    },
+    {
+      "id": 18,
+      "dataset_id": 2,
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"#big\"}\n\n```"
+      ]
+    },
+    {
+      "id": 19,
+      "dataset_id": 3,
+      "role": "user",
+      "parts": [
+        "Imagine you are my troubleshooter, and whenever I present you with an error, your task is to swiftly provide the solution. For instance, if I encounter a permission issue like 'Permission denied' when running a script i will send to you the error message like this #error: bash: ./script.py: Permission denied , your response should be in the format: #code python```\nimport os\n\n# Grant execute permission to the script\nos.system('chmod +x script.py')\n``` You'll promptly offer a complete Python code snippet that addresses the specific error encountered, enabling a seamless resolution."
+      ]
+    },
+    {
+      "id": 20,
+      "dataset_id": 3,
+      "role": "model",
+      "parts": [
+        "Sure i am here to help"
+      ]
+    },
+    {
+      "id": 21,
+      "dataset_id": 3,
+      "role": "user",
+      "parts": [
+        "you should not send the code that run the process send just the code that fix the error"
+      ]
+    },
+    {
+      "id": 22,
+      "dataset_id": 3,
+      "role": "model",
+      "parts": [
+        "Sure i will send you just the fixing error"
+      ]
+    },
+    {
+      "id": 23,
+      "dataset_id": 3,
+      "role": "user",
+      "parts": [
+        "#error: bash: ./script.py: Permission denied"
+      ]
+    },
+    {
+      "id": 24,
+      "dataset_id": 3,
+      "role": "model",
+      "parts": [
+        "#code python```\nimport os\n\n# Grant execute permission to the script\nos.system('chmod +x script.py')\n```"
+      ]
+    },
+    {
+      "id": 25,
+      "dataset_id": 3,
+      "role": "user",
+      "parts": [
+        "#error: python: module not found: numpy"
+      ]
+    },
+    {
+      "id": 26,
+      "dataset_id": 3,
+      "role": "model",
+      "parts": [
+        "#code python```\nimport subprocess\n\n# Install numpy using pip\nsubprocess.run(['pip', 'install', 'numpy'])\n```"
+      ]
+    },
+    {
+      "id": 27,
+      "dataset_id": 4,
+      "role": "user",
+      "parts": [
+        "You are my assistant for all tasks on my computer. When I give you a command related to a project, you will provide the step-by-step step instructions from start to finish, formatted as JSON. Each step step should include the action, file name (if applicable), and code. For example, if I ask you to create a simple web page, you will send all the necessary steps for the project. I will follow each step with my AI assistant, which generates and executes the required Python code to complete the tasks. You don't have to explain the code.\n\nExample:\n\n**User Input:** Create a simple shopping web page.\n\n**Model Response:**\n```json\n{\n    \"step_1\": {\n        \"action\": \"create_file\",\n        \"file_name\": \"index.html\",\n        \"code\": \"<!DOCTYPE html>\\n<html>\\n<head>\\n<title>Simple Shopping Page</title>\\n<link rel=\\\"stylesheet\\\" href=\\\"style.css\\\">\\n</head>\\n<body>\\n<h1>Welcome to Our Shop</h1>\\n<div id=\\\"products\\\"></div>\\n<script src=\\\"script.js\\\"></script>\\n</body>\\n</html>\"\n    },\n    \"step_2\": {\n        \"action\": \"create_file\",\n        \"file_name\": \"style.css\",\n        \"code\": \"body {\\n    font-family: sans-serif;\\n}\\n\\n#products {\\n    display: flex;\\n    flex-wrap: wrap;\\n    justify-content: center;\\n}\\n\\n.product {\\n    border: 1px solid #ccc;\\n    padding: 10px;\\n    margin: 10px;\\n    width: 200px;\\n    text-align: center;\\n}\\n\\n.product img {\\n    max-width: 100%;\\n    height: auto;\\n}\"\n    },\n    \"step_3\": {\n        \"action\": \"create_file\",\n        \"file_name\": \"script.js\",\n        \"code\": \"// Sample product data (replace with your actual data)\\nconst products = [\\n    { name: 'Product 1', price: 10, image: 'product1.jpg' },\\n    { name: 'Product 2', price: 15, image: 'product2.jpg' }\\n];\\n\\n// Get the products container element\\nconst productsContainer = document.getElementById('products');\\n\\n// Create product elements dynamically\\nproducts.forEach(product => {\\n    const productElement = document.createElement('div');\\n    productElement.classList.add('product');\\n\\n    // Create product image\\n    const productImage = document.createElement('img');\\n    productImage.src = product.image;\\n    productImage.alt = product.name;\\n    productElement.appendChild(productImage);\\n\\n    // Create product name\\n    const productName = document.createElement('h3');\\n    productName.textContent = product.name;\\n    productElement.appendChild(productName);\\n\\n    // Create product price\\n    const productPrice = document.createElement('p');\\n    productPrice.textContent = `$${product.price}`;\\n    productElement.appendChild(productPrice);\\n\\n    // Add to cart button\\n    const addToCartButton = document.createElement('button');\\n    addToCartButton.textContent = 'Add to Cart';\\n    addToCartButton.addEventListener('click', () => {\\n        console.log('Adding', product.name, 'to cart');\\n    });\\n    productElement.appendChild(addToCartButton);\\n\\n    // Add the product element to the products container\\n    productsContainer.appendChild(productElement);\\n});\"\n    },\n    \"step_4\": {\n        \"action\": \"run_command\",\n        \"code\": \"import webbrowser\\n\\nwebbrowser.open_new_tab('index.html')\"\n    },\n    \"step_5\": {\n        \"action\": \"modify_file\",\n        \"file_name\": \"index.html\",\n        \"code\": \"<!-- Adding a footer to the HTML file -->\\n<footer>\\n    <p>&copy; 2024 Simple Shop. All rights reserved.</p>\\n</footer>\"\n    }\n}\n```"
+      ]
+    },
+    {
+      "id": 28,
+      "dataset_id": 4,
+      "role": "model",
+      "parts": [
+        "```json\n{\"step_1\": {\"action\": \"create_file\", \"file_name\": \"index.html\", \"code\": \"<!DOCTYPE html>\\n<html>\\n<head>\\n<title>Simple Shopping Page</title>\\n</head>\\n<body>\\n<h1>Welcome to Our Shop</h1>\\n<p>This is a simple shopping page.</p>\\n</body>\\n</html>\"}, \"step_2\": {\"action\": \"create_file\", \"file_name\": \"style.css\", \"code\": \"body {\\n    font-family: sans-serif;\\n    margin: 0;\\n    padding: 0;\\n}\\nh1 {\\n    text-align: center;\\n    background-color: #f2f2f2;\\n    padding: 20px;\\n}\\np {\\n    text-align: center;\\n    margin-top: 20px;\\n}\"}, \"step_3\": {\"action\": \"modify_file\", \"file_name\": \"index.html\", \"code\": \"<link rel=\\\"stylesheet\\\" href=\\\"style.css\\\">\"}, \"step_4\": {\"action\": \"run_command\", \"code\": \"python -m http.server 8000\"}}\n\n```"
+      ]
+    },
+    {
+      "id": 29,
+      "dataset_id": 4,
+      "role": "user",
+      "parts": [
+        "create simple snake game"
+      ]
+    },
+    {
+      "id": 30,
+      "dataset_id": 4,
+      "role": "model",
+      "parts": [
+        "```json\n{\n\"step_1\": {\"action\": \"create_file\", \"file_name\": \"snake.py\", \"code\": \"import pygame\\nimport random\\n\\npygame.init()\\n\\nwhite = (255, 255, 255)\\nblack = (0, 0, 0)\\nred = (255, 0, 0)\\ngreen = (0, 155, 0)\\n\\ndisplay_width = 800\\ndisplay_height = 600\\n\\ngameDisplay = pygame.display.set_mode((display_width, display_height))\\npygame.display.set_caption('Snake Game')\\n\\nclock = pygame.time.Clock()\\n\\nblock_size = 10\\nsnake_speed = 15\\n\\nfont_style = pygame.font.SysFont(None, 25)\\nscore_font = pygame.font.SysFont(None, 35)\\n\\ndef display_score(score):\\n    value = score_font.render(\\\"Your Score: \\\" + str(score), True, white)\\n    gameDisplay.blit(value, [0, 0])\\n\\n\\ndef draw_snake(block_size, snake_list):\\n    for x, y in snake_list:\\n        pygame.draw.rect(gameDisplay, green, [x, y, block_size, block_size])\\n\\ndef message(msg, color):\\n    mesg = font_style.render(msg, True, color)\\n    gameDisplay.blit(mesg, [display_width/6, display_height/3])\\n\\ndef game_loop():\\n    game_over = False\\n    game_close = False\\n\\n    x1 = display_width / 2\\n    y1 = display_height / 2\\n\\n    x1_change = 0\\n    y1_change = 0\\n\\n    snake_list = []\\n    snake_length = 1\\n\\n    foodx = round(random.randrange(0, display_width - block_size) / 10.0) * 10.0\\n    foody = round(random.randrange(0, display_height - block_size) / 10.0) * 10.0\\n\\n    while not game_over:\\n\\n        while game_close == True:\\n            gameDisplay.fill(black)\\n            message(\\\"You Lost! Press C-Play Again or Q-Quit\\\", red)\\n            pygame.display.update()\\n\\n            for event in pygame.event.get():\\n                if event.type == pygame.KEYDOWN:\\n                    if event.key == pygame.K_q:\\n                        game_over = True\\n                        game_close = False\\n                    if event.key == pygame.K_c:\\n                        game_loop()\\n\\n        for event in pygame.event.get():\\n            if event.type == pygame.QUIT:\\n                game_over = True\\n            if event.type == pygame.KEYDOWN:\\n                if event.key == pygame.K_LEFT:\\n                    x1_change = -block_size\\n                    y1_change = 0\\n                elif event.key == pygame.K_RIGHT:\\n                x1_change = block_size\\n                    y1_change = 0\\n                elif event.key == pygame.K_UP:\\n                    y1_change = -block_size\\n                    x1_change = 0\\n                elif event.key == pygame.K_DOWN:\\n                    y1_change = block_size\\n                    x1_change = 0\\n\\n        if x1 >= display_width or x1 < 0 or y1 >= display_height or y1 < 0:\\n            game_close = True\\n        x1 += x1_change\\n        y1 += y1_change\\n        gameDisplay.fill(black)\\n        pygame.draw.rect(gameDisplay, red, [foodx, foody, block_size, block_size])\\n        snake_head = []\\n        snake_head.append(x1)\\n        snake_head.append(y1)\\n        snake_list.append(snake_head)\\n\\n        if len(snake_list) > snake_length:\\n            del snake_list[0]\\n\\n        for x in snake_list[:-1]:\\n            if x == snake_head:\\n                game_close = True\\n\\n        draw_snake(block_size, snake_list)\\n        display_score(snake_length - 1)\\n\\n        pygame.display.update()\\n\\n        if x1 == foodx and y1 == foody:\\n            foodx = round(random.randrange(0, display_width - block_size) / 10.0) * 10.0\\n            foody = round(random.randrange(0, display_height - block_size) / 10.0) * 10.0\\n            snake_length += 1\\n\\n        clock.tick(snake_speed)\\n\\n    pygame.quit()\\n    quit()\\n\\ngame_loop()\"}, \"step_2\": {\"action\": \"run_command\", \"code\": \"python snake.py\"}}\n\n```"
+      ]
+    },
+    {
+      "id": 31,
+      "dataset_id": 4,
+      "role": "user",
+      "parts": [
+        "create simple snake game in html"
+      ]
+    },
+    {
+      "id": 32,
+      "dataset_id": 4,
+      "role": "model",
+      "parts": [
+        "```json\n{\"step_1\": {\"action\": \"create_file\", \"file_name\": \"index.html\", \"code\": \"<!DOCTYPE html>\\n<html>\\n<head>\\n<title>Simple Snake Game</title>\\n<style>\\nbody {\\n  background-color: #333;\\n}\\ncanvas {\\n  background-color: #000;\\n  border: 2px solid #fff;\\n}\\n</style>\\n</head>\\n<body>\\n\\n<canvas id=\\\"gameCanvas\\\" width=\\\"400\\\" height=\\\"400\\\"></canvas>\\n\\n<script>\\nconst canvas = document.getElementById('gameCanvas');\\nconst ctx = canvas.getContext('2d');\\n\\nconst snake = [\\n  { x: 200, y: 200 },\\n  { x: 190, y: 200 },\\n  { x: 180, y: 200 },\\n  { x: 170, y: 200 },\\n  { x: 160, y: 200 }\\n];\\n\\nlet dx = 10;\\nlet dy = 0;\\n\\nlet foodX;\\nlet foodY;\\n\\nlet score = 0;\\n\\nfunction generateFood() {\\n  foodX = Math.floor(Math.random() * (canvas.width / 10)) * 10;\\n  foodY = Math.floor(Math.random() * (canvas.height / 10)) * 10;\\n}\\n\\nfunction drawSnakePart(snakePart) {\\n  ctx.fillStyle = 'green';\\n  ctx.fillRect(snakePart.x, snakePart.y, 10, 10);\\n  ctx.strokeStyle = 'darkgreen';\\n  ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);\\n}\\n\\nfunction drawSnake() {\\n  snake.forEach(drawSnakePart);\\n}\\n\\nfunction drawFood() {\\n  ctx.fillStyle = 'red';\\n  ctx.fillRect(foodX, foodY, 10, 10);\\n}\\n\\nfunction main() {\\n  if (hasGameEnded()) return;\\n\\n  setTimeout(function onTick() {\\n    clearCanvas();\\n    drawFood();\\n    moveSnake();\\n    drawSnake();\\n    main();\\n  }, 100)\\n}\\n\\nfunction clearCanvas() {\\n  ctx.fillStyle = 'black';\\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\\n}\\n\\nfunction moveSnake() {\\n  const head = { x: snake[0].x + dx, y: snake[0].y + dy };\\n  snake.unshift(head);\\n\\n  const didEatFood = snake[0].x === foodX && snake[0].y === foodY;\\n  if (didEatFood) {\\n    score += 10;\\n    document.getElementById('score').textContent = score;\\n    generateFood();\\n  } else {\\n    snake.pop();\\n  }\\n}\\n\\nfunction hasGameEnded() {\\n  for (let i = 4; i < snake.length; i++) {\\n    if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true\\n  }\\n  const hitLeftWall = snake[0].x < 0;\\n  const hitRightWall = snake[0].x > canvas.width - 10;\\n  const hitTopWall = snake[0].y < 0;\\n  const hitBottomWall = snake[0].y > canvas.height - 10;\\n\\n  return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall\\n}\\n\\nfunction changeDirection(event) {\\n  const LEFT_KEY = 37;\\n  const RIGHT_KEY = 39;\\n  const UP_KEY = 38;\\n  const DOWN_KEY = 40;\\n\\n  const keyPressed = event.keyCode;\\n\\n  const goingUp = dy === -10;\\n  const goingDown = dy === 10;\\n  const goingRight = dx === 10;\\n  const goingLeft = dx === -10;\\n\\n  if (keyPressed === LEFT_KEY && !goingRight) {\\n    dx = -10;\\n    dy = 0;\\n  }\\n\\n  if (keyPressed === UP_KEY && !goingDown) {\\n    dx = 0;\\n    dy = -10;\\n  }\\n\\n  if (keyPressed === RIGHT_KEY && !goingLeft) {\\n    dx = 10;\\n    dy = 0;\\n  }\\n\\n  if (keyPressed === DOWN_KEY && !goingUp) {\\n    dx = 0;\\n    dy = 10;\\n  }\\n}\\n\\ndocument.addEventListener(\\\"keydown\\\", changeDirection);\\n\\ngenerateFood();\\nmain();\\n</script>\\n\\n<div>Score: <span id=\\\"score\\\">0</span></div>\\n\\n</body>\\n</html>\"}, \"step_2\": {\"action\": \"open_file\", \"file_name\": \"index.html\", \"code\": null}}\n\n```"
+      ]
+    },
+    {
+      "id": 33,
+      "dataset_id": 4,
+      "role": "user",
+      "parts": [
+        "add some style to it"
+      ]
+    },
+    {
+      "id": 34,
+      "dataset_id": 4,
+      "role": "model",
+      "parts": [
+        "```json\n{\"step_1\": {\"action\": \"modify_file\", \"file_name\": \"index.html\", \"code\": \"<style>\\nbody {\\n  background-color: #333;\\n  display: flex;\\n  justify-content: center;\\n  align-items: center;\\n  min-height: 100vh;\\n  margin: 0;\\n}\\n\\ncanvas {\\n  background-color: #000;\\n  border: 5px solid #fff;\\n  border-radius: 10px;\\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);\\n}\\n\\n#score-container {\\n  position: absolute;\\n  top: 20px;\\n  left: 20px;\\n  background-color: rgba(0, 0, 0, 0.7);\\n  color: #fff;\\n  padding: 10px 20px;\\n  border-radius: 5px;\\n  font-family: sans-serif;\\n  font-size: 18px;\\n}\\n</style>\"}, \"step_2\": {\"action\": \"modify_file\", \"file_name\": \"index.html\", \"code\": \"<div id=\\\"score-container\\\">Score: <span id=\\\"score\\\">0</span></div>\"}}\n\n```"
+      ]
+    }
+  ]
+}

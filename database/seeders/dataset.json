@@ -1,0 +1,25 @@
+{
+    "table": "datasets",
+    "items": [
+        {
+            "id": 1,
+            "name": "Run process",
+            "type": "run_process"
+        },
+        {
+            "id": 2,
+            "name": "Find requirement",
+            "type": "find_requirement"
+        },
+        {
+            "id": 3,
+            "name": "Fix error",
+            "type": "fix_error"
+        },
+        {
+            "id": 4,
+            "name": "Divide to simples",
+            "type": "divide_to_simples"
+        }
+    ]
+}
