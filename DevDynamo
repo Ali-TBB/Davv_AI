@@ -1,2 +1,2 @@
 #!/usr/bin/bash
-python ./models/console.py
+python ./main.py

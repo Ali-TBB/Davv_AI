@@ -2,10 +2,11 @@ import cmd
 import os
 import time
 import pyautogui
-from BaseModel import create_model
-from Find_Requirements import Find_Requirements
-from Run_process import Run_process
-from Divide_to_sim import Divide_to_sim
+
+from src.find_requirements import FindRequirements
+from src.run_process import RunProcess
+from divide_to_simple import DivideToSimple
+
 
 class AICommand(cmd.Cmd):
     """ AI command prompt to access models data """
@@ -16,10 +17,10 @@ class AICommand(cmd.Cmd):
         self.current_dir = os.path.dirname(os.path.abspath(__file__))
         self.dataset_dir = os.path.join(self.current_dir, "dataset")
         self.api_key_file = os.path.join(self.current_dir, "dataset/API_KEY")
-        self.current_session = None
-        self.op = None
-        self.find = None
-        self.divide= None
+        self.get_started = True
+        self.run_process = None
+        self.find_requirement = None
+        self.divide_to_simple= None
         self.configure_api_key()
 
     def configure_api_key(self):
@@ -56,10 +57,11 @@ class AICommand(cmd.Cmd):
     def do_clear(self, arg):
         """ Clears the screen """
         print("\033c")
+
     def take_screenshot(self):
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        t = time.strftime("%y_%m_%d_%H%M%S")
-        full_path = os.path.join(current_dir, "screenshot_image/" + f"{t}.png")
+        image_name = time.strftime("%y_%m_%d_%H%M%S")
+        full_path = os.path.join(current_dir, "src/screenshot_image/" + f"{image_name}.png")
         try:
             # Capture the screenshot
             screenshot = pyautogui.screenshot()
@@ -98,27 +100,28 @@ class AICommand(cmd.Cmd):
 
     def default(self, arg):
         """ Handle new ways of inputting data """
-        if not self.current_session:
-            self.current_session = create_model("application/json", "gemini-1.5-pro-exp-0801")
-            self.op = Run_process(filename="command.py", model=self.current_session)
-            find_model = create_model("application/json", "gemini-1.5-pro-exp-0801")
-            self.find = Find_Requirements(model=find_model)
-            self.divide = Divide_to_sim(create_model("application/json", "gemini-1.5-pro-exp-0801"), "command.py")
+        if self.get_started:
+            self.run_process = RunProcess()
+            self.find_requirement = FindRequirements()
+            self.divide_to_simple = DivideToSimple()
+            self.get_started = False
         # Assuming "prompt" is the command to execute
         if arg.strip() == "#new":
             self.replace_files()
         else:
-            result, input_msg = self.find.Run(arg)
+            result, input_msg = self.find_requirement.Run(arg)
             if result == "#screenshot":
                 screenshot_path = self.take_screenshot()
-                self.op.Run(input_msg=input_msg, image_path=screenshot_path)
+                self.run_process.run(input_msg=input_msg, image_path=screenshot_path)
             elif result == "#simple":
-                self.op.Run(input_msg=input_msg)
+                self.run_process.run(input_msg=input_msg)
             elif result == "#big":
-                self.divide.Run(input_msg=input_msg)
+                self.divide_to_simple.run(input_msg=input_msg)
             elif result == "#response":
                 print(input_msg)
             else:
                 print("Invalid command.")
+
+
 if __name__ == '__main__':
     AICommand().cmdloop()
