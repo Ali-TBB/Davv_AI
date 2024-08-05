@@ -5,7 +5,7 @@ import pyautogui
 
 from src.find_requirements import FindRequirements
 from src.run_process import RunProcess
-from divide_to_simple import DivideToSimple
+from src.divide_to_simple import DivideToSimple
 
 
 class AICommand(cmd.Cmd):
