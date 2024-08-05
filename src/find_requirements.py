@@ -40,12 +40,12 @@ class FindRequirements(BaseModel):
         history_handler.update_history(new_chat_entry)
         history_handler.save_history()
         json_data = json.loads(self.split_output(output_msg))
-        if json_data["action"] == "#response":
+        if json_data["action"] == "response":
             response = json_data["response"]
-            return "#response", response
-        elif json_data["action"] == "#simple":
-            return "#simple", input_msg
-        elif json_data["action"] == "#screenshot":
-            return "#screenshot", input_msg
-        elif json_data["action"] == "#big":
-            return "#big", input_msg
+            return "response", response
+        elif json_data["action"] == "simple":
+            return "simple", input_msg
+        elif json_data["action"] == "screenshot":
+            return "screenshot", input_msg
+        elif json_data["action"] == "big":
+            return "big", input_msg

@@ -15,8 +15,8 @@ class AICommand(cmd.Cmd):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.current_dir = os.path.dirname(os.path.abspath(__file__))
-        self.dataset_dir = os.path.join(self.current_dir, "dataset")
-        self.api_key_file = os.path.join(self.current_dir, "dataset/API_KEY")
+        self.dataset_dir = os.path.join(self.current_dir, "../src/dataset")
+        self.api_key_file = os.path.join(self.current_dir, "../src/dataset/API_KEY")
         self.get_started = True
         self.run_process = None
         self.find_requirement = None
@@ -75,24 +75,24 @@ class AICommand(cmd.Cmd):
     def replace_files(self):
         try:
             # Replace data.json
-            with open(os.path.join(self.dataset_dir, "Run_process.json"), 'r') as src_file:
+            with open(os.path.join(self.dataset_dir, "run_process.json"), 'r') as src_file:
                 data = src_file.read()
-                with open(os.path.join(self.dataset_dir, "data.json"), 'w') as dest_file:
+                with open(os.path.join(self.dataset_dir, "data_run_process.json"), 'w') as dest_file:
                     dest_file.write(data)
 
             # Replace datafix.json
-            with open(os.path.join(self.dataset_dir, "FixError.json"), 'r') as src_file:
+            with open(os.path.join(self.dataset_dir, "fix_error.json"), 'r') as src_file:
                 data = src_file.read()
-                with open(os.path.join(self.dataset_dir, "datafix.json"), 'w') as dest_file:
+                with open(os.path.join(self.dataset_dir, "data_fix_error.json"), 'w') as dest_file:
                     dest_file.write(data)
         
-            with open(os.path.join(self.dataset_dir, "Find_Req.json"), 'r') as src_file:
+            with open(os.path.join(self.dataset_dir, "find_Req.json"), 'r') as src_file:
                 data = src_file.read()
                 with open(os.path.join(self.dataset_dir, "data_find_req.json"), 'w') as dest_file:
                     dest_file.write(data)
-            with open(os.path.join(self.dataset_dir, "Divide_to_sm.json"), 'r') as src_file:
+            with open(os.path.join(self.dataset_dir, "divide_to_simple.json"), 'r') as src_file:
                 data = src_file.read()
-                with open(os.path.join(self.dataset_dir, "Data_Divide_to_sm.json"), 'w') as dest_file:
+                with open(os.path.join(self.dataset_dir, "data_divide_to_simple.json"), 'w') as dest_file:
                     dest_file.write(data)
             print("New dataset created.")
         except Exception as e:
@@ -110,14 +110,14 @@ class AICommand(cmd.Cmd):
             self.replace_files()
         else:
             result, input_msg = self.find_requirement.Run(arg)
-            if result == "#screenshot":
+            if result == "screenshot":
                 screenshot_path = self.take_screenshot()
                 self.run_process.run(input_msg=input_msg, image_path=screenshot_path)
-            elif result == "#simple":
+            elif result == "simple":
                 self.run_process.run(input_msg=input_msg)
-            elif result == "#big":
+            elif result == "big":
                 self.divide_to_simple.run(input_msg=input_msg)
-            elif result == "#response":
+            elif result == "response":
                 print(input_msg)
             else:
                 print("Invalid command.")
