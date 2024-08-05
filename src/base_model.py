@@ -34,7 +34,24 @@ def create_model(mim_type, model_type):
         "response_mime_type": mim_type,
     }
 
-    safety_settings = ChatHistoryHandler("dataset/safety_setting.json").history
+    safety_settings = [
+    {
+      "category": "HARM_CATEGORY_HARASSMENT",
+      "threshold": "BLOCK_NONE"
+    },
+    {
+      "category": "HARM_CATEGORY_HATE_SPEECH",
+      "threshold": "BLOCK_NONE"
+    },
+    {
+      "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+      "threshold": "BLOCK_NONE"
+    },
+    {
+      "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+      "threshold": "BLOCK_NONE"
+    }
+  ]
 
     model = genai.GenerativeModel(
         model_name=model_type,
