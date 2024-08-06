@@ -43,5 +43,5 @@ for name in data:
 
 print(json.dumps(all, indent=2))
 open(os.path.join(Env.base_path, "database/seeders/dataset_item.json"), "w").write(
-    json.dumps({"table": "datasets", "items": all}, indent=2)
+    json.dumps({"table": "dataset_items", "items": all}, indent=2)
 )
