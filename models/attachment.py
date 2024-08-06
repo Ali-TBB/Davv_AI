@@ -1,3 +1,5 @@
+import google.generativeai as genai
+
 from utils.collection import Collection
 
 
@@ -31,3 +33,10 @@ class Attachment(Collection):
     @path.setter
     def path(self, value):
         self.set("path", value)
+
+    __url: str = None
+
+    @property
+    def url(self) -> str:
+        if not self.__url:
+            self.__url = genai.upload_file(self.path, mime_type=self.mime_type)

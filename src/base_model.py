@@ -30,7 +30,7 @@ def create_model(mim_type, model_type, data_type, **kwargs):
         "top_k": 1,
         "max_output_tokens": 2048,
         "response_mime_type": mim_type,
-        "response_schema" : list[data_type]
+        "response_schema": list[data_type],
     }
 
     safety_settings = [
@@ -97,11 +97,9 @@ class BaseModel:
             for part in dataset_item.parts:
                 if part.startswith("<-attachment->: "):
                     attachment_id = int(part.split("<-attachment->: ")[-1].strip())
-                    attachment = Attachment.find(attachment_id)
+                    attachment: Attachment = Attachment.find(attachment_id)
                     if attachment:
-                        history_item["parts"][i] = genai.upload_file(
-                            attachment.path, mime_type=attachment.mime_type
-                        )
+                        history_item["parts"][i] = attachment.url
                 i += 1
 
             history.append(history_item)
@@ -128,13 +126,15 @@ class BaseModel:
 
         self.dataset.addItem("model", [output_msg])
 
-    def send_message(self, input_msg, attachments_urls: list[str] = []):
-        if attachments_urls:
-            self.convo.send_message([input_msg] + attachments_urls)
+    def send_message(self, input_msg, attachments: list[Attachment] = []):
+        if attachments:
+            self.convo.send_message(
+                [input_msg] + [attachment.url for attachment in attachments]
+            )
         else:
             self.convo.send_message(input_msg)
 
-        return self.handle_output(input_msg, self.convo.last.text, attachments_urls)
+        return self.handle_output(input_msg, self.convo.last.text, attachments)
 
     def handle_output(self, input_msg, output_msg, attachments: list[Attachment] = []):
         raise NotImplementedError("Subclasses must implement this method")
@@ -165,8 +165,6 @@ class BaseModel:
             # Write command content to a temporary Python script
             self.directory.file(file_name).set(command_content)
 
-            with open(file_name, "w") as file:
-                file.write(command_content)
             # print(f"Command saved to {file_name}")
         except Exception as e:
             print(f"An error occurred while saving the command: {e}")

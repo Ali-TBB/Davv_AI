@@ -22,7 +22,15 @@ class AIConversation(Conversation):
     __divide_to_simple: BaseModel = None
     __directory: Directory = None
 
-    def __init__(self, id: int, name: str, dataset_id: int, created_at=None, updated_at=None, logger: Logger = None):
+    def __init__(
+        self,
+        id: int,
+        name: str,
+        dataset_id: int,
+        created_at=None,
+        updated_at=None,
+        logger: Logger = None,
+    ):
         super().__init__(id, name, dataset_id, created_at, updated_at)
         self.__logger = logger
         self.__directory = get_storage().directory(f"conv-{self.id}")
@@ -62,16 +70,14 @@ class AIConversation(Conversation):
     def handle_message(self, message, attachments: list[Attachment] = []) -> Message:
         self.sendMessage("user", message)
 
-        attachments_urls = [genai.upload_file(attachment.path, mime_type=attachment.mime_type) for attachment in attachments]
-
-        result, input_msg = self.find_requirement.send_message(message, attachments_urls)
+        result, input_msg = self.find_requirement.send_message(message, attachments)
         if result == "screenshot":
             attachments.append(self.take_screenshot())
-            answerContent = self.run_process.send_message(message, attachments_urls)
+            answerContent = self.run_process.send_message(message, attachments)
         elif result == "simple":
-            answerContent = self.run_process.send_message(message, attachments_urls)
+            answerContent = self.run_process.send_message(message, attachments)
         elif result == "big":
-            answerContent = self.divide_to_simple.send_message(message, attachments_urls)
+            answerContent = self.divide_to_simple.send_message(message, attachments)
         elif result == "response":
             answerContent = input_msg
         else:
@@ -81,7 +87,9 @@ class AIConversation(Conversation):
 
     def take_screenshot(self) -> Attachment:
         full_path = os.path.join(
-            Env.base_path, f"storage/conv-{self.id}", f"{time.strftime("%y_%m_%d_%H%M%S")}.png"
+            Env.base_path,
+            f"storage/conv-{self.id}",
+            f"{time.strftime('%y_%m_%d_%H%M%S')}.png",
         )
         # Capture the screenshot
         screenshot = pyautogui.screenshot()
@@ -94,5 +102,5 @@ class AIConversation(Conversation):
 
     @classmethod
     def new(cls, name: str, **kwargs) -> "AIConversation":
-        dataset = Dataset.create(None, "Conversation dataset - "+name)
+        dataset = Dataset.create(None, "Conversation dataset - " + name)
         return cls.create(None, name, dataset.id, **kwargs)

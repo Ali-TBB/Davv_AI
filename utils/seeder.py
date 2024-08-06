@@ -31,7 +31,9 @@ def seed():
             if not ("table" in seeder or "items" in seeder):
                 raise Exception("Invalid seeder, missing table or items key")
             elif not seeder["table"] in tables:
-                raise Exception(f"Invalid table, table '{seeder["table"]}' doesn't exists")
+                raise Exception(
+                    f"Invalid table, table '{seeder['table']}' doesn't exists"
+                )
             for item in seeder["items"]:
                 collector = tables[seeder["table"]]
                 collector.create(**item)

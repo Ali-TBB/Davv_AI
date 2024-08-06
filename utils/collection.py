@@ -58,7 +58,7 @@ class Collection:
 
     @classmethod
     def find(cls, id, **kwargs) -> "Collection":
-        return cls.findWhere(f"{cls.index} = ?", (id,), **kwargs)
+        return cls.findWhere(f"`{cls.index}` = ?", (id,), **kwargs)
 
     @classmethod
     def nextId(cls) -> int:
