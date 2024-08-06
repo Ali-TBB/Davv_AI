@@ -86,11 +86,7 @@ class AIConversation(Conversation):
         return self.sendMessage("model", answerContent)
 
     def take_screenshot(self) -> Attachment:
-        full_path = os.path.join(
-            Env.base_path,
-            f"storage/conv-{self.id}",
-            f"{time.strftime('%y_%m_%d_%H%M%S')}.png",
-        )
+        full_path = self.directory.file(f"{time.strftime('%y_%m_%d_%H%M%S')}.png").path
         # Capture the screenshot
         screenshot = pyautogui.screenshot()
         # Save the screenshot to the specified file path
