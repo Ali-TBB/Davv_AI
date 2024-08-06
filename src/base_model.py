@@ -1,7 +1,5 @@
 import json
-import os
 import subprocess
-import typing
 
 import google.generativeai as genai
 
@@ -33,7 +31,6 @@ def create_model(mim_type, model_type, data_type, **kwargs):
         "response_mime_type": mim_type,
         "response_schema": list[data_type],
     }
-
     safety_settings = [
         {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
         {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
@@ -79,7 +76,7 @@ class BaseModel:
 
     def create_model(self):
         self.model = create_model(
-            "application/json", "gemini-1.5-pro-exp-0801", self.data_type
+            "application/json", "gemini-1.5-flash-latest", self.data_type
         )
 
         history = []
@@ -104,8 +101,6 @@ class BaseModel:
                 i += 1
 
             history.append(history_item)
-
-        print(json.dumps(history, indent=2))
 
         self.convo = self.model.start_chat(history=history)
 
@@ -150,9 +145,7 @@ class BaseModel:
         Returns:
             str: The JSON data extracted from the output.
         """
-        json_data = output.replace("```json\n", "")
-        json_data = json_data.replace("```", "")
-        return json.loads(json_data)
+        return json.loads(output)
 
     def save_command(self, file_name, command_content):
         """
