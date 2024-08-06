@@ -26,7 +26,7 @@ class Directory:
         if os.path.exists(self.path):
             os.rmdir(self.path)
 
-    def items(self) -> list["File" | "Directory"]:
+    def items(self) -> list:
         return [
             self.file(item) if os.path.isfile(item) else self.directory(item)
             for item in os.listdir(self.path)

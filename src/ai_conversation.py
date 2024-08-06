@@ -48,7 +48,7 @@ class AIConversation(Conversation):
         from src.run_process import RunProcess
 
         if not self.__run_process:
-            self.__run_process = RunProcess(self.dataset)
+            self.__run_process = RunProcess(self.dataset, self.directory)
         return self.__run_process
 
     @property
@@ -56,7 +56,7 @@ class AIConversation(Conversation):
         from src.find_requirements import FindRequirements
 
         if not self.__find_requirement:
-            self.__find_requirement = FindRequirements(self.dataset)
+            self.__find_requirement = FindRequirements(self.dataset, self.directory)
         return self.__find_requirement
 
     @property
@@ -64,7 +64,7 @@ class AIConversation(Conversation):
         from src.divide_to_simple import DivideToSimple
 
         if not self.__divide_to_simple:
-            self.__divide_to_simple = DivideToSimple(self.dataset)
+            self.__divide_to_simple = DivideToSimple(self.dataset, self.directory)
         return self.__divide_to_simple
 
     def handle_message(self, message, attachments: list[Attachment] = []) -> Message:
