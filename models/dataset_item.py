@@ -1,7 +1,6 @@
 import json
 
 from utils.collection import Collection
-from models.dataset import Dataset
 
 
 class DatasetItem(Collection):
@@ -28,7 +27,8 @@ class DatasetItem(Collection):
     def dataset_id(self, value):
         self.set("dataset_id", value)
 
-    def dataset(self) -> Dataset:
+    @property
+    def dataset(self):
         return DatasetItem.find(self.dataset_id)
 
     @property

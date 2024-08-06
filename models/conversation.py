@@ -11,17 +11,13 @@ class Conversation(Collection):
     table = "conversations"
 
     def __init__(
-        self, id: int, name: str, datasets_ids: list, created_at=None, updated_at=None
+        self, id: int, name: str, dataset_id: int, created_at=None, updated_at=None
     ):
         super().__init__(
             {
                 "id": id,
                 "name": name,
-                "datasets_ids": (
-                    json.dumps(datasets_ids)
-                    if type(datasets_ids) == list
-                    else datasets_ids
-                ),
+                "dataset_id": dataset_id,
                 "created_at": created_at,
                 "updated_at": updated_at,
             },
@@ -36,17 +32,16 @@ class Conversation(Collection):
         self.set("name", value)
 
     @property
-    def datasets_ids(self) -> list:
-        return json.loads(self.get("datasets_ids"))
+    def dataset_id(self) -> int:
+        return self.get("dataset_id")
 
-    @datasets_ids.setter
-    def datasets_ids(self, value: list):
-        self.set("datasets_ids", json.dumps(value))
+    @dataset_id.setter
+    def dataset_id(self, value: int):
+        self.set("dataset_id", value)
 
-    def datasets(self) -> dict:
-        return {
-            dataset_id: Dataset.find(dataset_id) for dataset_id in self.datasets_ids
-        }
+    @property
+    def dataset(self) -> Dataset:
+        return Dataset.find(self.dataset_id)
 
     def messages(self) -> list[Message]:
         return Message.all(f"`conversation_id` = {self.id}")
@@ -54,15 +49,7 @@ class Conversation(Collection):
     def sendMessage(
         self, role: str, content: str, attachments_ids: list = []
     ) -> Message:
-        message = Message(None, self.id, role, content, attachments_ids)
-        message.save()
-        return message
-
-    @classmethod
-    def new(cls, name) -> "Conversation":
-        conversation = Conversation(None, name, [])
-        Conversation.create(conversation)
-        return conversation
+        return Message.create(None, self.id, role, content, attachments_ids)
 
     @classmethod
     def onDeleting(cls, collection):

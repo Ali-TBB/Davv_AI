@@ -5,11 +5,11 @@ from utils.env import Env
 
 class Database:
 
-    __connection: sqlite3 = None
+    __connection: sqlite3.Connection = None
 
     @classmethod
     def install(cls):
-        sql_file_path = os.path.join(Env.base_path, "assets", "database.sql")
+        sql_file_path = os.path.join(Env.base_path, "database/database.sql")
 
         with open(sql_file_path, "r") as sqlFile:
             print("Creating database...")
@@ -17,12 +17,20 @@ class Database:
                 cls.execute(sql)
             print("Database created successfully")
 
+        from utils import seeder
+
+        seeder.seed()
+
     @classmethod
     def execute(cls, sql, params=()) -> sqlite3.Cursor:
-        cursor = cls.connection.cursor()
-        cursor.execute(sql, params)
-        cls.connection.commit()
-        return cursor
+        try:
+            cursor = cls.connection.cursor()
+            cursor.execute(sql, params)
+            cls.connection.commit()
+            return cursor
+        except Exception as e:
+            print(f"Error executing SQL query '{sql}'", e)
+            raise e
 
     @classmethod
     def close(cls):
@@ -33,9 +41,15 @@ class Database:
 
     @classmethod
     @property
-    def connection(cls) -> sqlite3:
+    def connection(cls) -> sqlite3.Connection:
         if cls.__connection is None:
-            cls.__connection = sqlite3.connect(
-                os.path.join(Env.base_path, "database/database.db")
-            )
+            db_path = os.path.join(Env.base_path, "database/database.db")
+
+            install = not os.path.exists(db_path)
+
+            cls.__connection = sqlite3.connect(db_path)
+
+            if install:
+                cls.install()
+
         return cls.__connection

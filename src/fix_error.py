@@ -1,6 +1,6 @@
-import json
 import subprocess
 
+from models.attachment import Attachment
 from src.base_model import BaseModel
 
 
@@ -17,23 +17,10 @@ class FixError(BaseModel):
 
     """
 
-    def __init__(self):
-        super().__init__("dataset/datafix.json")
+    backup_name = "fix_error"
 
-    def run(self, input_msg):
-        """
-        Executes the error fixing process.
-
-        Args:
-            input_msg (str): The input message to be sent to the conversation.
-
-        Returns:
-            None
-        """
-        print("trying to fix the Error ...")
-        self.convo.send_message(input_msg)
-        output_msg = self.convo.last.text
-        json_data = json.loads(self.split_output(output_msg))
+    def handle_output(self, input_msg, output_msg, attachments: list[Attachment] = []):
+        json_data = self.parse_output(output_msg)
         if json_data["action"] == "execute":
             if json_data["language"] == "python":
                 self.save_command("ErrorCommand.py", json_data["code"])
@@ -46,12 +33,10 @@ class FixError(BaseModel):
                         if result.returncode != 0:
                             print(f"Error Command execution failed with return code {result.returncode}")
                         else:
-                            print("Error fixed, let's run it again ...")
-                            return
+                            return "Error fixed, let's run it again ..."
                     except Exception as e:
                         print(f"An error occurred while running the command: {e}")
                     i += 1
-                print("Error couldn't be fixed")
+                return "Error couldn't be fixed"
         elif json_data["action"] == "response":
-            response =  json_data["response"]
-            print(response)
+            return json_data["response"]

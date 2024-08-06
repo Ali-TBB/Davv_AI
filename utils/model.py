@@ -7,25 +7,25 @@ from utils.collection import Collection
 class Model:
 
     @staticmethod
-    def all(collection_cls, table, where=None) -> list[Collection]:
+    def all(collection_cls, table, where=None, params=(), **kwargs) -> list[Collection]:
         sql = f"SELECT * FROM `{table}`"
         if where:
             sql += f" WHERE {where}"
         rows: list[Collection] = []
-        for row in utils.Database.execute(sql).fetchall():
-            rows.append(collection_cls(*row))
+        for row in utils.Database.execute(sql, params).fetchall():
+            rows.append(collection_cls(*row, **kwargs))
         return rows
 
     @staticmethod
-    def find(collection_cls, table, id, index="id") -> "Collection":
+    def findWhere(collection_cls, table, where: str, params=(), **kwargs) -> "Collection":
         row = utils.Database.execute(
-            f"SELECT * FROM `{table}` WHERE `{index}` = {id}"
+            f"SELECT * FROM `{table}` WHERE {where}", params
         ).fetchone()
-        return collection_cls(*row) if row else None
+        return collection_cls(*row, **kwargs) if row else None
 
     @classmethod
-    def nextId(cls, table) -> int:
-        row = utils.Database.execute(f"SELECT MAX(`id`) FROM `{table}`").fetchone()
+    def nextId(cls, table, index="id") -> int:
+        row = utils.Database.execute(f"SELECT MAX(`{index}`) FROM `{table}`").fetchone()
         return row[0] + 1 if row[0] else 1
 
     @staticmethod
@@ -58,11 +58,11 @@ class Model:
         return Model.updateWhere(table, item.data, f"`{index}` = {item.id}") > 0
 
     @staticmethod
-    def deleteWhere(table, where=None) -> int:
+    def deleteWhere(table, where=None, params=()) -> int:
         sql = f"DELETE FROM `{table}`"
         if where:
             sql += f" WHERE {where}"
-        return utils.Database.execute(sql).rowcount
+        return utils.Database.execute(sql, params).rowcount
 
     @staticmethod
     def delete(table, id, index="id") -> bool:

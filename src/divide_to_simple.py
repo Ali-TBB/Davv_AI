@@ -1,7 +1,4 @@
-import json
-
-import google.generativeai as genai
-
+from models.attachment import Attachment
 from src.base_model import BaseModel
 
 
@@ -9,8 +6,6 @@ class DivideToSimple(BaseModel):
     """
     A class that represents the DivideToSimple model.
 
-    Attributes:
-        JPath (str): The path to the JSON dataset file.
 
     Methods:
         __init__(self): Initializes the DivideToSimple object.
@@ -19,30 +14,11 @@ class DivideToSimple(BaseModel):
         open_file(self, file_name): Opens the file with the given name.
     """
 
-    def __init__(self):
-        super().__init__(JPath="dataset/Data_Divide_to_sm.json")
+    backup_name = "divide_to_simple"
 
-    def run(self, input_msg=None, path=None, type=None, mime_type=None):
-        """
-        Runs the model with the given input.
-
-        Args:
-            input_msg (str): The input message.
-            path (str): The path to the file.
-            type (str): The type of the file.
-            mime_type (str): The MIME type of the file.
-
-        Returns:
-            dict: The output data in JSON format.
-        """
-        if path and type:
-            upload_file = genai.upload_file(path, mime_type=mime_type)
-            self.convo.send_message([input_msg, upload_file])
-        else:
-            self.convo.send_message(input_msg)
-        output_msg = self.convo.last.text
-        self.update_history(input_msg, output_msg, path, type)
-        json_data = json.loads(self.split_output(output_msg))
+    def handle_output(self, input_msg, output_msg, attachments: list[Attachment] = []):
+        self.update_history(input_msg, output_msg, attachments)
+        json_data = self.parse_output(output_msg)
         for step_name in json_data:
             step = json_data[step_name]
             if step["action"] == "create_file":

@@ -1,127 +1,113 @@
-import cmd
 import os
-import time
-import pyautogui
 
-from src.find_requirements import FindRequirements
-from src.run_process import RunProcess
-from src.divide_to_simple import DivideToSimple
+import cmd
+import questionary
+
+from utils.env import Env
+from src.ai_conversation import AIConversation
 
 
 class AICommand(cmd.Cmd):
-    """ AI command prompt to access models data """
-    prompt = '(User): '
+    """AI command prompt to access models data"""
+
+    prompt = "(User): "
+
+    conversation: AIConversation
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.current_dir = os.path.dirname(os.path.abspath(__file__))
         self.dataset_dir = os.path.join(self.current_dir, "../src/dataset")
-        self.api_key_file = os.path.join(self.current_dir, "../src/dataset/API_KEY")
-        self.get_started = True
-        self.run_process = None
-        self.find_requirement = None
-        self.divide_to_simple= None
+        self.hello()
+
+    def hello(self):
+        print("Hello, welcome to the AI command prompt.")
         self.configure_api_key()
+        self.home()
 
     def configure_api_key(self):
-        try:
-            with open(self.api_key_file, 'r') as file:
-                api_key = file.read().strip()
-                if not api_key:
-                    print("API key not found in the text file.")
-                    self.prompt_api_key()
-        except FileNotFoundError:
+        if not Env.has("API_KEY"):
             print("API key file not found.")
             self.prompt_api_key()
 
     def prompt_api_key(self):
-        api_key = input("Enter your API key: ").strip()
-        with open(self.api_key_file, 'w') as file:
-            file.write(api_key)
+        api_key = questionary.text("Enter your API key:").ask()
+        if api_key:
+            Env.set("API_KEY", api_key)
+            print("API key set successfully.")
+        else:
+            print("API key is required.")
+            self.prompt_api_key()
+
+    def home(self):
+        actions = {
+            "Create a new conversation": self.create_conversation,
+            "Open an existing conversation": self.open_conversation,
+            # "Help": lambda: self.do_help(""),
+            "Quit": lambda: self.do_quit(""),
+        }
+        action = questionary.select(
+            "What would you like to do?",
+            choices=actions.keys(),
+        ).ask()
+        actions[action]()
 
     def do_nothing(self, arg):
-        """ Does nothing """
+        """Does nothing"""
         pass
 
     def do_quit(self, arg):
-        """ Close program and saves safely data """
-        return True
+        """Close program and saves safely data"""
+        print("Exiting the program, bye")
+        exit()
 
     def do_EOF(self, arg):
-        """ Close program and saves safely data, when
+        """Close program and saves safely data, when
         user input is CTRL + D
         """
         print("")
         return True
 
     def do_clear(self, arg):
-        """ Clears the screen """
+        """Clears the screen"""
         print("\033c")
 
-    def take_screenshot(self):
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        image_name = time.strftime("%y_%m_%d_%H%M%S")
-        full_path = os.path.join(current_dir, "src/screenshot_image/" + f"{image_name}.png")
-        try:
-            # Capture the screenshot
-            screenshot = pyautogui.screenshot()
-            # Save the screenshot to the specified file path
-            screenshot.save(full_path)
-            print("Screenshot saved successfully!")
-        except Exception as e:
-            print(f"An error occurred: {e}")
-        return full_path
+    def create_conversation(self):
+        name = questionary.text("Enter the conversation name: ").ask()
+        if name:
+            self.do_clear("")
+            self.conversation = AIConversation.new(name)
+            print(f"Conversation {name} created successfully.")
+        else:
+            print("Conversation name is required.")
+            self.create_conversation()
 
-    def replace_files(self):
-        try:
-            # Replace data.json
-            with open(os.path.join(self.dataset_dir, "run_process.json"), 'r') as src_file:
-                data = src_file.read()
-                with open(os.path.join(self.dataset_dir, "data_run_process.json"), 'w') as dest_file:
-                    dest_file.write(data)
+    def open_conversation(self):
+        self.do_clear("")
+        conversations = AIConversation.all()
 
-            # Replace datafix.json
-            with open(os.path.join(self.dataset_dir, "fix_error.json"), 'r') as src_file:
-                data = src_file.read()
-                with open(os.path.join(self.dataset_dir, "data_fix_error.json"), 'w') as dest_file:
-                    dest_file.write(data)
-        
-            with open(os.path.join(self.dataset_dir, "find_Req.json"), 'r') as src_file:
-                data = src_file.read()
-                with open(os.path.join(self.dataset_dir, "data_find_req.json"), 'w') as dest_file:
-                    dest_file.write(data)
-            with open(os.path.join(self.dataset_dir, "divide_to_simple.json"), 'r') as src_file:
-                data = src_file.read()
-                with open(os.path.join(self.dataset_dir, "data_divide_to_simple.json"), 'w') as dest_file:
-                    dest_file.write(data)
-            print("New dataset created.")
-        except Exception as e:
-            print(f"An error occurred while replacing files: {e}")
+        if conversations:
+            name = questionary.select(
+                "Select the conversation:",
+                choices=[conversation.name for conversation in conversations],
+            ).ask()
+            self.do_clear("")
+
+            self.conversation = AIConversation.findWhere("`name` = ?", (name,))
+        else:
+            print("There is no conversations created yet")
+            self.home()
 
     def default(self, arg):
-        """ Handle new ways of inputting data """
-        if self.get_started:
-            self.run_process = RunProcess()
-            self.find_requirement = FindRequirements()
-            self.divide_to_simple = DivideToSimple()
-            self.get_started = False
+        """Handle new ways of inputting data"""
         # Assuming "prompt" is the command to execute
-        if arg.strip() == "#new":
-            self.replace_files()
+        if arg.strip() == "#home":
+            self.home()
+        elif arg.strip() == "#new":
+            self.create_conversation()
         else:
-            result, input_msg = self.find_requirement.Run(arg)
-            if result == "screenshot":
-                screenshot_path = self.take_screenshot()
-                self.run_process.run(input_msg=input_msg, image_path=screenshot_path)
-            elif result == "simple":
-                self.run_process.run(input_msg=input_msg)
-            elif result == "big":
-                self.divide_to_simple.run(input_msg=input_msg)
-            elif result == "response":
-                print(input_msg)
-            else:
-                print("Invalid command.")
+            print(self.conversation.handle_message(arg).content)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     AICommand().cmdloop()

@@ -5,11 +5,11 @@ class Attachment(Collection):
 
     table = "attachments"
 
-    def __init__(self, id, name, path, created_at=None, updated_at=None):
+    def __init__(self, id, mime_type, path, created_at=None, updated_at=None):
         super().__init__(
             {
                 "id": id,
-                "name": name,
+                "mime_type": mime_type,
                 "path": path,
                 "created_at": created_at,
                 "updated_at": updated_at,
@@ -17,12 +17,12 @@ class Attachment(Collection):
         )
 
     @property
-    def name(self) -> str:
-        return self.get("name")
+    def mime_type(self) -> str:
+        return self.get("mime_type")
 
-    @name.setter
-    def name(self, value):
-        self.set("name", value)
+    @mime_type.setter
+    def mime_type(self, value):
+        self.set("mime_type", value)
 
     @property
     def path(self) -> str:

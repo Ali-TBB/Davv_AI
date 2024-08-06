@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `datasets` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL,
-  `type` VARCHAR(255) NOT NULL,
+  `backup_id` INT,
   `created_at` TIMESTAMP,
   `updated_at` TIMESTAMP
 );
@@ -19,14 +19,14 @@ CREATE TABLE IF NOT EXISTS `dataset_items` (
 CREATE TABLE IF NOT EXISTS `conversations` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL,
-  `datasets_ids` TEXT NOT NULL,
+  `dataset_id` TEXT NOT NULL,
   `created_at` TIMESTAMP,
   `updated_at` TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS `attachments` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `name` VARCHAR(255) NOT NULL,
+  `mime_type` VARCHAR(255) NOT NULL,
   `path` VARCHAR(255) NOT NULL,
   `created_at` TIMESTAMP,
   `updated_at` TIMESTAMP

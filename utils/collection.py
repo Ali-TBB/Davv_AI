@@ -6,8 +6,9 @@ import utils
 
 
 class Collection:
-    auto_increment = True
     table: str
+    index = "id"
+    auto_increment = True
     __data: dict
 
     def __init__(self, data):
@@ -48,37 +49,32 @@ class Collection:
         self.set("updated_at", str(value))
 
     @classmethod
-    def all(cls, where=None) -> list["Collection"]:
-        return utils.Model.all(cls, cls.table, where)
+    def all(cls, where=None, params=(), **kwargs) -> list["Collection"]:
+        return utils.Model.all(cls, cls.table, where, params, **kwargs)
 
     @classmethod
-    def find(cls, id, index="id") -> "Collection":
-        return utils.Model.find(cls, cls.table, id, index)
+    def findWhere(cls, where=None, params=(), **kwargs) -> "Collection":
+        return utils.Model.findWhere(cls, cls.table, where, params, **kwargs)
+
+    @classmethod
+    def find(cls, id, **kwargs) -> "Collection":
+        return cls.findWhere(f"{cls.index} = ?", (id,), **kwargs)
 
     @classmethod
     def nextId(cls) -> int:
         return utils.Model.nextId(cls.table)
 
     @classmethod
-    def create(cls, collection) -> int:
+    def create(cls, *args, **kwargs) -> "Collection":
+        collection = cls(*args, **kwargs)
         res = utils.Model.create(cls.table, collection, cls.auto_increment)
         cls.onEvent("creating", collection, res)
-        return res
-
-    @classmethod
-    def new(cls) -> "Collection":
-        raise Exception("Method new not implemented")
+        return collection
 
     def update(self) -> bool:
         res = utils.Model.update(self.__class__.table, self)
         self.__class__.onEvent("updating", self, res)
         return res
-
-    def save(self) -> int | bool:
-        if self.id:
-            return self.update()
-        else:
-            return self.__class__.create(self)
 
     def delete(self) -> bool:
         self.__class__.onEvent("deleting", self)

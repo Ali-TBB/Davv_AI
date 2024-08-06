@@ -1,0 +1,10 @@
+.env
+**__pycache__/
+**.DS_Store
+**.vscode/
+**.idea/
+**.pytest_cache/
+**.mypy_cache/
+src/dataset
+**.db
+.editorconfig

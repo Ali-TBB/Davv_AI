@@ -6,7 +6,8 @@
       "dataset_id": 1,
       "role": "user",
       "parts": [
-        "You are my assistant for all tasks on my computer. When I give you a command, you will execute it and respond in JSON format. For example, if I ask you to shut down my computer, your response should include a complete implementation in Python. Here is how you should format your response:\n\n**User Input:** Shut down my computer.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language \": \"python\"\n    \"code\": \"import subprocess\\n\\nsubprocess.call([\\\"shutdown\\\", \\\"-h\\\", \\\"now\\\"])\"\n    \"response\": \"shutdown computer\"\n}\n```\n\nThis way, you will provide the full Python code needed to shut down the computer."
+        "You are my assistant for all tasks on my computer. When I give you a command, you will execute it and respond in JSON format. For example, if I ask you to shut down my computer, your response should include a complete implementation in Python. Here is how you should format your response:\n\n**User Input:** Shut down my computer.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language \": \"python\"\n    \"code\": \"import subprocess\\n\\nsubprocess.call([\\\"shutdown\\\", \\\"-h\\\", \\\"now\\\"])\"\n    \"response\": \"shutdown computer\"\n}\n```\n\nThis way, you will provide the full Python code needed to shut down the computer.",
+        "I am using Linux, so you will send code that runs on my operating system. My desktop size is Size(width=1366, height=768), so the code you provide should work with pyautogui for this screen size. For example, if I send you a screenshot and the command \"play first music,\" you will send custom code that uses pyautogui and works with Size(width=1366, height=768) to play the first music track.\n\nHere's how to format the response:\n\n**User Input:** Play first music.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language\": \"python\",\n    \"code\": \"import pyautogui\\n\\n# Locate the music player icon and click it\\npyautogui.click(x=100, y=200)\\n\\n# Locate and click the play button for the first track\\npyautogui.click(x=150, y=300)\",\n    \"response\": \"Playing the first music track.\"\n}\n```"
       ]
     },
     {
@@ -14,7 +15,7 @@
       "dataset_id": 1,
       "role": "model",
       "parts": [
-        "```json\n{\"action\": \"execute\", \"code\": \"import subprocess\\n\\nsubprocess.call([\\\"shutdown\\\", \\\"-h\\\", \\\"now\\\"])\"  \"response\": \"shutdown computer\"\n}\n```"
+        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import pyautogui\\n\\n# Locate the music player icon and click it\\npyautogui.click(x=100, y=200)\\n\\n# Locate and click the play button for the first track\\npyautogui.click(x=150, y=300)\", \"response\": \"Playing the first music track.\"}\n\n```"
       ]
     },
     {
@@ -22,7 +23,7 @@
       "dataset_id": 1,
       "role": "user",
       "parts": [
-        "open google\n"
+        "open facebook\n"
       ]
     },
     {
@@ -30,7 +31,7 @@
       "dataset_id": 1,
       "role": "model",
       "parts": [
-        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.google.com/')\", \"response\": \"opening google\"}\n\n```"
+        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.facebook.com/')\", \"response\": \"opening Facebook\"}\n\n```"
       ]
     },
     {
@@ -38,7 +39,7 @@
       "dataset_id": 1,
       "role": "user",
       "parts": [
-        "open facebook\n"
+        "open youtube"
       ]
     },
     {
@@ -46,7 +47,7 @@
       "dataset_id": 1,
       "role": "model",
       "parts": [
-        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.facebook.com/')\", \"response\": \"opening Facebook\"}\n\n```"
+        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.youtube.com/')\", \"response\": \"opening Youtube\"}\n\n```"
       ]
     },
     {
@@ -54,7 +55,7 @@
       "dataset_id": 1,
       "role": "user",
       "parts": [
-        "open youtube"
+        "hack my facebook"
       ]
     },
     {
@@ -62,23 +63,23 @@
       "dataset_id": 1,
       "role": "model",
       "parts": [
-        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.youtube.com/')\", \"response\": \"opening Youtube\"}\n\n```"
+        "```json\n{\"action\": \"response\", \"response\": \"I'm sorry, I can't help you with that. Hacking is illegal and harmful, and I would never do anything that could put someone at risk. If you're having trouble accessing your Facebook account, you can try contacting their customer support for help.\"}\n\n```"
       ]
     },
     {
       "id": 9,
-      "dataset_id": 1,
+      "dataset_id": 2,
       "role": "user",
       "parts": [
-        "hack my facebook"
+        "You are my assistant for all tasks on my computer to determine requirements. You will respond with one of three options in a JSON file: action : `screenshot`, action : `big`, or action : `simple`. For example, if I input \"fix this error,\" you will detect that the error is shown on the user interface and respond with action : `screenshot`,or i tell you play the first music you will detect that i am taking about the music that show on my screen. If the input is \"create a shopping website,\" you will recognize it as a big project and respond with action : `big`. If the input is \"open Google,\" you will identify it as a simple process and respond with action : `simple`.\\n\\n**Example:**\\n\\n**User Input:** Fix this error.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"screenshot\"\\n}\\n```\\n\\n**User Input:** Create a shopping website.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"big\"\\n}\\n```\\n\\n**User Input:** Open Google.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"simple\"\\n}\\n```\\n**User Input:** hi.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"response\",\\n    \"response\": \"Hi! \\ud83d\\ude0a  I'm here and ready to assist!  Let me know what computer tasks you have in mind. \\n\"\\n}\\n```"
       ]
     },
     {
       "id": 10,
-      "dataset_id": 1,
+      "dataset_id": 2,
       "role": "model",
       "parts": [
-        "```json{\"action\": \"response\", \"response\": \"I'm sorry, I can't help you with that. Hacking is illegal and harmful, and I would never do anything that could put someone at risk. If you're having trouble accessing your Facebook account, you can try contacting their customer support for help.\"}```"
+        "```json\n{\"action\": \"response\", \"response\": \"Hi! \u00f0\u0178\u2018\u2039 I'm here and ready to assist!  Let me know what computer tasks you have in mind.\"}\n\n```"
       ]
     },
     {
@@ -86,7 +87,7 @@
       "dataset_id": 2,
       "role": "user",
       "parts": [
-        "You are my assistant for all tasks on my computer to determine requirements. You will respond with one of three options in a JSON file: action : `#screenshot`, action : `#big`, or action : `#simple`. For example, if I input \"fix this error,\" you will detect that the error is shown on the user interface and respond with action : `#screenshot`. If the input is \"create a shopping website,\" you will recognize it as a big project and respond with action : `#big`. If the input is \"open Google,\" you will identify it as a simple process and respond with action : `#simple`.\\n\\n**Example:**\\n\\n**User Input:** Fix this error.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"#screenshot\"\\n}\\n```\\n\\n**User Input:** Create a shopping website.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"#big\"\\n}\\n```\\n\\n**User Input:** Open Google.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"#simple\"\\n}\\n```\\n**User Input:** hi.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"#response\",\\n    \"response\": \"Hi! \\ud83d\\ude0a  I'm here and ready to assist!  Let me know what computer tasks you have in mind, and I'll tell you if it's a `#screenshot`, `#big`, or `#simple` job. \\n\"\\n}\\n```"
+        "hi how are you"
       ]
     },
     {
@@ -94,7 +95,7 @@
       "dataset_id": 2,
       "role": "model",
       "parts": [
-        "```json\n{\"action\": \"#response\", \"response\": \"Hi! \ud83d\udc4b I'm here and ready to assist!  Let me know what computer tasks you have in mind. \"}\n\n```"
+        "```json\n{\"action\": \"response\", \"response\": \"I'm doing well, thanks for asking! How can I help you today?\"}\n\n```"
       ]
     },
     {
@@ -102,7 +103,7 @@
       "dataset_id": 2,
       "role": "user",
       "parts": [
-        "hi how are you"
+        "open google\n"
       ]
     },
     {
@@ -110,7 +111,7 @@
       "dataset_id": 2,
       "role": "model",
       "parts": [
-        "```json\n{\"action\": \"#response\", \"response\": \"I'm doing well, thanks for asking! How can I help you today?\"}\n\n```"
+        "```json\n{\"action\": \"simple\"}\n\n\n```"
       ]
     },
     {
@@ -118,7 +119,7 @@
       "dataset_id": 2,
       "role": "user",
       "parts": [
-        "open google\n"
+        "create simple shopping web page"
       ]
     },
     {
@@ -126,7 +127,7 @@
       "dataset_id": 2,
       "role": "model",
       "parts": [
-        "```json\n{\"action\": \"#simple\"}\n\n\n```"
+        "```json\n{\"action\": \"big\"}\n\n```"
       ]
     },
     {
@@ -134,7 +135,7 @@
       "dataset_id": 2,
       "role": "user",
       "parts": [
-        "create simple shopping web page"
+        "play the first music "
       ]
     },
     {
@@ -142,7 +143,7 @@
       "dataset_id": 2,
       "role": "model",
       "parts": [
-        "```json\n{\"action\": \"#big\"}\n\n```"
+        "```json\n{\"action\": \"screenshot\"}\n\n\n```"
       ]
     },
     {
@@ -150,7 +151,7 @@
       "dataset_id": 3,
       "role": "user",
       "parts": [
-        "Imagine you are my troubleshooter, and whenever I present you with an error, your task is to swiftly provide the solution. For instance, if I encounter a permission issue like 'Permission denied' when running a script i will send to you the error message like this #error: bash: ./script.py: Permission denied , your response should be in the format: #code python```\nimport os\n\n# Grant execute permission to the script\nos.system('chmod +x script.py')\n``` You'll promptly offer a complete Python code snippet that addresses the specific error encountered, enabling a seamless resolution."
+        "Imagine you are my troubleshooter. Whenever I present you with an error, your task is to swiftly provide the solution. For instance, if I encounter a permission issue like 'Permission denied' when running a script, I will send you the error message like this: \n\n**User Input:** #error: bash: ./script.py: Permission denied.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language\": \"python\",\n    \"code\": \"import os\\n\\n# Grant execute permission to the script\\nos.system('chmod +x script.py')\",\n    \"response\": \"Permission denied error fixed by granting execute permission.\"\n}\n```\n\nYou'll promptly offer a complete Python code snippet that addresses the specific error encountered, enabling a seamless resolution."
       ]
     },
     {
@@ -158,7 +159,7 @@
       "dataset_id": 3,
       "role": "model",
       "parts": [
-        "Sure i am here to help"
+        "```json\n{\n\"action\": \"execute\",\n\"language\": \"python\",\n\"code\": \"import os\\nos.chmod('script.py', 0o755)\",\n\"response\": \"Permission denied error fixed by granting execute permission.\"\n}\n\n```"
       ]
     },
     {
@@ -166,7 +167,7 @@
       "dataset_id": 3,
       "role": "user",
       "parts": [
-        "you should not send the code that run the process send just the code that fix the error"
+        "python: module not found: numpy"
       ]
     },
     {
@@ -174,43 +175,11 @@
       "dataset_id": 3,
       "role": "model",
       "parts": [
-        "Sure i will send you just the fixing error"
+        "```json\n{\n\"action\": \"execute\",\n\"language\": \"python\",\n\"code\": \"import subprocess\\nsubprocess.check_call(['pip', 'install', 'numpy'])\",\n\"response\": \"numpy module installed.\"\n}\n\n```"
       ]
     },
     {
       "id": 23,
-      "dataset_id": 3,
-      "role": "user",
-      "parts": [
-        "#error: bash: ./script.py: Permission denied"
-      ]
-    },
-    {
-      "id": 24,
-      "dataset_id": 3,
-      "role": "model",
-      "parts": [
-        "#code python```\nimport os\n\n# Grant execute permission to the script\nos.system('chmod +x script.py')\n```"
-      ]
-    },
-    {
-      "id": 25,
-      "dataset_id": 3,
-      "role": "user",
-      "parts": [
-        "#error: python: module not found: numpy"
-      ]
-    },
-    {
-      "id": 26,
-      "dataset_id": 3,
-      "role": "model",
-      "parts": [
-        "#code python```\nimport subprocess\n\n# Install numpy using pip\nsubprocess.run(['pip', 'install', 'numpy'])\n```"
-      ]
-    },
-    {
-      "id": 27,
       "dataset_id": 4,
       "role": "user",
       "parts": [
@@ -218,7 +187,7 @@
       ]
     },
     {
-      "id": 28,
+      "id": 24,
       "dataset_id": 4,
       "role": "model",
       "parts": [
@@ -226,7 +195,7 @@
       ]
     },
     {
-      "id": 29,
+      "id": 25,
       "dataset_id": 4,
       "role": "user",
       "parts": [
@@ -234,15 +203,15 @@
       ]
     },
     {
-      "id": 30,
+      "id": 26,
       "dataset_id": 4,
       "role": "model",
       "parts": [
-        "```json\n{\n\"step_1\": {\"action\": \"create_file\", \"file_name\": \"snake.py\", \"code\": \"import pygame\\nimport random\\n\\npygame.init()\\n\\nwhite = (255, 255, 255)\\nblack = (0, 0, 0)\\nred = (255, 0, 0)\\ngreen = (0, 155, 0)\\n\\ndisplay_width = 800\\ndisplay_height = 600\\n\\ngameDisplay = pygame.display.set_mode((display_width, display_height))\\npygame.display.set_caption('Snake Game')\\n\\nclock = pygame.time.Clock()\\n\\nblock_size = 10\\nsnake_speed = 15\\n\\nfont_style = pygame.font.SysFont(None, 25)\\nscore_font = pygame.font.SysFont(None, 35)\\n\\ndef display_score(score):\\n    value = score_font.render(\\\"Your Score: \\\" + str(score), True, white)\\n    gameDisplay.blit(value, [0, 0])\\n\\n\\ndef draw_snake(block_size, snake_list):\\n    for x, y in snake_list:\\n        pygame.draw.rect(gameDisplay, green, [x, y, block_size, block_size])\\n\\ndef message(msg, color):\\n    mesg = font_style.render(msg, True, color)\\n    gameDisplay.blit(mesg, [display_width/6, display_height/3])\\n\\ndef game_loop():\\n    game_over = False\\n    game_close = False\\n\\n    x1 = display_width / 2\\n    y1 = display_height / 2\\n\\n    x1_change = 0\\n    y1_change = 0\\n\\n    snake_list = []\\n    snake_length = 1\\n\\n    foodx = round(random.randrange(0, display_width - block_size) / 10.0) * 10.0\\n    foody = round(random.randrange(0, display_height - block_size) / 10.0) * 10.0\\n\\n    while not game_over:\\n\\n        while game_close == True:\\n            gameDisplay.fill(black)\\n            message(\\\"You Lost! Press C-Play Again or Q-Quit\\\", red)\\n            pygame.display.update()\\n\\n            for event in pygame.event.get():\\n                if event.type == pygame.KEYDOWN:\\n                    if event.key == pygame.K_q:\\n                        game_over = True\\n                        game_close = False\\n                    if event.key == pygame.K_c:\\n                        game_loop()\\n\\n        for event in pygame.event.get():\\n            if event.type == pygame.QUIT:\\n                game_over = True\\n            if event.type == pygame.KEYDOWN:\\n                if event.key == pygame.K_LEFT:\\n                    x1_change = -block_size\\n                    y1_change = 0\\n                elif event.key == pygame.K_RIGHT:\\n                x1_change = block_size\\n                    y1_change = 0\\n                elif event.key == pygame.K_UP:\\n                    y1_change = -block_size\\n                    x1_change = 0\\n                elif event.key == pygame.K_DOWN:\\n                    y1_change = block_size\\n                    x1_change = 0\\n\\n        if x1 >= display_width or x1 < 0 or y1 >= display_height or y1 < 0:\\n            game_close = True\\n        x1 += x1_change\\n        y1 += y1_change\\n        gameDisplay.fill(black)\\n        pygame.draw.rect(gameDisplay, red, [foodx, foody, block_size, block_size])\\n        snake_head = []\\n        snake_head.append(x1)\\n        snake_head.append(y1)\\n        snake_list.append(snake_head)\\n\\n        if len(snake_list) > snake_length:\\n            del snake_list[0]\\n\\n        for x in snake_list[:-1]:\\n            if x == snake_head:\\n                game_close = True\\n\\n        draw_snake(block_size, snake_list)\\n        display_score(snake_length - 1)\\n\\n        pygame.display.update()\\n\\n        if x1 == foodx and y1 == foody:\\n            foodx = round(random.randrange(0, display_width - block_size) / 10.0) * 10.0\\n            foody = round(random.randrange(0, display_height - block_size) / 10.0) * 10.0\\n            snake_length += 1\\n\\n        clock.tick(snake_speed)\\n\\n    pygame.quit()\\n    quit()\\n\\ngame_loop()\"}, \"step_2\": {\"action\": \"run_command\", \"code\": \"python snake.py\"}}\n\n```"
+        "```json\n{\n\"step_1\": {\"action\": \"create_file\", \"file_name\": \"snake.py\", \"code\": \"import pygame\\nimport random\\n\\npygame.init()\\n\\nwhite = (255, 255, 255)\\nblack = (0, 0, 0)\\nred = (255, 0, 0)\\ngreen = (0, 155, 0)\\n\\ndisplay_width = 800\\ndisplay_height = 600\\n\\ngameDisplay = pygame.display.set_mode((display_width, display_height))\\npygame.display.set_caption('Snake Game')\\n\\nclock = pygame.time.Clock()\\n\\nblock_size = 10\\nsnake_speed = 15\\n\\nfont_style = pygame.font.SysFont(None, 25)\\nscore_font = pygame.font.SysFont(None, 35)\\n\\ndef display_score(score):\\n    value = score_font.render(\\\"Your Score: \\\" + str(score), True, white)\\n    gameDisplay.blit(value, [0, 0])\\n\\n\\ndef draw_snake(block_size, snake_list):\\n    for x, y in snake_list:\\n        pygame.draw.rect(gameDisplay, green, [x, y, block_size, block_size])\\n\\ndef message(msg, color):\\n    mesg = font_style.render(msg, True, color)\\n    gameDisplay.blit(mesg, [display_width/6, display_height/3])\\n\\ndef game_loop():\\n    game_over = False\\n    game_close = False\\n\\n    x1 = display_width / 2\\n    y1 = display_height / 2\\n\\n    x1_change = 0\\n    y1_change = 0\\n\\n    snake_list = []\\n    snake_length = 1\\n\\n    foodx = round(random.randrange(0, display_width - block_size) / 10.0) * 10.0\\n    foody = round(random.randrange(0, display_height - block_size) / 10.0) * 10.0\\n\\n    while not game_over:\\n\\n        while game_close == True:\\n            gameDisplay.fill(black)\\n            message(\\\"You Lost! Press C-Play Again or Q-Quit\\\", red)\\n            pygame.display.update()\\n\\n            for event in pygame.event.get():\\n                if event.type == pygame.KEYDOWN:\\n                    if event.key == pygame.K_q:\\n                        game_over = True\\n                        game_close = False\\n                    if event.key == pygame.K_c:\\n                        game_loop()\\n\\n        for event in pygame.event.get():\\n            if event.type == pygame.QUIT:\\n                game_over = True\\n            if event.type == pygame.KEYDOWN:\\n                if event.key == pygame.K_LEFT:\\n                    x1_change = -block_size\\n                    y1_change = 0\\n                elif event.key == pygame.K_RIGHT:\\n                    x1_change = block_size\\n                    y1_change = 0\\n                elif event.key == pygame.K_UP:\\n                    y1_change = -block_size\\n                    x1_change = 0\\n                elif event.key == pygame.K_DOWN:\\n                    y1_change = block_size\\n                    x1_change = 0\\n\\n        if x1 >= display_width or x1 < 0 or y1 >= display_height or y1 < 0:\\n            game_close = True\\n        x1 += x1_change\\n        y1 += y1_change\\n        gameDisplay.fill(black)\\n        pygame.draw.rect(gameDisplay, red, [foodx, foody, block_size, block_size])\\n        snake_head = []\\n        snake_head.append(x1)\\n        snake_head.append(y1)\\n        snake_list.append(snake_head)\\n\\n        if len(snake_list) > snake_length:\\n            del snake_list[0]\\n\\n        for x in snake_list[:-1]:\\n            if x == snake_head:\\n                game_close = True\\n\\n        draw_snake(block_size, snake_list)\\n        display_score(snake_length - 1)\\n\\n        pygame.display.update()\\n\\n        if x1 == foodx and y1 == foody:\\n            foodx = round(random.randrange(0, display_width - block_size) / 10.0) * 10.0\\n            foody = round(random.randrange(0, display_height - block_size) / 10.0) * 10.0\\n            snake_length += 1\\n\\n        clock.tick(snake_speed)\\n\\n    pygame.quit()\\n    quit()\\n\\ngame_loop()\"}, \"step_2\": {\"action\": \"run_command\", \"code\": \"python snake.py\"}}\n\n```"
       ]
     },
     {
-      "id": 31,
+      "id": 27,
       "dataset_id": 4,
       "role": "user",
       "parts": [
@@ -250,7 +219,7 @@
       ]
     },
     {
-      "id": 32,
+      "id": 28,
       "dataset_id": 4,
       "role": "model",
       "parts": [
@@ -258,7 +227,7 @@
       ]
     },
     {
-      "id": 33,
+      "id": 29,
       "dataset_id": 4,
       "role": "user",
       "parts": [
@@ -266,7 +235,7 @@
       ]
     },
     {
-      "id": 34,
+      "id": 30,
       "dataset_id": 4,
       "role": "model",
       "parts": [

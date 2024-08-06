@@ -1,5 +1,7 @@
 import sys
 
+from utils.env import Env
+
 
 def arg(index, default=None):
     """
@@ -19,11 +21,17 @@ def arg(index, default=None):
 
 
 if __name__ == "__main__":
+    Env.init()
+
     target = arg(1, "console")
     if target == "console":
         from run import console
 
         console.AICommand().cmdloop()
+    elif target == "browser":
+        from run import browser
+
+        browser.start()
     else:
         print("Invalid target")
         sys.exit(1)
