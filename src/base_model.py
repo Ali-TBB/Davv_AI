@@ -23,6 +23,7 @@ def create_model(mim_type, model_type, data_type, **kwargs):
         genai.GenerativeModel: The configured generative model.
     """
     # Configure the model with the API key
+    genai.configure(api_key=Env.get("API_KEY"))
 
     generation_config = {
         "temperature": 1,
