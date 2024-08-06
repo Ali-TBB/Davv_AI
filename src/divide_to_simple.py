@@ -21,12 +21,15 @@ class DivideToSimple(BaseModel):
     def handle_output(self, input_msg, output_msg, attachments: list[Attachment] = []):
         self.update_history(input_msg, output_msg, attachments)
         json_data = self.parse_output(output_msg)
-        for step_name in json_data:
-            step = json_data[step_name]
+        for step in json_data:
             if step["action"] == "create_file":
                 self.create_file(step["file_name"], step["code"])
             if step["action"] == "run_command":
                 self.run_command("command.py", step["code"])
+            if step["action"] == "open_file":
+                self.open_file(step["file_name"])
+            if step["action"] == "modify_file":
+                self.create_file(step["file_name"], step["code"])
         return json_data
 
     def create_file(self, file_name, code):
