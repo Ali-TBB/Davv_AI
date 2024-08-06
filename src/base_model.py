@@ -1,6 +1,7 @@
 import json
 import os
 import subprocess
+import typing
 
 import google.generativeai as genai
 
@@ -10,7 +11,7 @@ from utils.env import Env
 from utils.storage import Directory
 
 
-def create_model(mim_type, model_type, **kwargs):
+def create_model(mim_type, model_type, data_type, **kwargs):
     """
     Creates and configures the generative model.
 
@@ -22,7 +23,6 @@ def create_model(mim_type, model_type, **kwargs):
         genai.GenerativeModel: The configured generative model.
     """
     # Configure the model with the API key
-    genai.configure(api_key=Env.get("API_KEY"))
 
     generation_config = {
         "temperature": 1,
@@ -30,6 +30,7 @@ def create_model(mim_type, model_type, **kwargs):
         "top_k": 1,
         "max_output_tokens": 2048,
         "response_mime_type": mim_type,
+        "response_schema" : list[data_type]
     }
 
     safety_settings = [
@@ -45,6 +46,7 @@ def create_model(mim_type, model_type, **kwargs):
         safety_settings=safety_settings,
         **kwargs,
     )
+
     return model
 
 
@@ -57,6 +59,7 @@ class BaseModel:
         convo (genai.Conversation): The conversation object for chat history.
     """
 
+    data_type = None
     dataset: Dataset
     directory: Directory
 
@@ -73,9 +76,9 @@ class BaseModel:
         self.directory = directory
         self.create_model()
 
-    def create_model(self, **kwargs):
+    def create_model(self):
         self.model = create_model(
-            "application/json", "gemini-1.5-pro-exp-0801", **kwargs
+            "application/json", "gemini-1.5-pro-exp-0801", self.data_type
         )
 
         history = []

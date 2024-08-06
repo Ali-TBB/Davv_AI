@@ -1,5 +1,6 @@
 from models.attachment import Attachment
 from src.base_model import BaseModel
+from src.data_types.divide_to_simple import DivideToSimpleDataType
 
 
 class DivideToSimple(BaseModel):
@@ -15,6 +16,7 @@ class DivideToSimple(BaseModel):
     """
 
     backup_name = "divide_to_simple"
+    data_type = DivideToSimpleDataType
 
     def handle_output(self, input_msg, output_msg, attachments: list[Attachment] = []):
         self.update_history(input_msg, output_msg, attachments)

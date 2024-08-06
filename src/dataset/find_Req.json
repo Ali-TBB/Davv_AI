@@ -32,7 +32,7 @@
   {
     "role": "model",
     "parts": [
-      "```json\n{\"action\": \"simple\"}\n\n\n```"
+      "```json\n{\"action\": \"simple\", \"response\":  \"null\"}\n\n\n```"
     ]
   },
   {
@@ -44,7 +44,7 @@
   {
     "role": "model",
     "parts": [
-      "```json\n{\"action\": \"big\"}\n\n```"
+      "```json\n{\"action\": \"big\", \"response\":  \"null\"}\n\n```"
     ]
   },
   {
@@ -56,7 +56,7 @@
   {
     "role": "model",
     "parts": [
-      "```json\n{\"action\": \"screenshot\"}\n\n\n```"
+      "```json\n{\"action\": \"screenshot\", \"response\":  \"null\"}\n\n\n```"
     ]
   }
 ]

@@ -45,7 +45,7 @@
   {
     "role": "model",
     "parts": [
-      "```json\n{\"action\": \"response\", \"response\": \"I'm sorry, I can't help you with that. Hacking is illegal and harmful, and I would never do anything that could put someone at risk. If you're having trouble accessing your Facebook account, you can try contacting their customer support for help.\"}\n\n```"
+      "```json\n{\"action\": \"response\", \"language\": \"null\", \"code\": \"null\", \"response\": \"I'm sorry, I can't help you with that. Hacking is illegal and harmful, and I would never do anything that could put someone at risk. If you're having trouble accessing your Facebook account, you can try contacting their customer support for help.\"}\n\n```"
     ]
   }
 ]

@@ -1,6 +1,7 @@
 from models.attachment import Attachment
 from models.dataset import Dataset
 from src.base_model import BaseModel
+from src.data_types.find_requirements import FindRequirementsDataType
 
 
 class FindRequirements(BaseModel):
@@ -14,6 +15,7 @@ class FindRequirements(BaseModel):
     """
 
     backup_name = "find_requirement"
+    data_type = FindRequirementsDataType
 
     def handle_output(self, input_msg, output_msg, attachments: list[Attachment] = []):
         self.update_history(input_msg, output_msg, attachments)

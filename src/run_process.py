@@ -3,7 +3,7 @@
 from models.attachment import Attachment
 from models.dataset import Dataset
 from src.base_model import BaseModel
-
+from src.data_types.run_process import RunProcessDataType
 
 class RunProcess(BaseModel):
     """
@@ -15,6 +15,8 @@ class RunProcess(BaseModel):
     Attributes:
         convo: The conversation object.
     """
+
+    data_type = RunProcessDataType
 
     backup_name = "run_process"
 
