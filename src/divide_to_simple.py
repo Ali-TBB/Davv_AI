@@ -28,8 +28,6 @@ class DivideToSimple(BaseModel):
                 self.run_command("command.py", step["code"])
             if step["action"] == "open_file":
                 self.open_file(step["file_name"])
-            if step["action"] == "modify_file":
-                self.create_file(step["file_name"], step["code"])
         return json_data
 
     def create_file(self, file_name, code):
