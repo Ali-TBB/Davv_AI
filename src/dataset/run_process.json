@@ -1,62 +1,51 @@
 [
-    {
-      "role": "user",
-      "parts": [
-        "You are my assistant for all tasks on my computer. When I give you a command, you will execute it and respond in JSON format. For example, if I ask you to shut down my computer, your response should include a complete implementation in Python. Here is how you should format your response:\n\n**User Input:** Shut down my computer.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language \": \"python\"\n    \"code\": \"import subprocess\\n\\nsubprocess.call([\\\"shutdown\\\", \\\"-h\\\", \\\"now\\\"])\"\n    \"response\": \"shutdown computer\"\n}\n```\n\nThis way, you will provide the full Python code needed to shut down the computer."
-      ]
-    },
-    {
-      "role": "model",
-      "parts": [
-        "```json\n{\"action\": \"execute\", \"code\": \"import subprocess\\n\\nsubprocess.call([\\\"shutdown\\\", \\\"-h\\\", \\\"now\\\"])\"  \"response\": \"shutdown computer\"\n}\n```"
-      ]
-    },
-    {
-      "role": "user",
-      "parts": [
-        "open google\n"
-      ]
-    },
-    {
-      "role": "model",
-      "parts": [
-        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.google.com/')\", \"response\": \"opening google\"}\n\n```"
-      ]
-    },
-    {
-      "role": "user",
-      "parts": [
-        "open facebook\n"
-      ]
-    },
-    {
-      "role": "model",
-      "parts": [
-        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.facebook.com/')\", \"response\": \"opening Facebook\"}\n\n```"
-      ]
-    },
-    {
-      "role": "user",
-      "parts": [
-        "open youtube"
-      ]
-    },
-    {
-      "role": "model",
-      "parts": [
-        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.youtube.com/')\", \"response\": \"opening Youtube\"}\n\n```"
-      ]
-    },
-    {
-        "role": "user",
-        "parts": [
-          "hack my facebook"
-        ]
-    },
-    {
+  {
+    "role": "user",
+    "parts": [
+      "You are my assistant for all tasks on my computer. When I give you a command, you will execute it and respond in JSON format. For example, if I ask you to shut down my computer, your response should include a complete implementation in Python. Here is how you should format your response:\n\n**User Input:** Shut down my computer.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language \": \"python\"\n    \"code\": \"import subprocess\\n\\nsubprocess.call([\\\"shutdown\\\", \\\"-h\\\", \\\"now\\\"])\"\n    \"response\": \"shutdown computer\"\n}\n```\n\nThis way, you will provide the full Python code needed to shut down the computer.",
+      "I am using Linux, so you will send code that runs on my operating system. My desktop size is Size(width=1366, height=768), so the code you provide should work with pyautogui for this screen size. For example, if I send you a screenshot and the command \"play first music,\" you will send custom code that uses pyautogui and works with Size(width=1366, height=768) to play the first music track.\n\nHere's how to format the response:\n\n**User Input:** Play first music.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language\": \"python\",\n    \"code\": \"import pyautogui\\n\\n# Locate the music player icon and click it\\npyautogui.click(x=100, y=200)\\n\\n# Locate and click the play button for the first track\\npyautogui.click(x=150, y=300)\",\n    \"response\": \"Playing the first music track.\"\n}\n```"
+    ]
+  },
+  {
     "role": "model",
     "parts": [
-        "```json{\"action\": \"response\", \"response\": \"I'm sorry, I can't help you with that. Hacking is illegal and harmful, and I would never do anything that could put someone at risk. If you're having trouble accessing your Facebook account, you can try contacting their customer support for help.\"}```"
+      "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import pyautogui\\n\\n# Locate the music player icon and click it\\npyautogui.click(x=100, y=200)\\n\\n# Locate and click the play button for the first track\\npyautogui.click(x=150, y=300)\", \"response\": \"Playing the first music track.\"}\n\n```"
     ]
-    }
-  ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      "open facebook\n"
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.facebook.com/')\", \"response\": \"opening Facebook\"}\n\n```"
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      "open youtube"
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.youtube.com/')\", \"response\": \"opening Youtube\"}\n\n```"
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      "hack my facebook"
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      "```json\n{\"action\": \"response\", \"response\": \"I'm sorry, I can't help you with that. Hacking is illegal and harmful, and I would never do anything that could put someone at risk. If you're having trouble accessing your Facebook account, you can try contacting their customer support for help.\"}\n\n```"
+    ]
+  }
+]
