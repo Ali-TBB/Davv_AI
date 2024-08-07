@@ -1,13 +1,14 @@
 import time
 import wave
 import pyaudio
-
+import numpy as np
 
 class AudioRecorder:
 
     MAX_RECORDING_TIME = 30
 
-    def __init__(self, on_recording_finished: callable):
+    def __init__(self, on_recording_finished: callable, stop_on_silence=True):
+        self.stop_on_silence = stop_on_silence
         self.output_file = f"rec-{time.strftime('%Y%m%d-%H%M%S')}.wav"
         self.on_recording_finished = on_recording_finished
         self.recording = False
@@ -46,6 +47,13 @@ class AudioRecorder:
         start_time = time.time()
         while self.recording and (time.time() - start_time) < self.MAX_RECORDING_TIME:
             data = stream.read(CHUNK)
+
+            if self.stop_on_silence:
+                if self.is_voice_active(data):
+                    silence_count = 0
+                else:
+                    silence_count += 1
+
             frames.append(data)
 
         # Stop Recording
@@ -60,3 +68,7 @@ class AudioRecorder:
             wave_file.writeframes(b"".join(frames))
 
         self.on_recording_finished(self.output_file)
+
+    def is_voice_active(self, data, threshold=500):
+        audio_data = np.frombuffer(data, dtype=np.int16)
+        return np.any(np.abs(audio_data) > threshold)
