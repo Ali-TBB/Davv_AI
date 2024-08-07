@@ -1,47 +1,60 @@
 class Attachment {
 
   id
-  type
-  path
+  meme_type
+  filename
 
   /**
    * Attachment class
    * @param {number} id
-   * @param {string} type
-   * @param {string} path
+   * @param {string} meme_type
+   * @param {string} filename
    */
-  constructor(id, type, path) {
+  constructor(id, meme_type, filename) {
     this.id = id
-    this.type = type
-    this.path = path
+    this.meme_type = meme_type
+    this.filename = filename
   }
 
   /**
    * @returns {Attachment} JSON representation of the attachment
    */
   static fromJson(json) {
-    return new Attachment(json.id, json.type, json.path)
+    return new Attachment(json.id, json.meme_type, json.filename)
   }
 
-  static async pickImage() {
-    filename = await eel.pick_image()()
-    if (filename) {
-      const attachment = new Attachment(undefined, "image/*", filename)
-      window.currentConversation.sendMessage([attachment])
+  get json() {
+    return {
+      id: this.id,
+      meme_type: this.meme_type,
+      filename: this.filename
     }
   }
 
-  static recordVoice() {
-    eel.start_recording()()
-  }
-
-  static stopRecording() {
-    eel.stop_recording()()
+  static pickImage() {
+    return new Promise((resolve, reject) => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*";
+      input.onchange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = async (event) => {
+            const attachment = new Attachment(undefined, file.type, await eel.upload_file(event.target.result)())
+            window.currentConversation.sendMessage([attachment])
+            resolve()
+          }
+          reader.readAsDataURL(file);
+        }
+      }
+      input.click();
+    });
   }
 
 }
 
 eel.expose(stopRecording)
 function stopRecording(filename) {
-  window.currentConversation.sendMessage([new Attachment(undefined, "audio/*", filename)])
+  window.currentConversation.sendMessage([new Attachment(undefined, "audio/wav", filename)])
 }

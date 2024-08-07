@@ -1,7 +1,11 @@
+import os
 import time
 import wave
 import pyaudio
 import numpy as np
+
+from utils.env import Env
+
 
 class AudioRecorder:
 
@@ -61,7 +65,9 @@ class AudioRecorder:
         stream.close()
         audio.terminate()
 
-        with wave.open(self.output_file, "wb") as wave_file:
+        with wave.open(
+            os.path.join(Env.base_path, "run/browser/uploads", self.output_file), "wb"
+        ) as wave_file:
             wave_file.setnchannels(CHANNELS)
             wave_file.setsampwidth(audio.get_sample_size(FORMAT))
             wave_file.setframerate(RATE)

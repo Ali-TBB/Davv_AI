@@ -34,7 +34,7 @@ class Message {
       id: this.id,
       role: this.role,
       content: this.content,
-      attachments: this.attachments,
+      attachments: this.attachments.map(attachment => attachment.json),
       created_at: this.created_at.getMilliseconds()
     }
   }
@@ -77,8 +77,8 @@ class Message {
     }[this.role]
   }
 
-  toString() {
-    return `${this.role}: ${this.content} - ${this.created_at}`
+  attach() {
+    $(".conversation-box").append(this.html);
   }
 
 }

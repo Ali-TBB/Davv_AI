@@ -170,7 +170,10 @@ class BaseModel:
         Returns:
             str: The JSON data extracted from the output.
         """
-        return json.loads(output)
+        try:
+            return json.loads(output)
+        except:
+            return {"response": output}
 
     def save_command(self, file_name, command_content):
         """

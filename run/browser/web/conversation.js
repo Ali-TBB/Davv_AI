@@ -32,7 +32,7 @@ class Conversation {
     for (let conversation of conversations) {
       const conversationObj = Conversation.fromJson(conversation);
       window.conversations[conversationObj.id] = conversationObj;
-      $(".conversations-box .list-group").append(conversationObj.html);
+      conversationObj.attach();
       if (window.currentConversation === undefined) {
         window.currentConversation = conversationObj;
         conversationObj.select();
@@ -45,25 +45,26 @@ class Conversation {
     const messages = await eel.load_conversation(this.id)()
     for (let message of messages) {
       const messageObj = Message.fromJson(message);
-      $(".conversation-box").append(messageObj.html);
+      messageObj.attach();
     }
   }
 
   async sendMessage(attachments = []) {
     const messageContent = $(".input-group input").val();
-    if (messageContent === "") return;
+    if (messageContent === "" && attachments.length === 0) return;
     $(".input-group input").val("");
     
     $(".input-group input").attr("disabled", true);
     $(".input-group button").attr("disabled", true);
 
     const message = new Message(undefined, "user", messageContent, attachments, new Date());
-    $(".conversation-box").append(message.html);
+    message.attach();
 
     const answerJson = await eel.message_received(this.id, message.json)();
+    console.log(answerJson);
 
     const answer = Message.fromJson(answerJson);
-    $(".conversation-box").append(answer.html);
+    answer.attach();
 
     $(".input-group input").attr("disabled", false);
     $(".input-group button").attr("disabled", false);
@@ -76,7 +77,7 @@ class Conversation {
       console.log(conversationData);
       if (conversationData !== null) {
         const conversation = Conversation.fromJson(conversationData);
-        $(".conversations-box").append(conversation.html);
+        conversation.attach();
         conversation.select();
       }
     }
@@ -109,7 +110,8 @@ class Conversation {
     $(`.conversation-item[conversation-id="${this.id}"]`).removeClass("list-group-item-light");
     
     $(".input-group input").attr("disabled", false);
-    $(".input-group button").attr("disabled", false);
+    $(".input-group .btn-record").attr("disabled", false);
+    $(".input-group .btn-pick-img").attr("disabled", false);
   }
 
   static select(conversationId) {
@@ -155,5 +157,9 @@ class Conversation {
         </div>
       </div>
     `
+  }
+
+  attach() {
+    $(".conversations-box .list-group").append(this.html);
   }
 }

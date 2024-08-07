@@ -16,14 +16,20 @@ $on("#create-conversation", "click", function() {
   Conversation.create();
 });
 
-$on(".input-group input", "change", function() {
-  if ($(this).val()) {
-    $(".input-group button").attr("disabled", false);
-  }
+$on(".input-group input", "input", function() {
+  $(".input-group .btn-send").attr("disabled", !$(this).val());
 });
 
-$on(".input-group button", "click", function() {
+$on(".input-group .btn-send", "click", function() {
   window.currentConversation.sendMessage();
+});
+
+$on(".input-group .btn-record", "mousedown", function() {
+  eel.start_recording()()
+});
+
+$on(".input-group .btn-record", "mouseup", function() {
+  eel.stop_recording()()
 });
 
 $(document).ready(function() {

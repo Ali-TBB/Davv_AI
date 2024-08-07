@@ -1,21 +1,23 @@
+import base64
+import time
 import eel
 import os
+import shutil
 
 import pyautogui
 
+from models.attachment import Attachment
 from run.browser.audio_recorder import AudioRecorder
 from run.browser.browser_logger import BrowserLogger
 from src.ai_conversation import AIConversation
-
-
-PKG_DIR = os.path.dirname(os.path.abspath(__file__))
+from utils.env import Env
 
 
 logger = BrowserLogger(eel)
 
 
 def start():
-    eel.init(os.path.join(PKG_DIR, "web"))
+    eel.init(os.path.join(Env.base_path, "run/browser/web"))
     w, h = pyautogui.size()
     eel.start("index.html", mode="edge", app_mode=True, size=(w * 0.6, h))
 
@@ -42,33 +44,39 @@ def load_conversation(conversation_id):
 
 
 @eel.expose
-def messageReceived(conversation_id, message_data):
+def message_received(conversation_id, message_data: dict):
     print("Message received:", message_data)
 
     conversation: AIConversation = AIConversation.find(
         conversation_id, logger=BrowserLogger(eel)
     )
-    answer = conversation.handle_message(
-        message_data["content"], message_data["attachments"]
-    )
+    attachments: list[Attachment] = []
+    for attachment in message_data.get("attachments", []):
+        path = os.path.join(
+            Env.base_path, "run/browser/uploads", attachment["filename"]
+        )
+        shutil.move(path, conversation.directory.path)
+        attachments.append(
+            Attachment.create(
+                None,
+                attachment["meme_type"],
+                os.path.join(conversation.directory.name, attachment["filename"]),
+            )
+        )
+
+    answer = conversation.handle_message(message_data["content"], attachments)
     return answer.data
 
 
 @eel.expose
-def pick_image():
-    import tkinter as tk
-    from tkinter import filedialog
-
-    tk.Tk().withdraw()
-    path = filedialog.askopenfilename(filetypes=[("Image files", "*.png *.jpg")])
-    if path:
-        import time
-        import shutil
-
-        filename = f"img-{time.strftime('%Y%m%d-%H%M%S')}.{path.split('.')[-1]}"
-
-        shutil.copy(path, os.path.join(PKG_DIR, "web/uploads/", filename))
-        return filename
+def upload_file(file_content):
+    filename = f"tmp-{time.strftime('%Y%m%d-%H%M%S')}"
+    path = os.path.join(Env.base_path, "run/browser/uploads", filename)
+    header, encoded = file_content.split(",", 1)
+    data = base64.b64decode(encoded)
+    with open(path, "wb") as f:
+        f.write(data)
+    return filename
 
 
 current_recording = None
@@ -79,11 +87,9 @@ def start_recording():
     global current_recording
     if not current_recording:
         current_recording = AudioRecorder(
-            lambda filename: eel.stopRecording(filename),
+            lambda filename: eel.stopRecording(filename), False
         )
         current_recording.start()
-
-    raise Exception("Already recording")
 
 
 @eel.expose
@@ -92,5 +98,3 @@ def stop_recording():
     if current_recording:
         current_recording.stop()
         current_recording = None
-
-    raise Exception("Not recording")

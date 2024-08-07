@@ -84,7 +84,12 @@
           <div class="input-group border-top bg-light">
             <div class="input-group-append border-right">
               <!-- Attachment button -->
-              <button class="btn btn-link" type="button" id="attachments-btn">
+              <button
+                class="btn btn-link btn-pick-img"
+                type="button"
+                id="attachments-btn"
+                onclick="Attachment.pickImage()"
+              >
                 <i class="fa fa-image"></i>
               </button>
             </div>
@@ -96,7 +101,7 @@
               disabled
             />
             <div class="input-group-append border-left m-0">
-              <button class="btn btn-link btn-recorde" disabled>
+              <button class="btn btn-link btn-record" disabled>
                 <i class="fa fa-microphone"></i>
               </button>
             </div>

@@ -11,24 +11,30 @@ def get_storage():
 
 class Directory:
 
-    path: str
+    __path: str
 
     def __init__(self, path: str):
-        self.path = path
-        if os.path.exists(self.path) and not os.path.isdir(self.path):
-            raise Exception(f"Path '{self.path}' is not a directory")
+        self.__path = path
+        if os.path.exists(path) and not os.path.isdir(path):
+            raise Exception(f"Path '{path}' is not a directory")
+
+    @property
+    def path(self) -> str:
+        if not os.path.exists(self.__path):
+            self.create()
+        return self.__path
 
     @property
     def name(self) -> str:
         return os.path.basename(self.path)
 
     def create(self):
-        if not os.path.exists(self.path):
-            os.makedirs(self.path)
+        if not os.path.exists(self.__path):
+            os.makedirs(self.__path)
 
     def delete(self):
-        if os.path.exists(self.path):
-            os.rmdir(self.path)
+        if os.path.exists(self.__path):
+            os.rmdir(self.__path)
 
     def items(self) -> list:
         return [
@@ -37,11 +43,9 @@ class Directory:
         ]
 
     def file(self, file: str):
-        self.create()
         return File(self, file)
 
     def directory(self, directory: str):
-        self.create()
         return Directory(os.path.join(self.path, directory))
 
 
