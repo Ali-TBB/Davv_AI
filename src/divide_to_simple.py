@@ -23,7 +23,7 @@ class DivideToSimple(BaseModel):
     ):
         self.update_history(input_msg, output_msg, attachments)
         json_data = self.parse_output(output_msg)
-        for step in json_data:
+        for step in json_data["steps"]:
             if step["action"] == "create_file":
                 self.create_file(step["file_name"], step["code"])
             if step["action"] == "run_command":
