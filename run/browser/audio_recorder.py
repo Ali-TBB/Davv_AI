@@ -48,15 +48,18 @@ class AudioRecorder:
         )
         frames = []
 
-        start_time = time.time()
+        start_time = last_voice_time = time.time()
         while self.recording and (time.time() - start_time) < self.MAX_RECORDING_TIME:
             data = stream.read(CHUNK)
 
             if self.stop_on_silence:
                 if self.is_voice_active(data):
-                    silence_count = 0
+                    last_voice_time = time.time()
                 else:
-                    silence_count += 1
+                    elapsed_silence = time.time() - last_voice_time  # Calculate elapsed silence time
+                    if elapsed_silence >= 4:
+                        print("Silence detected for 4 seconds. Stopping recording.")
+                        break
 
             frames.append(data)
 

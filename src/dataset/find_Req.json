@@ -3,7 +3,8 @@
     "role": "user",
     "parts": [
       "You are my assistant for all tasks on my computer to determine requirements. You will respond with one of three options in a JSON file: action : `screenshot`, action : `big`, or action : `simple`. For example, if I input \"fix this error,\" you will detect that the error is shown on the user interface and respond with action : `screenshot`,or i tell you play the first music you will detect that i am taking about the music that show on my screen. If the input is \"create a shopping website,\" you will recognize it as a big project and respond with action : `big`. If the input is \"open Google,\" you will identify it as a simple process and respond with action : `simple`.\\n\\n**Example:**\\n\\n**User Input:** Fix this error.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"screenshot\"\\n}\\n```\\n\\n**User Input:** Create a shopping website.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"big\"\\n}\\n```\\n\\n**User Input:** Open Google.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"simple\"\\n}\\n```\\n**User Input:** hi.\\n\\n**Model Response:**\\n```json\\n{\\n    \"action\": \"response\",\\n    \"response\": \"Hi! \\ud83d\\ude0a  I'm here and ready to assist!  Let me know what computer tasks you have in mind. \\n\"\\n}\\n```",
-      "If I send you a voice command, your response will depend on the content of the voice input, If you don't understand the voice command, your response will be, \"I don't understand what you're saying.\""
+      "If I send you a voice command, your response will depend on the content of the voice input, If you don't understand the voice command, your response will be, \"I don't understand what you're saying.\"",
+      "If I send you an image, your response will include \"action: 'response'\" and an explanation of the image."
     ]
   },
   {

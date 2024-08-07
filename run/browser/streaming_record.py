@@ -14,7 +14,7 @@ def detect(on_detect: callable):
 
         try:
             # Use PocketSphinx for offline recognition
-            command = recognizer.recognize_sphinx(audio).lower()
+            command = recognizer.recognize_google(audio).lower()
             print(f"Recognized: {command}")
 
             if "hi google" in command or "hey google" in command:
