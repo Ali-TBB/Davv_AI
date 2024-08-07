@@ -58,40 +58,78 @@ input::placeholder {
 .app {
   margin: auto;
   padding: 10px;
-  max-width: 90vw;
+  max-width: 95vw;
 }
 
-@media screen and (min-width: 786px) {
+@media screen and (min-width: 1200px) {
   .app {
-    max-width: 95vw;
+    max-width: 70vw;
   }
 }
 
 .conversation {
   display: grid;
-  grid-template-columns: 11rem 1fr;
+  grid-template-columns: 10rem 1fr;
 }
 
 .conversation.expanded {
   display: grid;
-  grid-template-columns: 28rem 1fr;
+  grid-template-columns: 22rem 1fr;
 }
 
-.conversations-box,
+.conversation .sidebar .header {
+  height: 2.9rem;
+}
+.conversation .sidebar .header h2 {
+  display: none;
+}
+
+.conversation.expanded .sidebar .header h2 {
+  display: unset;
+}
+
+.conversation .sidebar #create-conversation span {
+  display: none;
+}
+
+.conversation.expanded .sidebar #create-conversation span {
+  display: unset;
+}
+
+.conversations-box {
+  height: 100%;
+}
+.conversations-box .list-group {
+  height: 100%;
+}
+
+.conversations-box .list-group,
 .conversation-box {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .conversation-box {
   height: 75vh;
 }
 
+.conversations-box .conversation-item:hover {
+  background-color: #ececec !important;
+}
+
 .conversations-box .conversation-item.active {
   cursor: unset;
+  background-color: #007bff !important;
 }
 
 .conversation .conversation-item .date {
   display: none;
+}
+.conversation .conversation-item .btn {
+  height: fit-content;
+  color: black;
+}
+.conversation .conversation-item.active .btn {
+  color: white;
 }
 
 .conversation.expanded .conversation-item .date {

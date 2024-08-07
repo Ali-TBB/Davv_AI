@@ -28,7 +28,7 @@ class Message(Collection):
                 "content": content,
                 "attachments_ids": (
                     json.dumps(attachments_ids)
-                    if type(attachments_ids) == list
+                    if type(attachments_ids) != str
                     else attachments_ids
                 ),
                 "created_at": created_at,

@@ -46,16 +46,14 @@ class Conversation(Collection):
     def messages(self) -> list[Message]:
         return Message.all(f"`conversation_id` = {self.id}")
 
-    def sendMessage(
+    def send_message(
         self, role: str, content: str, attachments_ids: list = []
     ) -> Message:
         return Message.create(None, self.id, role, content, attachments_ids)
 
     @classmethod
-    def onDeleting(cls, collection):
-        print("Deleting conversation", collection)
-        for dataset in collection.datasets().values():
-            dataset.delete()
+    def onDeleting(cls, collection: "Conversation"):
+        collection.dataset.delete()
 
         for message in collection.messages():
             message.delete()

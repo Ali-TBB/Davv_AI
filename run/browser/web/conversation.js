@@ -28,7 +28,7 @@ class Conversation {
   }
 
   static async all() {
-    const conversations = await eel.loadConversations()();
+    const conversations = await eel.load_conversations()();
     for (let conversation of conversations) {
       const conversationObj = Conversation.fromJson(conversation);
       window.conversations[conversationObj.id] = conversationObj;
@@ -42,14 +42,14 @@ class Conversation {
 
   async loadMessages() {
     $(".conversation-box").empty();
-    const messages = await eel.loadConversationMessages(this.id)()
+    const messages = await eel.load_conversation(this.id)()
     for (let message of messages) {
       const messageObj = Message.fromJson(message);
       $(".conversation-box").append(messageObj.html);
     }
   }
 
-  async sendMessage() {
+  async sendMessage(attachments = []) {
     const messageContent = $(".input-group input").val();
     if (messageContent === "") return;
     $(".input-group input").val("");
@@ -57,10 +57,10 @@ class Conversation {
     $(".input-group input").attr("disabled", true);
     $(".input-group button").attr("disabled", true);
 
-    const message = new Message(undefined, "user", messageContent, [], new Date());
+    const message = new Message(undefined, "user", messageContent, attachments, new Date());
     $(".conversation-box").append(message.html);
 
-    const answerJson = await eel.messageReceived(this.id, message.json)();
+    const answerJson = await eel.message_received(this.id, message.json)();
 
     const answer = Message.fromJson(answerJson);
     $(".conversation-box").append(answer.html);
@@ -72,7 +72,7 @@ class Conversation {
   static async create() {
     const conversationName = prompt("Enter the conversation name:");
     if (conversationName !== null) {
-      const conversationData = await eel.createConversation(conversationName)();
+      const conversationData = await eel.create_conversation(conversationName)();
       console.log(conversationData);
       if (conversationData !== null) {
         const conversation = Conversation.fromJson(conversationData);
@@ -84,7 +84,7 @@ class Conversation {
 
   static async delete(id) {
     $(`.conversation-item[conversation-id="${id}"] .btn-danger`).attr("disabled", true)
-    if (await eel.deleteConversation(id)()) {
+    if (await eel.delete_conversation(id)()) {
       $(`.conversation-item[conversation-id="${id}"]`).remove(); 
       $(".conversation-box").empty();
     } else 
@@ -129,26 +129,29 @@ class Conversation {
   get html() {
     return `
       <div conversation-id="${this.id}"
-           class="conversation-item list-group-item list-group-item-action list-group-item-light rounded-0 d-flex justify-content-between align-items-center">
-        <div class="media px-2">
-          <img
-            src="https://bootstrapious.com/i/snippets/sn-conversation/avatar.svg"
-            alt="user"
-            width="50"
-            class="rounded-circle"
-          />
-        </div>
-        <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">
+           class="conversation-item rounded-0 d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+        <img
+          src="https://ui-avatars.com/api/?name=AI&background=ddd&color=007bff&bold=true&rounded=true"
+          alt="user"
+          width="40"
+          class="rounded-circle"
+        />
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <div class="d-flex flex-column px-2 justify-content-center">
+            <h5>
               ${this.title}
-          </h5>
-          <small class="date mb-0 px-2 gp-5">
-            ${this.created_at.toLocaleString()}
-            <button class="btn btn-danger btn-sm btn-circle"
-                    onclick="Conversation.delete(${this.id})">
-              x
-            </button>
-          </small>
+            </h5>
+            <small class="date">
+              ${this.created_at.toLocaleString()}
+            </small>
+          </div>
+          <!-- menu button -->
+          <button class="btn dropright" type="button" id="delete-conversation-${self.id}" data-toggle="dropdown" aria-haspopup="true">
+            <i class="fas fa-ellipsis-v"></i>
+            <ul class="dropdown-menu dropdown-menu-bottom" aria-labelledby="delete-conversation-${self.id}">
+              <li class="dropdown-item" onclick="Conversation.delete(${this.id})">Delete</li>
+            </ul>
+          </button>
         </div>
       </div>
     `

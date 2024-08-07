@@ -4,3 +4,4 @@ pyautogui
 questionary
 python-dotenv
 eel
+pyaudio

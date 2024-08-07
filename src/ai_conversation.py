@@ -1,25 +1,26 @@
-import os
+import json
 import time
 
 import pyautogui
-import google.generativeai as genai
 
 from models.attachment import Attachment
 from models.conversation import Conversation
 from models.dataset import Dataset
 from models.message import Message
-from utils.env import Env
 from utils.logger import Logger
 from utils.storage import Directory, get_storage
 from src.base_model import BaseModel
+from src.divide_to_simple import DivideToSimple
+from src.find_requirements import FindRequirements
+from src.run_process import RunProcess
 
 
 class AIConversation(Conversation):
 
     __logger: Logger
-    __run_process: BaseModel = None
-    __find_requirement: BaseModel = None
-    __divide_to_simple: BaseModel = None
+    __run_process: RunProcess = None
+    __find_requirement: FindRequirements = None
+    __divide_to_simple: DivideToSimple = None
     __directory: Directory = None
 
     def __init__(
@@ -29,7 +30,7 @@ class AIConversation(Conversation):
         dataset_id: int,
         created_at=None,
         updated_at=None,
-        logger: Logger = None,
+        logger: Logger = Logger(),
     ):
         super().__init__(id, name, dataset_id, created_at, updated_at)
         self.__logger = logger
@@ -44,46 +45,45 @@ class AIConversation(Conversation):
         return self.__directory
 
     @property
-    def run_process(self):
-        from src.run_process import RunProcess
+    def run_process(self) -> RunProcess:
 
         if not self.__run_process:
             self.__run_process = RunProcess(self.dataset, self.directory)
         return self.__run_process
 
     @property
-    def find_requirement(self):
-        from src.find_requirements import FindRequirements
+    def find_requirement(self) -> FindRequirements:
 
         if not self.__find_requirement:
             self.__find_requirement = FindRequirements(self.dataset, self.directory)
         return self.__find_requirement
 
     @property
-    def divide_to_simple(self):
-        from src.divide_to_simple import DivideToSimple
+    def divide_to_simple(self) -> DivideToSimple:
 
         if not self.__divide_to_simple:
             self.__divide_to_simple = DivideToSimple(self.dataset, self.directory)
         return self.__divide_to_simple
 
     def handle_message(self, message, attachments: list[Attachment] = []) -> Message:
-        self.sendMessage("user", message)
+        self.send_message("user", message)
 
         result, input_msg = self.find_requirement.send_message(message, attachments)
         if result == "screenshot":
             attachments.append(self.take_screenshot())
-            answerContent = self.run_process.send_message(message, attachments)
+            answer = self.run_process.send_message(message, attachments)
         elif result == "simple":
-            answerContent = self.run_process.send_message(message, attachments)
+            answer = self.run_process.send_message(message, attachments)
         elif result == "big":
-            answerContent = self.divide_to_simple.send_message(message, attachments)
+            answer = self.divide_to_simple.send_message(message, attachments)
         elif result == "response":
-            answerContent = input_msg
+            answer = input_msg
         else:
-            answerContent = "Invalid command."
+            answer = "Invalid command."
 
-        return self.sendMessage("model", answerContent)
+        return self.send_message(
+            "model", json.loads(answer) if type(answer) != str else answer
+        )
 
     def take_screenshot(self) -> Attachment:
         full_path = self.directory.file(f"{time.strftime('%y_%m_%d_%H%M%S')}.png").path
@@ -91,10 +91,8 @@ class AIConversation(Conversation):
         screenshot = pyautogui.screenshot()
         # Save the screenshot to the specified file path
         screenshot.save(full_path)
-        self.__logger.info("Screenshot saved successfully!")
-        attachment = Attachment(None, "image/png", full_path)
-        Attachment.create(attachment)
-        return attachment
+        self.logger.info("Screenshot saved successfully!")
+        return Attachment.create(None, "image/png", full_path)
 
     @classmethod
     def new(cls, name: str, **kwargs) -> "AIConversation":

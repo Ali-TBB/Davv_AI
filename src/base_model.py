@@ -5,6 +5,7 @@ import google.generativeai as genai
 
 from models.attachment import Attachment
 from models.dataset import Dataset
+from models.dataset_item import DatasetItem
 from utils.env import Env
 from utils.storage import Directory
 
@@ -29,7 +30,7 @@ def create_model(mim_type, model_type, data_type, **kwargs):
         "top_k": 1,
         "max_output_tokens": 2048,
         "response_mime_type": mim_type,
-        "response_schema": list[data_type],
+        "response_schema": data_type,
     }
     safety_settings = [
         {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
@@ -61,7 +62,7 @@ class BaseModel:
     dataset: Dataset
     directory: Directory
 
-    backup_name: str
+    backup_name: str = None
 
     def __init__(self, dataset: Dataset, directory: Directory):
         """
@@ -74,13 +75,21 @@ class BaseModel:
         self.directory = directory
         self.create_model()
 
+    @property
+    def backup(self) -> Dataset:
+        """
+        Backs up the chat history.
+        """
+        if self.backup_name:
+            return Dataset.findWhere("`name` = ?", (self.backup_name,))
+
     def create_model(self):
         self.model = create_model(
             "application/json", "gemini-1.5-flash-latest", self.data_type
         )
 
         history = []
-        backup_dataset = Dataset.findWhere("`name` = ?", (self.backup_name,))
+        backup_dataset = self.backup
         all_items = (
             backup_dataset.all_items if backup_dataset else []
         ) + self.dataset.all_items
@@ -118,9 +127,23 @@ class BaseModel:
         inputParts = [input_msg]
         for attachment in attachments:
             inputParts.append(f"<-attachment->: {attachment.id}")
-        self.dataset.addItem("user", inputParts)
 
-        self.dataset.addItem("model", [output_msg])
+        datasets_ids = [str(self.dataset.id)]
+        if self.backup:
+            datasets_ids.append(str(self.backup.id))
+
+        exists = (
+            DatasetItem.findWhere(
+                f"`parts` = ? AND dataset_id IN ({', '.join(datasets_ids)})",
+                (json.dumps(inputParts),),
+            )
+            != None
+        )
+
+        if not exists:
+            self.dataset.addItem("user", inputParts)
+
+            self.dataset.addItem("model", [output_msg])
 
     def send_message(self, input_msg, attachments: list[Attachment] = []):
         if attachments:
@@ -132,7 +155,9 @@ class BaseModel:
 
         return self.handle_output(input_msg, self.convo.last.text, attachments)
 
-    def handle_output(self, input_msg, output_msg, attachments: list[Attachment] = []):
+    def handle_output(
+        self, input_msg: str, output_msg: str, attachments: list[Attachment] = []
+    ):
         raise NotImplementedError("Subclasses must implement this method")
 
     def parse_output(self, output):
@@ -184,7 +209,7 @@ class BaseModel:
             # Print the output of the executed script
             RED = "\033[91m"
             RESET = "\033[0m"
-            return "Output:\n", RED + result.stdout.decode("utf-8") + RESET
+            return "Output:\n" + RED + result.stdout.decode("utf-8") + RESET
 
     def fix_error(self, issue):
         """
@@ -195,5 +220,5 @@ class BaseModel:
         """
         from src.fix_error import FixError
 
-        fixer = FixError.new(f"fix issue: {issue}")
+        fixer = FixError(f"fix issue: {issue}", self.directory)
         return fixer.send_message(issue)

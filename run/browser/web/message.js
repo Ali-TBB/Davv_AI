@@ -35,7 +35,7 @@ class Message {
       role: this.role,
       content: this.content,
       attachments: this.attachments,
-      created_at: this.created_at.getMilliseconds() / 1000
+      created_at: this.created_at.getMilliseconds()
     }
   }
 

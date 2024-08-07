@@ -17,16 +17,26 @@ class FindRequirements(BaseModel):
     backup_name = "find_requirement"
     data_type = FindRequirementsDataType
 
-    def handle_output(self, input_msg, output_msg, attachments: list[Attachment] = []):
+    def handle_output(
+        self, input_msg: str, output_msg: str, attachments: list[Attachment] = []
+    ):
         self.update_history(input_msg, output_msg, attachments)
         json_data = self.parse_output(output_msg)
-        if json_data["action"] == "simple":
-            return "simple", input_msg
-        elif json_data["action"] == "screenshot":
-            return "screenshot", input_msg
-        elif json_data["action"] == "big":
-            return "big", input_msg
+        if "action" in json_data:
+            if json_data["action"] == "simple":
+                return "simple", input_msg
+            elif json_data["action"] == "screenshot":
+                return "screenshot", input_msg
+            elif json_data["action"] == "big":
+                return "big", input_msg
+            else:
+                return "response", (
+                    json_data["response"]
+                    if "response" in json_data
+                    else "Sorry, I didn't understand that."
+                )
         else:
+            print(json_data)
             return "response", (
                 json_data["response"]
                 if "response" in json_data

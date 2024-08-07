@@ -29,7 +29,7 @@ class Database:
             cls.connection.commit()
             return cursor
         except Exception as e:
-            print(f"Error executing SQL query '{sql}'", e)
+            print(f"Error executing SQL query '{sql}'\params: {params}", e)
             raise e
 
     @classmethod

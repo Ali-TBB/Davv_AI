@@ -18,7 +18,9 @@ class DivideToSimple(BaseModel):
     backup_name = "divide_to_simple"
     data_type = DivideToSimpleDataType
 
-    def handle_output(self, input_msg, output_msg, attachments: list[Attachment] = []):
+    def handle_output(
+        self, input_msg: str, output_msg: str, attachments: list[Attachment] = []
+    ):
         self.update_history(input_msg, output_msg, attachments)
         json_data = self.parse_output(output_msg)
         for step in json_data:
@@ -28,7 +30,7 @@ class DivideToSimple(BaseModel):
                 self.run_command("command.py", step["code"])
             if step["action"] == "open_file":
                 self.open_file(step["file_name"])
-        return json_data
+        return "Done"
 
     def create_file(self, file_name, code):
         """

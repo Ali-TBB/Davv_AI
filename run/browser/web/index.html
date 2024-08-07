@@ -8,17 +8,24 @@
       type="text/css"
       href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
     />
-    <link
+    <!-- <link
       rel="stylesheet"
       type="text/css"
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    /> -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" type="text/css" href="style.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/react@16.7.0/umd/react.production.min.js"></script>
+    <!-- <script src="https://unpkg.com/react@16.7.0/umd/react.production.min.js"></script> -->
     <script type="text/javascript" src="/eel.js"></script>
   </head>
   <body>
@@ -38,59 +45,63 @@
       </header>
 
       <div class="conversation expanded rounded-lg overflow-hidden shadow">
-        <!-- Conversations box-->
-        <div class="sidebar px-0 bg-white">
-          <div class="bg-gray px-4 py-2 bg-light d-flex align-items-center">
+        <!-- Side bar -->
+        <div class="sidebar px-0 bg-light border-right">
+          <div class="header px-2 py-2 border-bottom">
             <!-- show/hide conversations button -->
-            <div class="row">
-              <div class="d-flex align-items-center">
-                <button
-                  type="button"
-                  class="expand-btn btn btn-link text-dark"
-                  id="show-hide-conversations"
-                >
-                  <i class="fa fa-bars"></i>
-                </button>
-              </div>
-              <!-- Conversation box with name-->
-              <div class="d-flex align-items-center">
-                <h2 class="h6 text-uppercase py-2">Conversations</h2>
-              </div>
-            </div>
+            <button
+              type="button"
+              class="expand-btn btn text-dark d-flex align-items-center"
+              id="show-hide-conversations"
+            >
+              <i class="fa fa-bars"></i>
+              <h2 class="h6 text-uppercase mx-2">Recent Conversations</h2>
+            </button>
+            <!-- Conversation box with name-->
           </div>
 
           <div class="conversations-box">
             <!-- Create conversion button -->
-            <button
-              type="button"
-              class="btn btn-link text-dark"
-              id="create-conversation"
-            >
-              <i class="fa fa-plus"></i> New conversation
-            </button>
+            <div class="d-flex justify-content-center border-bottom">
+              <button
+                type="button"
+                class="btn btn-link text-dark"
+                id="create-conversation"
+              >
+                <i class="fa fa-plus"></i>
+                <span> Start new conversation</span>
+              </button>
+            </div>
             <div class="list-group rounded-0"></div>
           </div>
         </div>
+
         <!-- Conversation Box-->
         <div class="px-0">
           <div class="conversation-box px-4 py-5 bg-white"></div>
 
           <!-- Typing area -->
-          <div class="input-group">
+          <div class="input-group border-top bg-light">
+            <div class="input-group-append border-right">
+              <!-- Attachment button -->
+              <button class="btn btn-link" type="button" id="attachments-btn">
+                <i class="fa fa-image"></i>
+              </button>
+            </div>
             <input
               type="text"
               placeholder="Type a message"
               aria-describedby="button-addon2"
-              class="form-control rounded-0 border-0 py-4 bg-light"
+              class="form-control border-0 py-4 bg-light"
               disabled
             />
-            <div class="input-group-append">
-              <button
-                id="button-addon2"
-                type="submit"
-                class="btn btn-link"
-                disabled
-              >
+            <div class="input-group-append border-left m-0">
+              <button class="btn btn-link btn-recorde" disabled>
+                <i class="fa fa-microphone"></i>
+              </button>
+            </div>
+            <div class="input-group-append border-left m-0">
+              <button class="btn btn-link btn-send" disabled>
                 <i class="fa fa-paper-plane"></i>
               </button>
             </div>

@@ -13,7 +13,7 @@ class DatasetItem(Collection):
                 "id": id,
                 "dataset_id": dataset_id,
                 "role": role,
-                "parts": json.dumps(parts) if type(parts) == list else parts,
+                "parts": json.dumps(parts) if type(parts) != str else parts,
                 "created_at": created_at,
                 "updated_at": updated_at,
             },

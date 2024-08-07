@@ -25,18 +25,24 @@ class FixError(BaseModel):
             if json_data["language"] == "python":
                 self.save_command("ErrorCommand.py", json_data["code"])
                 i = 0
-                while (i < 3):
+                while i < 3:
                     try:
                         # Execute the command using subprocess
-                        result = subprocess.run(["python", "ErrorCommand.py"], capture_output=True)
+                        result = subprocess.run(
+                            ["python", "ErrorCommand.py"], capture_output=True
+                        )
                         # Check the return code of the subprocess
                         if result.returncode != 0:
-                            print(f"Error Command execution failed with return code {result.returncode}")
+                            print(
+                                f"Error Command execution failed with return code {result.returncode}"
+                            )
                         else:
                             return "Error fixed, let's run it again ..."
                     except Exception as e:
                         print(f"An error occurred while running the command: {e}")
                     i += 1
                 return "Error couldn't be fixed"
-        elif json_data["action"] == "response":
+        elif "response" in json_data:
             return json_data["response"]
+        else:
+            return f"Invalid command {json_data["action"]}."
