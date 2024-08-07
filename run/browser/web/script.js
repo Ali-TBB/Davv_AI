@@ -24,14 +24,16 @@ $on(".input-group input", "input", function() {
 });
 
 $on(".input-group .btn-send", "click", function() {
-  window.currentConversation.sendMessage();
+  window.currentConversation?.sendMessage();
 });
 
 $on(".input-group .btn-record", "mousedown", function() {
+  if (!window.currentConversation) return;
   eel.start_recording()()
 });
 
 $on(".input-group .btn-record", "mouseup", function() {
+  if (!window.currentConversation) return;
   eel.stop_recording()()
 });
 

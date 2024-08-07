@@ -1,5 +1,8 @@
 import os
 import json
+import platform
+
+import pyautogui
 
 from utils import list_dir
 from utils.collection import Collection
@@ -19,6 +22,12 @@ tables: dict[str, Collection] = {
 }
 
 
+variables = {
+    "OS_SYSTEM": platform.system(),
+    "SIZE": pyautogui.size,
+}
+
+
 def seed():
     [table.truncate() for table in tables.values()]
 
@@ -27,7 +36,10 @@ def seed():
 
     for filePath in pathFiles:
         if filePath.endswith(".json"):
-            seeder = json.loads(open(filePath, "r").read())
+            content = open(filePath, "r").read()
+            for variable, value in variables.items():
+                content = content.replace(f"<-${variable}->", value)
+            seeder = json.loads(content)
             if not ("table" in seeder or "items" in seeder):
                 raise Exception("Invalid seeder, missing table or items key")
             elif not seeder["table"] in tables:

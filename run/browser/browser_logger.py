@@ -11,6 +11,6 @@ class BrowserLogger(Logger):
 
     def log(self, level: str, message: str | Message):
         if isinstance(message, Message):
-            self.__eel.messageReceived(message.data)
+            self.__eel.messageReceived(message.__dict__())
         else:
             self.__eel.log(level, message)

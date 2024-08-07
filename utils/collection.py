@@ -106,13 +106,15 @@ class Collection:
         return self.__data.copy()
 
     def __str__(self) -> str:
-        data = self.data
+        data = self.data.copy()
         data["created_at"] = str(data["created_at"])
         data["updated_at"] = str(data["updated_at"])
         return f"{self.__class__.__name__}: {json.dumps(data, indent=2)}"
 
     def __dict__(self) -> dict:
-        return self.data
+        data = self.data.copy()
+        data.pop("updated_at")
+        return data
 
     listeners = {
         "creating": [],

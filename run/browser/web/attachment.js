@@ -1,18 +1,18 @@
 class Attachment {
 
   id
-  meme_type
+  mime_type
   filename
 
   /**
    * Attachment class
    * @param {number} id
-   * @param {string} meme_type
+   * @param {string} mime_type
    * @param {string} filename
    */
-  constructor(id, meme_type, filename) {
+  constructor(id, mime_type, filename) {
     this.id = id
-    this.meme_type = meme_type
+    this.mime_type = mime_type
     this.filename = filename
   }
 
@@ -20,14 +20,28 @@ class Attachment {
    * @returns {Attachment} JSON representation of the attachment
    */
   static fromJson(json) {
-    return new Attachment(json.id, json.meme_type, json.filename)
+    console.log(json);
+    return new Attachment(json.id, json.mime_type, json.path)
   }
 
   get json() {
     return {
       id: this.id,
-      meme_type: this.meme_type,
+      mime_type: this.mime_type,
       filename: this.filename
+    }
+  }
+
+  get html() {
+    console.log(this.mime_type);
+    if (this.mime_type.startsWith("image/")) {
+      return `<img src="storage/${this.filename}" alt="image" class="img-fluid rounded ml-2" width="100" />`
+    } else if (this.mime_type.startsWith("audio/")) {
+      return `<audio controls class="ml-2">
+                <source src="storage/${this.filename}" type="${this.mime_type}">
+              </audio>`
+    } else {
+      return `<a href="storage/${this.filename}" class="ml-2">${this.filename}</a>`
     }
   }
 

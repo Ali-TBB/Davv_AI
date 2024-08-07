@@ -23,14 +23,12 @@ class FixError(BaseModel):
         json_data = self.parse_output(output_msg)
         if json_data["action"] == "execute":
             if json_data["language"] == "python":
-                self.save_command("ErrorCommand.py", json_data["code"])
+                path = self.save_command("ErrorCommand.py", json_data["code"])
                 i = 0
                 while i < 3:
                     try:
                         # Execute the command using subprocess
-                        result = subprocess.run(
-                            ["python", "ErrorCommand.py"], capture_output=True
-                        )
+                        result = subprocess.run(["python", path], capture_output=True)
                         # Check the return code of the subprocess
                         if result.returncode != 0:
                             print(

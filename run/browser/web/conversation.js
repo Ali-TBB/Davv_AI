@@ -48,7 +48,6 @@ class Conversation {
     $(".conversation-box").empty();
     const messages = await eel.load_conversation(this.id)()
     for (let message of messages) {
-      console.log(message.attachments);
       const messageObj = Message.fromJson(message);
       messageObj.attach();
     }

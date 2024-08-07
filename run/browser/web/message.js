@@ -26,7 +26,7 @@ class Message {
    * @returns {Message} JSON representation of the message
    */
   static fromJson(json) {
-    return new Message(json.id, json.role, json.content, json.attachments, new Date(json.created_at))
+    return new Message(json.id, json.role, json.content, json.attachments.map(attachment => Attachment.fromJson(attachment)), new Date(json.created_at))
   }
 
   get json() {
@@ -43,6 +43,8 @@ class Message {
    * @returns {string} HTML representation of the message
    */
   get html() {
+    const attachmentsHtml = this.attachments.map(attachment => attachment.html).join("")
+    console.log(this.attachments, attachmentsHtml);
     return {
       model: `<div class="message-item media mb-3">
               <img
@@ -56,6 +58,7 @@ class Message {
                   <p class="text-small mb-0 text-muted">
                     ${this.content}
                   </p>
+                  ${attachmentsHtml}
                 </div>
                 <p class="small text-muted">
                   ${this.created_at.toLocaleString()}
@@ -68,6 +71,7 @@ class Message {
                   <p class="text-small mb-0 text-white">
                     ${this.content}
                   </p>
+                  ${attachmentsHtml}
                 </div>
                 <p class="small text-muted">
                   ${this.created_at.toLocaleString()}

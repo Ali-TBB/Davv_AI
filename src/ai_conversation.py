@@ -72,10 +72,11 @@ class AIConversation(Conversation):
         )
         print("result: ", result, "msg: ", input_msg)
         if result == "screenshot":
-            attachments.append(self.take_screenshot())
+            screenshot = self.take_screenshot()
+            attachments.append(screenshot)
+            message.add_attachment(screenshot)
+
             answer = self.run_process.send_message(message_content, attachments)
-            message.attachments_ids = [a.id for a in attachments]
-            message.update()
         elif result == "simple":
             answer = self.run_process.send_message(message_content, attachments)
         elif result == "big":

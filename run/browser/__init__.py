@@ -25,19 +25,17 @@ def start():
 
 def link_storage():
     source = os.path.join(Env.base_path, "storage")
-    link_name = os.path.join(Env.base_path, "run/browser/storage")
+    link_name = os.path.join(Env.base_path, "run/browser/web/storage")
     # Check if the symlink already exists
     if os.path.islink(link_name) or os.path.exists(link_name):
         try:
             os.remove(link_name)
-            print(f"Existing symlink or file removed: {link_name}")
         except OSError as e:
             print(f"Error removing existing symlink or file: {e}")
 
     # Create the new symlink
     try:
         os.symlink(source, link_name)
-        print(f"Symlink created: {link_name} -> {source}")
     except OSError as e:
         print(f"Error creating symlink: {e}")
 
@@ -51,7 +49,7 @@ def create_conversation(name):
 
     current_conversation = AIConversation.new(name, logger=logger)
     current_conversation.init()
-    return current_conversation.data
+    return current_conversation.__dict__()
 
 
 @eel.expose
@@ -70,7 +68,7 @@ def delete_conversation(conversation_id):
 
 @eel.expose
 def load_conversations():
-    return [item.data for item in AIConversation.all(logger=logger)]
+    return [item.__dict__() for item in AIConversation.all(logger=logger)]
 
 
 @eel.expose
@@ -80,13 +78,15 @@ def load_conversation(conversation_id):
     current_conversation = AIConversation.find(conversation_id, logger=logger)
     if current_conversation:
         current_conversation.init()
-        return [item.data for item in current_conversation.messages()]
+        return [item.__dict__() for item in current_conversation.messages()]
     return []
 
 
 @eel.expose
 def message_received(message_data: dict):
     print("Message received:", message_data)
+    if not current_conversation:
+        return None
 
     attachments: list[Attachment] = []
     for attachment in message_data.get("attachments", []):
@@ -97,7 +97,7 @@ def message_received(message_data: dict):
         attachments.append(
             Attachment.create(
                 None,
-                attachment["meme_type"],
+                attachment["mime_type"],
                 os.path.join(
                     current_conversation.directory.name, attachment["filename"]
                 ),
@@ -105,7 +105,7 @@ def message_received(message_data: dict):
         )
 
     answer = current_conversation.handle_message(message_data["content"], attachments)
-    return answer.data
+    return answer.__dict__()
 
 
 @eel.expose

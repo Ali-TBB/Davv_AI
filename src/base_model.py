@@ -7,7 +7,7 @@ from models.attachment import Attachment
 from models.dataset import Dataset
 from models.dataset_item import DatasetItem
 from utils.env import Env
-from utils.storage import Directory
+from utils.storage import Directory, File
 
 
 def create_model(mim_type, model_type, data_type, **kwargs):
@@ -135,7 +135,7 @@ class BaseModel:
 
         exists = (
             DatasetItem.findWhere(
-                f"`parts` = ? AND dataset_id IN ({', '.join(datasets_ids)})",
+                f"`parts` = ? AND dataset_id IN ({', '.join([str(id) for id in datasets_ids])})",
                 (json.dumps(inputParts),),
             )
             != None
@@ -186,7 +186,9 @@ class BaseModel:
         """
         try:
             # Write command content to a temporary Python script
-            self.directory.file(file_name).set(command_content)
+            file: File = self.directory.file(file_name)
+            file.set(command_content)
+            return file.path
 
             # print(f"Command saved to {file_name}")
         except Exception as e:
@@ -200,10 +202,10 @@ class BaseModel:
             file_name (str): The name of the file to save the command to.
             code (str): The code to execute.
         """
-        self.save_command(file_name, code)
+        path = self.save_command(file_name, code)
         print("Operation is running ...")
         # Execute the command using subprocess
-        result = subprocess.run(["python", file_name], capture_output=True)
+        result = subprocess.run(["python", path], capture_output=True)
         # Check the return code of the subprocess
         if result.returncode != 0:
             print(f"Command execution failed with return code {result.returncode}")

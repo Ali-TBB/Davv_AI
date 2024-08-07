@@ -79,4 +79,16 @@ class Message(Collection):
         self.set("attachments_ids", json.dumps(value))
 
     def attachments(self) -> list[Attachment]:
-        return Attachment.all(f"`id` IN ({', '.join(self.attachments_ids)})")
+        return Attachment.all(
+            f"`id` IN ({', '.join([str(id) for id in self.attachments_ids])})"
+        )
+
+    def add_attachment(self, attachment: Attachment):
+        self.attachments_ids.append(attachment.id)
+        self.update()
+
+    def __dict__(self) -> dict:
+        return {
+            **super().__dict__(),
+            "attachments": [attachment.__dict__() for attachment in self.attachments()],
+        }
