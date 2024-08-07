@@ -24,14 +24,15 @@ class RunProcess(BaseModel):
         self.update_history(input_msg, output_msg, attachments)
 
         json_data = self.parse_output(output_msg)
-        if json_data["action"] == "execute":
-            if json_data["language"] == "python":
-                return self.run_command("command.py", json_data["code"])
-            elif json_data["language"] == "shell":
-                return self.run_command("command.sh", json_data["code"])
-            else:
-                return f"Invalid language {json_data['language']}."
-        elif "response" in json_data:
+        if "action" in json_data:
+            if json_data["action"] == "execute":
+                if json_data["language"] == "python":
+                    return self.run_command("command.py", json_data["code"])
+                elif json_data["language"] == "shell":
+                    return self.run_command("command.sh", json_data["code"])
+                else:
+                    return f"Invalid language {json_data['language']}."
+        if "response" in json_data:
             return json_data["response"]
         else:
-            return f"Invalid command {json_data["action"]}."
+            return f"Invalid command."

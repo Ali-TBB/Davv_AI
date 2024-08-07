@@ -45,4 +45,4 @@ class FixError(BaseModel):
         elif "response" in json_data:
             return json_data["response"]
         else:
-            return f"Invalid command {json_data["action"]}."
+            return f"Invalid command {json_data['action']}."

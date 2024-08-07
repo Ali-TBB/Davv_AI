@@ -1,4 +1,5 @@
 import json
+import os
 import time
 
 import pyautogui
@@ -21,7 +22,6 @@ class AIConversation(Conversation):
     __run_process: RunProcess = None
     __find_requirement: FindRequirements = None
     __divide_to_simple: DivideToSimple = None
-    __directory: Directory = None
 
     def __init__(
         self,
@@ -34,15 +34,14 @@ class AIConversation(Conversation):
     ):
         super().__init__(id, name, dataset_id, created_at, updated_at)
         self.__logger = logger
-        self.__directory = get_storage().directory(f"conv-{self.id}")
+
+    @property
+    def directory(self) -> Directory:
+        return get_storage().directory(f"conv-{self.id}")
 
     @property
     def logger(self) -> Logger:
         return self.__logger
-
-    @property
-    def directory(self) -> Directory:
-        return self.__directory
 
     @property
     def run_process(self) -> RunProcess:
@@ -86,13 +85,17 @@ class AIConversation(Conversation):
         )
 
     def take_screenshot(self) -> Attachment:
-        full_path = self.directory.file(f"{time.strftime('%y_%m_%d_%H%M%S')}.png").path
-        # Capture the screenshot
+        filename = f"{time.strftime('%y_%m_%d_%H%M%S')}.png"
+        file = self.directory.file(filename)
+
         screenshot = pyautogui.screenshot()
-        # Save the screenshot to the specified file path
-        screenshot.save(full_path)
+        screenshot.save(file.path)
+
         self.logger.info("Screenshot saved successfully!")
-        return Attachment.create(None, "image/png", full_path)
+
+        return Attachment.create(
+            None, "image/png", os.path.join(self.directory.name, file.name)
+        )
 
     @classmethod
     def new(cls, name: str, **kwargs) -> "AIConversation":

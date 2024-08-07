@@ -1,6 +1,8 @@
+import os
 import google.generativeai as genai
 
 from utils.collection import Collection
+from utils.storage import get_storage
 
 
 class Attachment(Collection):
@@ -39,4 +41,7 @@ class Attachment(Collection):
     @property
     def url(self) -> str:
         if not self.__url:
-            self.__url = genai.upload_file(self.path, mime_type=self.mime_type)
+            self.__url = genai.upload_file(
+                os.path.join(get_storage().path, self.path), mime_type=self.mime_type
+            )
+        return self.__url

@@ -18,6 +18,10 @@ class Directory:
         if os.path.exists(self.path) and not os.path.isdir(self.path):
             raise Exception(f"Path '{self.path}' is not a directory")
 
+    @property
+    def name(self) -> str:
+        return os.path.basename(self.path)
+
     def create(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
@@ -54,6 +58,10 @@ class File:
     @property
     def path(self) -> str:
         return os.path.join(self.directory.path, self.filename)
+
+    @property
+    def name(self) -> str:
+        return os.path.basename(self.filename)
 
     @property
     def content(self) -> str | list | dict:
