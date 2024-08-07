@@ -35,6 +35,11 @@ class AIConversation(Conversation):
         super().__init__(id, name, dataset_id, created_at, updated_at)
         self.__logger = logger
 
+    def init(self):
+        self.__run_process = RunProcess(self.dataset, self.directory)
+        self.__find_requirement = FindRequirements(self.dataset, self.directory)
+        self.__divide_to_simple = DivideToSimple(self.dataset, self.directory)
+
     @property
     def directory(self) -> Directory:
         return get_storage().directory(f"conv-{self.id}")
@@ -45,36 +50,36 @@ class AIConversation(Conversation):
 
     @property
     def run_process(self) -> RunProcess:
-
-        if not self.__run_process:
-            self.__run_process = RunProcess(self.dataset, self.directory)
         return self.__run_process
 
     @property
     def find_requirement(self) -> FindRequirements:
-
-        if not self.__find_requirement:
-            self.__find_requirement = FindRequirements(self.dataset, self.directory)
         return self.__find_requirement
 
     @property
     def divide_to_simple(self) -> DivideToSimple:
-
-        if not self.__divide_to_simple:
-            self.__divide_to_simple = DivideToSimple(self.dataset, self.directory)
         return self.__divide_to_simple
 
-    def handle_message(self, message, attachments: list[Attachment] = []) -> Message:
-        self.send_message("user", message)
+    def handle_message(
+        self, message_content, attachments: list[Attachment] = []
+    ) -> Message:
+        message = self.send_message(
+            "user", message_content, [a.id for a in attachments]
+        )
 
-        result, input_msg = self.find_requirement.send_message(message, attachments)
+        result, input_msg = self.find_requirement.send_message(
+            message_content, attachments
+        )
+        print("result: ", result, "msg: ", input_msg)
         if result == "screenshot":
             attachments.append(self.take_screenshot())
-            answer = self.run_process.send_message(message, attachments)
+            answer = self.run_process.send_message(message_content, attachments)
+            message.attachments_ids = [a.id for a in attachments]
+            message.update()
         elif result == "simple":
-            answer = self.run_process.send_message(message, attachments)
+            answer = self.run_process.send_message(message_content, attachments)
         elif result == "big":
-            answer = self.divide_to_simple.send_message(message, attachments)
+            answer = self.divide_to_simple.send_message(message_content, attachments)
         elif result == "response":
             answer = input_msg
         else:

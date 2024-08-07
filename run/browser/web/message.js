@@ -78,7 +78,9 @@ class Message {
   }
 
   attach() {
-    $(".conversation-box").append(this.html);
+    const conversationBox = $(".conversation-box");
+    conversationBox.append(this.html);
+    conversationBox.scrollTop(conversationBox.prop("scrollHeight"));
   }
 
 }

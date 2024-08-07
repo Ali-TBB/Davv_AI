@@ -9,6 +9,9 @@ function $on(target, eventName, callback) {
 
 $on(".conversations-box .conversation-item", "click", function() {
   const conversationId = $(this).attr("conversation-id");
+  
+  if (window.currentConversation && window.currentConversation.id == conversationId) return;
+  
   Conversation.select(conversationId);
 });
 

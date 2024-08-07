@@ -28,15 +28,19 @@ class Conversation {
   }
 
   static async all() {
+    window.conversations = {}
+    $(".conversations-box .list-group").empty();
+    window.currentConversation = undefined;
+
     const conversations = await eel.load_conversations()();
     for (let conversation of conversations) {
       const conversationObj = Conversation.fromJson(conversation);
       window.conversations[conversationObj.id] = conversationObj;
       conversationObj.attach();
-      if (window.currentConversation === undefined) {
-        window.currentConversation = conversationObj;
-        conversationObj.select();
-      }
+    }
+
+    if (window.currentConversation === undefined) {
+      Object.values(window.conversations)[0]?.select();
     }
   }
 
@@ -44,6 +48,7 @@ class Conversation {
     $(".conversation-box").empty();
     const messages = await eel.load_conversation(this.id)()
     for (let message of messages) {
+      console.log(message.attachments);
       const messageObj = Message.fromJson(message);
       messageObj.attach();
     }
@@ -60,7 +65,7 @@ class Conversation {
     const message = new Message(undefined, "user", messageContent, attachments, new Date());
     message.attach();
 
-    const answerJson = await eel.message_received(this.id, message.json)();
+    const answerJson = await eel.message_received(message.json)();
     console.log(answerJson);
 
     const answer = Message.fromJson(answerJson);
@@ -84,12 +89,11 @@ class Conversation {
   }
 
   static async delete(id) {
-    $(`.conversation-item[conversation-id="${id}"] .btn-danger`).attr("disabled", true)
     if (await eel.delete_conversation(id)()) {
       $(`.conversation-item[conversation-id="${id}"]`).remove(); 
       $(".conversation-box").empty();
-    } else 
-      $(`.conversation-item[conversation-id="${id}"] .btn-danger`).attr("disabled", false)
+    } else
+      alert("Failed to delete the conversation");
   }
 
   async select() {

@@ -17,7 +17,9 @@ class Model:
         return rows
 
     @staticmethod
-    def findWhere(collection_cls, table, where: str, params=(), **kwargs) -> "Collection":
+    def findWhere(
+        collection_cls, table, where: str, params=(), **kwargs
+    ) -> "Collection":
         row = utils.Database.execute(
             f"SELECT * FROM `{table}` WHERE {where}", params
         ).fetchone()

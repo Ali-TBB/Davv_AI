@@ -1,5 +1,4 @@
 from models.attachment import Attachment
-from models.dataset import Dataset
 from src.base_model import BaseModel
 from src.data_types.find_requirements import FindRequirementsDataType
 

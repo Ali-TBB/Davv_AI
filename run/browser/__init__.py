@@ -17,19 +17,55 @@ logger = BrowserLogger(eel)
 
 
 def start():
+    link_storage()
     eel.init(os.path.join(Env.base_path, "run/browser/web"))
     w, h = pyautogui.size()
-    eel.start("index.html", mode="edge", app_mode=True, size=(w * 0.6, h))
+    eel.start("index.html", app_mode=True, size=(w * 0.6, h))
+
+
+def link_storage():
+    source = os.path.join(Env.base_path, "storage")
+    link_name = os.path.join(Env.base_path, "run/browser/storage")
+    # Check if the symlink already exists
+    if os.path.islink(link_name) or os.path.exists(link_name):
+        try:
+            os.remove(link_name)
+            print(f"Existing symlink or file removed: {link_name}")
+        except OSError as e:
+            print(f"Error removing existing symlink or file: {e}")
+
+    # Create the new symlink
+    try:
+        os.symlink(source, link_name)
+        print(f"Symlink created: {link_name} -> {source}")
+    except OSError as e:
+        print(f"Error creating symlink: {e}")
+
+
+current_conversation: AIConversation = None
 
 
 @eel.expose
 def create_conversation(name):
-    return AIConversation.new(name, logger=logger).data
+    global current_conversation
+
+    current_conversation = AIConversation.new(name, logger=logger)
+    current_conversation.init()
+    return current_conversation.data
 
 
 @eel.expose
 def delete_conversation(conversation_id):
-    return AIConversation.find(conversation_id).delete()
+    global current_conversation
+
+    if current_conversation and current_conversation.id == conversation_id:
+
+        if current_conversation.delete():
+            current_conversation = None
+            return True
+        return False
+    else:
+        return AIConversation.find(conversation_id).delete()
 
 
 @eel.expose
@@ -39,32 +75,36 @@ def load_conversations():
 
 @eel.expose
 def load_conversation(conversation_id):
-    conversation = AIConversation.find(conversation_id)
-    return [item.data for item in conversation.messages()]
+    global current_conversation
+
+    current_conversation = AIConversation.find(conversation_id, logger=logger)
+    if current_conversation:
+        current_conversation.init()
+        return [item.data for item in current_conversation.messages()]
+    return []
 
 
 @eel.expose
-def message_received(conversation_id, message_data: dict):
+def message_received(message_data: dict):
     print("Message received:", message_data)
 
-    conversation: AIConversation = AIConversation.find(
-        conversation_id, logger=BrowserLogger(eel)
-    )
     attachments: list[Attachment] = []
     for attachment in message_data.get("attachments", []):
         path = os.path.join(
             Env.base_path, "run/browser/uploads", attachment["filename"]
         )
-        shutil.move(path, conversation.directory.path)
+        shutil.move(path, current_conversation.directory.path)
         attachments.append(
             Attachment.create(
                 None,
                 attachment["meme_type"],
-                os.path.join(conversation.directory.name, attachment["filename"]),
+                os.path.join(
+                    current_conversation.directory.name, attachment["filename"]
+                ),
             )
         )
 
-    answer = conversation.handle_message(message_data["content"], attachments)
+    answer = current_conversation.handle_message(message_data["content"], attachments)
     return answer.data
 
 

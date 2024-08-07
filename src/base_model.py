@@ -90,9 +90,10 @@ class BaseModel:
 
         history = []
         backup_dataset = self.backup
-        all_items = (
-            backup_dataset.all_items if backup_dataset else []
-        ) + self.dataset.all_items
+        # all_items = (
+        #     backup_dataset.all_items if backup_dataset else []
+        # ) + self.dataset.all_items
+        all_items = backup_dataset.all_items if backup_dataset else []
 
         for dataset_item in all_items:
             history_item = {

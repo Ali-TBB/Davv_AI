@@ -77,6 +77,7 @@ class AICommand(cmd.Cmd):
         if name:
             self.do_clear("")
             self.conversation = AIConversation.new(name)
+            self.conversation.init()
             print(f"Conversation {name} created successfully.")
         else:
             print("Conversation name is required.")
@@ -89,11 +90,18 @@ class AICommand(cmd.Cmd):
         if conversations:
             name = questionary.select(
                 "Select the conversation:",
-                choices=[conversation.name for conversation in conversations],
+                choices=[conversation.name for conversation in conversations]
+                + ["Cancel"],
             ).ask()
+
             self.do_clear("")
 
+            if name == "Cancel":
+                self.home()
+                return
+
             self.conversation = AIConversation.findWhere("`name` = ?", (name,))
+            self.conversation.init()
         else:
             print("There is no conversations created yet")
             self.home()

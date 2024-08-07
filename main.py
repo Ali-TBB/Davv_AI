@@ -29,11 +29,13 @@ def ask_target():
     Returns:
         The selected target.
     """
+
     return questionary.select(
         "Select a target",
         choices=[
             "Console",
             "Browser",
+            "Quit",
         ],
     ).ask()
 
@@ -54,6 +56,8 @@ if __name__ == "__main__":
         from run import browser
 
         browser.start()
+    elif target.lower() == "quit":
+        sys.exit(0)
     else:
         print("Invalid target")
         sys.exit(1)
