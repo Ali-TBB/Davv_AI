@@ -49,8 +49,12 @@ class Collection:
         self.set("updated_at", str(value))
 
     @classmethod
-    def all(cls, where=None, params=(), **kwargs) -> list["Collection"]:
-        return utils.Model.all(cls, cls.table, where, params, **kwargs)
+    def all(
+        cls, where=None, params=(), order_by="created_at", order_type="ASC", **kwargs
+    ) -> list["Collection"]:
+        return utils.Model.all(
+            cls, cls.table, where, params, order_by, order_type, **kwargs
+        )
 
     @classmethod
     def findWhere(cls, where=None, params=(), **kwargs) -> "Collection":

@@ -5,3 +5,6 @@ questionary
 python-dotenv
 eel
 pyaudio
+numpy
+Pillow
+pywebview

@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>DevDynamo_AI</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Davv_AI</title>
 
     <link
       rel="stylesheet"
-      type="text/css"
-      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
     />
+
     <!-- <link
       rel="stylesheet"
       type="text/css"
@@ -20,26 +27,24 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/style.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <!-- <script src="https://unpkg.com/react@16.7.0/umd/react.production.min.js"></script> -->
+
     <script type="text/javascript" src="/eel.js"></script>
   </head>
   <body>
     <div class="app">
       <!-- For demo purpose-->
       <header class="text-center">
-        <h1 class="display-4 text-white">DevDynamo_AI</h1>
+        <h1 class="display-4 text-white">Davv_AI</h1>
         <p class="text-white lead mb-0">
-          An elegant conversation widget compatible with Bootstrap 4
+          Empowering Developers, One Command at a Time.
         </p>
         <p class="text-white lead mb-4">
-          Snippet by
-          <a href="https://bootstrapious.com" class="text-white">
-            <u>Bootstrapious</u></a
+          Powered by
+          <a href="https://github.com/Ali-TBB/Davv_AI" class="text-white">
+            <u>Davv team</u></a
           >
         </p>
       </header>
@@ -51,7 +56,7 @@
             <!-- show/hide conversations button -->
             <button
               type="button"
-              class="expand-btn btn text-dark d-flex align-items-center"
+              class="expand-btn btn bg-transparent text-dark d-flex align-items-center"
               id="show-hide-conversations"
             >
               <i class="fa fa-bars"></i>
@@ -77,8 +82,32 @@
         </div>
 
         <!-- Conversation Box-->
-        <div class="px-0">
-          <div class="conversation-box px-4 py-5 bg-white"></div>
+        <div class="px-0 conversation-box">
+          <div
+            class="header border-bottom bg-light px-3 py-1 d-flex justify-content-between align-items-center"
+          >
+            <h3></h3>
+            <button
+              class="btn dropdown bg-transparent"
+              type="button"
+              id="btn-settings"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              disabled
+            >
+              <i class="fas fa-gear"></i>
+            </button>
+            <ul
+              class="dropdown-menu dropdown-menu-bottom"
+              aria-labelledby="btn-settings"
+            >
+              <li class="dropdown-item" id="stream-recording">
+                Start Stream Recording
+              </li>
+            </ul>
+          </div>
+          <div class="conversation-messages px-4 py-5 bg-white"></div>
 
           <!-- Typing area -->
           <div class="input-group border-top bg-light">
@@ -98,7 +127,7 @@
               type="text"
               placeholder="Type a message"
               aria-describedby="button-addon2"
-              class="form-control border-0 py-4 bg-light"
+              class="form-control border-0 py-3 bg-light"
               disabled
             />
             <div class="input-group-append border-left m-0">
@@ -115,9 +144,64 @@
         </div>
       </div>
     </div>
-    <script src="conversation.js"></script>
-    <script src="message.js"></script>
-    <script src="attachment.js"></script>
-    <script src="script.js"></script>
+
+    <!-- image preview modal -->
+    <div
+      class="modal fade"
+      id="image-preview-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="image-preview-modal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog-centred" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Preview attachment image</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <img src="" alt="" class="img-fluid" />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="src/js/conversation.js"></script>
+    <script src="src/js/message.js"></script>
+    <script src="src/js/attachment.js"></script>
+    <script src="src/js/script.js"></script>
   </body>
 </html>

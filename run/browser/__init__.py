@@ -4,11 +4,14 @@ import eel
 import os
 import shutil
 
+from gtts import gTTS
 import pyautogui
 
 from models.attachment import Attachment
+from run.browser import audio_effect
 from run.browser.audio_recorder import AudioRecorder
 from run.browser.browser_logger import BrowserLogger
+from run.browser.streaming_record import StreamingRecord
 from src.ai_conversation import AIConversation
 from utils.env import Env
 
@@ -17,27 +20,21 @@ logger = BrowserLogger(eel)
 
 
 def start():
-    link_storage()
     eel.init(os.path.join(Env.base_path, "run/browser/web"))
     w, h = pyautogui.size()
-    eel.start("index.html", app_mode=True, size=(w * 0.6, h))
+    eel.start("index.html", app_mode=True, size=(w * 0.6, h), close_callback=on_close)
 
 
-def link_storage():
-    source = os.path.join(Env.base_path, "storage")
-    link_name = os.path.join(Env.base_path, "run/browser/web/storage")
-    # Check if the symlink already exists
-    if os.path.islink(link_name) or os.path.exists(link_name):
-        try:
-            os.remove(link_name)
-        except OSError as e:
-            print(f"Error removing existing symlink or file: {e}")
+def on_close(page, sockets):
+    print("Closing page", page, sockets)
 
-    # Create the new symlink
-    try:
-        os.symlink(source, link_name)
-    except OSError as e:
-        print(f"Error creating symlink: {e}")
+    if streaming_record:
+        streaming_record.stop()
+
+    if current_recording:
+        current_recording.stop()
+
+    exit()
 
 
 current_conversation: AIConversation = None
@@ -68,7 +65,9 @@ def delete_conversation(conversation_id):
 
 @eel.expose
 def load_conversations():
-    return [item.__dict__() for item in AIConversation.all(logger=logger)]
+    return [
+        item.__dict__() for item in AIConversation.all(logger=logger, order_type="DESC")
+    ]
 
 
 @eel.expose
@@ -90,9 +89,7 @@ def message_received(message_data: dict):
 
     attachments: list[Attachment] = []
     for attachment in message_data.get("attachments", []):
-        path = os.path.join(
-            Env.base_path, "run/browser/uploads", attachment["filename"]
-        )
+        path = os.path.join(Env.base_path, "run/browser/tmp", attachment["filename"])
         shutil.move(path, current_conversation.directory.path)
         attachments.append(
             Attachment.create(
@@ -104,14 +101,24 @@ def message_received(message_data: dict):
             )
         )
 
-    answer = current_conversation.handle_message(message_data["content"], attachments)
-    return answer.__dict__()
+    message, answer = current_conversation.handle_message(
+        message_data["content"], attachments
+    )
+
+    gTTS(answer.content, lang="en").save(
+        os.path.join(current_conversation.directory.path, f"answer-{answer.id}.mp3")
+    )
+
+    if streaming_record:
+        streaming_record.start()
+
+    return {"message": message.__dict__(), "answer": answer.__dict__()}
 
 
 @eel.expose
 def upload_file(file_content):
     filename = f"tmp-{time.strftime('%Y%m%d-%H%M%S')}"
-    path = os.path.join(Env.base_path, "run/browser/uploads", filename)
+    path = os.path.join(Env.base_path, "run/browser/tmp", filename)
     header, encoded = file_content.split(",", 1)
     data = base64.b64decode(encoded)
     with open(path, "wb") as f:
@@ -125,9 +132,17 @@ current_recording = None
 @eel.expose
 def start_recording():
     global current_recording
-    if not current_recording:
+
+    if not current_recording and current_conversation:
+        if streaming_record:
+            audio_effect.play("start-stream-recording.wav")
+        audio_effect.play("start-recording.wav")
+
+        print("Starting recording...")
+
         current_recording = AudioRecorder(
-            lambda filename: eel.stopRecording(filename), False
+            on_recording_finished,
+            stop_on_silence=streaming_record is not None,
         )
         current_recording.start()
 
@@ -135,6 +150,35 @@ def start_recording():
 @eel.expose
 def stop_recording():
     global current_recording
+
     if current_recording:
         current_recording.stop()
         current_recording = None
+
+
+def on_recording_finished(filename):
+    global current_recording
+
+    eel.stopRecording(filename)
+    current_recording = None
+    audio_effect.play("end-recording.wav")
+
+
+streaming_record = None
+
+
+@eel.expose
+def streaming_recording():
+    global streaming_record
+
+    if not current_conversation:
+        return False
+
+    if streaming_record:
+        streaming_record.stop()
+        streaming_record = None
+    else:
+        streaming_record = StreamingRecord(start_recording)
+        streaming_record.start()
+
+    return streaming_record is not None

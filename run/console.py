@@ -114,7 +114,8 @@ class AICommand(cmd.Cmd):
         elif arg.strip() == "#new":
             self.create_conversation()
         else:
-            print(self.conversation.handle_message(arg).content)
+            message, answer = self.conversation.handle_message(arg)
+            print(answer.content)
 
 
 if __name__ == "__main__":

@@ -27,12 +27,16 @@ class RunProcess(BaseModel):
         if "action" in json_data:
             if json_data["action"] == "execute":
                 if json_data["language"] == "python":
-                    return self.run_command("command.py", json_data["code"])
+                    return json_data["response"], self.run_command(
+                        "command.py", json_data["code"]
+                    )
                 elif json_data["language"] == "shell":
-                    return self.run_command("command.sh", json_data["code"])
+                    return json_data["response"], self.run_command(
+                        "command.sh", json_data["code"]
+                    )
                 else:
-                    return f"Invalid language {json_data['language']}."
+                    return f"Invalid language {json_data['language']}.", None
         if "response" in json_data:
-            return json_data["response"]
+            return json_data["response"], None
         else:
-            return f"Invalid command."
+            return f"Invalid command.", None

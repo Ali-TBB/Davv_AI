@@ -213,9 +213,8 @@ class BaseModel:
             return self.fix_error(result.stderr.decode("utf-8"))
         else:
             # Print the output of the executed script
-            RED = "\033[91m"
-            RESET = "\033[0m"
-            return "Output:\n" + RED + result.stdout.decode("utf-8") + RESET
+            output = result.stdout.decode("utf-8")
+            return output if output else None
 
     def fix_error(self, issue):
         """

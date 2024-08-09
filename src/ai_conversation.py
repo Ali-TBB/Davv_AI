@@ -76,9 +76,9 @@ class AIConversation(Conversation):
             attachments.append(screenshot)
             message.add_attachment(screenshot)
 
-            answer = self.run_process.send_message(message_content, attachments)
+            answer, output = self.run_process.send_message(message_content, attachments)
         elif result == "simple":
-            answer = self.run_process.send_message(message_content, attachments)
+            answer, output = self.run_process.send_message(message_content, attachments)
         elif result == "big":
             answer = self.divide_to_simple.send_message(message_content, attachments)
         elif result == "response":
@@ -86,7 +86,7 @@ class AIConversation(Conversation):
         else:
             answer = "Invalid command."
 
-        return self.send_message(
+        return message, self.send_message(
             "model", json.loads(answer) if type(answer) != str else answer
         )
 
@@ -94,8 +94,10 @@ class AIConversation(Conversation):
         filename = f"{time.strftime('%y_%m_%d_%H%M%S')}.png"
         file = self.directory.file(filename)
 
+        self.logger.window_down()
         screenshot = pyautogui.screenshot()
         screenshot.save(file.path)
+        self.logger.window_up()
 
         self.logger.info("Screenshot saved successfully!")
 

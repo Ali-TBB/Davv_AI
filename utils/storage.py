@@ -6,7 +6,7 @@ from utils.env import Env
 
 
 def get_storage():
-    return Directory(os.path.join(Env.base_path, "storage"))
+    return Directory(os.path.join(Env.base_path, "run/browser/web/storage"))
 
 
 class Directory:
@@ -65,12 +65,12 @@ class File:
 
     @property
     def name(self) -> str:
-        return os.path.basename(self.filename)
+        return os.path.basename(self.path)
 
     @property
     def content(self) -> str | list | dict:
         if os.path.exists(self.path):
-            with open(self.filename, "r") as file:
+            with open(self.path, "r") as file:
                 content = file.read()
                 try:
                     return json.loads(content)
@@ -79,11 +79,11 @@ class File:
 
     def set(self, content: str | list | dict | bytes):
         if isinstance(content, bytes):
-            with open(self.filename, "wb") as file:
+            with open(self.path, "wb") as file:
                 file.write(content)
         else:
             if isinstance(content, (list, dict)):
                 content = json.dumps(content, indent=4)
 
-            with open(self.filename, "w") as file:
+            with open(self.path, "w") as file:
                 file.write(content)

@@ -17,3 +17,9 @@ class Logger:
 
     def message(self, message: Message):
         self.log("message", message)
+
+    def window_down(self):
+        pass
+
+    def window_up(self):
+        pass

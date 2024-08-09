@@ -7,10 +7,20 @@ from utils.collection import Collection
 class Model:
 
     @staticmethod
-    def all(collection_cls, table, where=None, params=(), **kwargs) -> list[Collection]:
+    def all(
+        collection_cls,
+        table,
+        where=None,
+        params=(),
+        order_by="created_at",
+        order_type="ASC",
+        **kwargs,
+    ) -> list[Collection]:
         sql = f"SELECT * FROM `{table}`"
         if where:
             sql += f" WHERE {where}"
+        if order_by:
+            sql += f" ORDER BY `{order_by}` {order_type}"
         rows: list[Collection] = []
         for row in utils.Database.execute(sql, params).fetchall():
             rows.append(collection_cls(*row, **kwargs))

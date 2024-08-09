@@ -24,7 +24,7 @@ tables: dict[str, Collection] = {
 
 variables = {
     "OS_SYSTEM": platform.system(),
-    "SIZE": pyautogui.size,
+    "SIZE": pyautogui.size(),
 }
 
 
@@ -38,7 +38,7 @@ def seed():
         if filePath.endswith(".json"):
             content = open(filePath, "r").read()
             for variable, value in variables.items():
-                content = content.replace(f"<-${variable}->", value)
+                content = content.replace(f"<-{variable}->", str(value))
             seeder = json.loads(content)
             if not ("table" in seeder or "items" in seeder):
                 raise Exception("Invalid seeder, missing table or items key")
