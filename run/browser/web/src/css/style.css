@@ -1,7 +1,11 @@
+html{
+  height: 100%;
+  margin: 0;
+}
 body {
   background-color: #74ebd5;
   background-image: linear-gradient(90deg, #74ebd5 0%, #9face6 100%);
-
+  margin: 0;
   min-height: 100vh;
 }
 
@@ -190,4 +194,26 @@ input::placeholder {
   border-radius: 0.5rem;
   width: 100%;
   max-width: 300px;
+}
+
+
+.header {
+  flex: 0 1 auto;
+  text-align: center;
+  background-color: transparent;
+}
+
+.title {
+  font-size: 1.5rem; /* Smaller font size for the title */
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1rem; /* Smaller font size for the subtitle */
+  margin-bottom: 0.5rem;
+}
+
+.header p {
+  font-size: 0.9rem; /* Smaller font size for the paragraph */
+  margin-bottom: 0.5rem;
 }
