@@ -16,6 +16,7 @@ def arg(index, default=None):
     Returns:
         The command line argument at the given index, or the default value if the index is out of range.
     """
+
     try:
         return sys.argv[index]
     except IndexError:
@@ -40,8 +41,26 @@ def ask_target():
     ).ask()
 
 
+def configure_api_key():
+    """
+    Prompts the user to enter their API key and sets it in the environment variable.
+    If the user does not provide an API key, it prompts again until a valid key is entered.
+    """
+
+    if not Env.get("API_KEY"):
+        api_key = questionary.text("Enter your API key:").ask()
+        if api_key:
+            Env.set("API_KEY", api_key)
+            print("API key set successfully.")
+        else:
+            print("API key is required.")
+            configure_api_key()
+
+
 if __name__ == "__main__":
     Env.init()
+
+    configure_api_key()
 
     target = arg(1)
 

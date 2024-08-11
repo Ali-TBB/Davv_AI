@@ -9,18 +9,27 @@ class RunProcess(BaseModel):
     """
     Represents a process runner.
 
-    Args:
-        BaseModel: The base model class.
-
     Attributes:
-        convo: The conversation object.
+        data_type (RunProcessDataType): The data type of the process.
+        backup_name (str): The name used for backup purposes.
     """
 
     data_type = RunProcessDataType
-
     backup_name = "run_process"
 
     def handle_output(self, input_msg, output_msg, attachments: list[Attachment] = []):
+        """
+        Handles the output of the process.
+
+        Args:
+            input_msg (str): The input message.
+            output_msg (str): The output message.
+            attachments (list[Attachment], optional): The list of attachments. Defaults to [].
+
+        Returns:
+            tuple: A tuple containing the response message and the result of the command execution.
+        """
+
         self.update_history(input_msg, output_msg, attachments)
 
         json_data = self.parse_output(output_msg)

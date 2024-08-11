@@ -22,8 +22,38 @@ PRE_SPEECH_FRAMES = int(
 
 
 class StreamingRecord:
+    """
+    Class for streaming audio recording and speech detection.
+
+    Args:
+        on_detect (callable): A callback function to be called when speech is detected.
+
+    Attributes:
+        audio: The PyAudio object for audio input.
+        stream: The audio stream for recording.
+        thread: The thread for running the speech detection process.
+        detecting (bool): Flag indicating if speech detection is currently active.
+
+    Methods:
+        start(): Start the audio recording and speech detection process.
+        stop(): Stop the audio recording and speech detection process.
+
+    Private Methods:
+        __detect(): Method for detecting speech in the audio stream.
+        __on_stop(): Method to be called when the speech detection process is stopped.
+        __is_silent(data): Check if the audio data is below the silent threshold.
+        __convert_to_text(frames): Convert the audio frames to text using Google Speech Recognition.
+
+    """
 
     def __init__(self, on_detect: callable):
+        """
+        Initializes the StreamingRecord object.
+
+        Args:
+            on_detect (callable): A callable object that will be called when detection occurs.
+        """
+
         self.on_detect = on_detect
         self.audio = None
         self.stream = None
@@ -31,6 +61,10 @@ class StreamingRecord:
         self.detecting = False
 
     def start(self):
+        """
+        Start the audio recording and speech detection process.
+        """
+
         if self.detecting:
             return
         self.audio = pyaudio.PyAudio()
@@ -46,6 +80,10 @@ class StreamingRecord:
         self.thread.start()
 
     def __detect(self):
+        """
+        Method for detecting speech in the audio stream.
+        """
+
         print("Listening for speech...")
 
         frames = []
@@ -83,22 +121,47 @@ class StreamingRecord:
         self.__on_stop()
 
     def __on_stop(self):
+        """
+        Method to be called when the speech detection process is stopped.
+        """
+
         self.stream.stop_stream()
         self.stream.close()
         self.audio.terminate()
 
     def stop(self):
+        """
+        Stop the audio recording and speech detection process.
+        """
+
         if not self.detecting:
             return
         self.detecting = False
         self.thread.join()
 
     def __is_silent(self, data):
-        """Returns 'True' if below the 'silent' threshold"""
+        """
+        Check if the audio data is below the silent threshold.
+
+        Args:
+            data: The audio data to be checked.
+
+        Returns:
+            bool: True if the audio data is below the silent threshold, False otherwise.
+        """
+
         return np.max(np.frombuffer(data, np.int16)) < THRESHOLD
 
     def __convert_to_text(self, frames):
-        """Convert audio file to text"""
+        """
+        Convert the audio frames to text using Google Speech Recognition.
+
+        Args:
+            frames: The audio frames to be converted.
+
+        Returns:
+            bool: True if speech is detected and the callback function is called, False otherwise.
+        """
 
         path = os.path.join(
             Env.base_path,

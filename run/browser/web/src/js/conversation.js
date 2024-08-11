@@ -20,12 +20,19 @@ class Conversation {
   }
 
   /**
-   * @returns {Object} JSON representation of the conversation
+   * Creates a Conversation object from a JSON representation.
+   * @param {Object} json - The JSON object representing the Conversation.
+   * @returns {Conversation} - The created Conversation object.
    */
   static fromJson(json) {
     return new Conversation(json.id, json.name, new Date(json.created_at));
   }
 
+  /**
+   * Retrieves all conversations and populates the conversations box.
+   *
+   * @returns {Promise<void>} A promise that resolves when all conversations are loaded and attached.
+   */
   static async all() {
     window.conversations = {};
     $(".conversations-box .list-group").empty();
@@ -43,6 +50,10 @@ class Conversation {
       all[all.length - 1].select();
   }
 
+  /**
+   * Loads the messages of the conversation.
+   * @returns {Promise<void>} A promise that resolves when the messages are loaded.
+   */
   async loadMessages() {
     $(".conversation-messages").empty();
 
@@ -52,6 +63,11 @@ class Conversation {
     this.scrollDown();
   }
 
+  /**
+   * Sends a message and handles the response.
+   * @param {Array} attachments - An array of attachments.
+   * @returns {Promise<void>} - A promise that resolves when the message is sent and response is handled.
+   */
   async sendMessage(attachments = []) {
     const messageContent = $(".input-group input").val();
     if (messageContent !== "" || attachments.length > 0) {
@@ -92,6 +108,10 @@ class Conversation {
     $("#btn-settings").attr("disabled", false);
   }
 
+  /**
+   * Creates a new conversation.
+   * @returns {Promise<void>} A promise that resolves when the conversation is created.
+   */
   static async create() {
     const conversationName = prompt("Enter the conversation name:");
     if (conversationName !== null) {
@@ -106,6 +126,11 @@ class Conversation {
     }
   }
 
+  /**
+   * Deletes a conversation by its ID.
+   * @param {number} id - The ID of the conversation to delete.
+   * @returns {Promise<void>} - A promise that resolves when the conversation is deleted successfully.
+   */
   static async delete(id) {
     if (await eel.delete_conversation(id)()) {
       $(`.conversation-item[conversation-id="${id}"]`).remove();
@@ -119,6 +144,10 @@ class Conversation {
     } else alert("Failed to delete the conversation");
   }
 
+  /**
+   * Selects the current conversation and performs necessary UI updates.
+   * @returns {Promise<void>} A promise that resolves when the conversation is selected.
+   */
   async select() {
     window.currentConversation = this;
     $(".input-group input").attr("disabled", true);
@@ -157,6 +186,11 @@ class Conversation {
     $("#btn-settings").attr("disabled", false);
   }
 
+  /**
+   * Selects a conversation by its ID.
+   *
+   * @param {string} conversationId - The ID of the conversation to select.
+   */
   static select(conversationId) {
     if (
       window.currentConversation &&
@@ -165,7 +199,7 @@ class Conversation {
       return;
 
     /**
-     *  @type {Conversation
+     *  @type {Conversation}
      */
     const conversation = window.conversations[conversationId];
 
@@ -212,10 +246,19 @@ class Conversation {
     `;
   }
 
+  /**
+   * Attaches the HTML content of the conversation to the conversations box.
+   */
   attach() {
     $(".conversations-box .list-group").append(this.html);
   }
 
+  /**
+   * Scrolls down the conversation messages.
+   * @async
+   * @function scrollDown
+   * @returns {Promise<void>}
+   */
   async scrollDown() {
     await delay(5);
     const conversationBox = $(".conversation-messages");

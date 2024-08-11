@@ -6,20 +6,27 @@ from src.base_model import BaseModel
 
 class FixError(BaseModel):
     """
-    Class to fix errors in the dataset.
+    Represents a class for fixing errors.
 
     Attributes:
-        None
-
-    Methods:
-        __init__(self): Initializes the FixError class.
-        run(self, input_msg): Runs the error fixing process.
-
+        backup_name (str): The name of the backup.
     """
 
     backup_name = "fix_error"
 
     def handle_output(self, input_msg, output_msg, attachments: list[Attachment] = []):
+        """
+        Handles the output of the error fixing process.
+
+        Args:
+            input_msg (str): The input message.
+            output_msg (str): The output message.
+            attachments (list[Attachment], optional): The list of attachments. Defaults to [].
+
+        Returns:
+            str: The result of the error fixing process.
+        """
+
         json_data = self.parse_output(output_msg)
         if json_data["action"] == "execute":
             if json_data["language"] == "python":

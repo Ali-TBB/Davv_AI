@@ -22,7 +22,9 @@ class Message {
   }
 
   /**
-   * @returns {Message} JSON representation of the message
+   * Creates a new Message object from a JSON representation.
+   * @param {Object} json - The JSON object representing the Message.
+   * @returns {Message} - The created Message object.
    */
   static fromJson(json) {
     return new Message(
@@ -34,6 +36,10 @@ class Message {
     );
   }
 
+  /**
+   * Returns the JSON representation of the message.
+   * @returns {Object} The JSON representation of the message.
+   */
   get json() {
     return {
       id: this.id,
@@ -91,6 +97,10 @@ class Message {
     }[this.role];
   }
 
+  /**
+   * Attaches the HTML content of the message to the conversation box.
+   * @returns {Promise<void>} A promise that resolves when the HTML content is attached.
+   */
   async attach() {
     const conversationBox = $(".conversation-messages");
     conversationBox.append(this.html);

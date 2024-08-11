@@ -24,6 +24,16 @@ dataset_id = 0
 
 
 def parse(items):
+    """
+    Parses a list of items and assigns unique IDs and dataset IDs to each item.
+
+    Args:
+        items (list): A list of items to be parsed.
+
+    Returns:
+        list: The parsed list of items with assigned IDs and dataset IDs.
+    """
+
     global id, dataset_id
     dataset_id += 1
     i = 0

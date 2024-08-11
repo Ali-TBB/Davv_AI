@@ -13,14 +13,16 @@ from utils.storage import Directory, File
 
 def create_model(mim_type, model_type, data_type, **kwargs):
     """
-    Creates and configures the generative model.
+    Create a generative model with the specified configuration.
 
     Args:
         mim_type (str): The MIME type of the response.
         model_type (str): The type of the generative model.
+        data_type (str): The schema of the response data.
+        **kwargs: Additional keyword arguments for configuring the model.
 
     Returns:
-        genai.GenerativeModel: The configured generative model.
+        genai.GenerativeModel: The created generative model.
     """
     # Configure the model with the API key
     genai.configure(api_key=Env.get("API_KEY"))
@@ -52,11 +54,13 @@ def create_model(mim_type, model_type, data_type, **kwargs):
 
 class BaseModel:
     """
-    Represents a base model for executing commands and managing chat history.
+    Base class for models in the AI system.
 
     Attributes:
-        model (genai.GenerativeModel): The generative model to use.
-        convo (genai.Conversation): The conversation object for chat history.
+        data_type (str): The type of data used by the model.
+        dataset (Dataset): The dataset used by the model.
+        directory (Directory): The directory where the model is stored.
+        backup_name (str): The name of the backup dataset.
     """
 
     data_type = None
@@ -71,7 +75,9 @@ class BaseModel:
 
         Args:
             dataset (Dataset): The dataset used for training the model.
+            directory (Directory): The directory where the model will be saved.
         """
+
         self.dataset = dataset
         self.directory = directory
         self.create_model()
@@ -79,21 +85,33 @@ class BaseModel:
     @property
     def backup(self) -> Dataset:
         """
-        Backs up the chat history.
+        Backup the current dataset.
+
+        Returns:
+            Dataset: The backup dataset.
         """
+
         if self.backup_name:
             return Dataset.findWhere("`name` = ?", (self.backup_name,))
 
     def create_model(self):
+        """
+        Creates a model for the AI chatbot.
+
+        This method initializes the model for the AI chatbot using the specified parameters.
+        It also processes the history of conversation items, replacing attachment references
+        with their corresponding URLs.
+
+        Returns:
+            None
+        """
+
         self.model = create_model(
             "application/json", "gemini-1.5-flash-latest", self.data_type
         )
 
         history = []
         backup_dataset = self.backup
-        # all_items = (
-        #     backup_dataset.all_items if backup_dataset else []
-        # ) + self.dataset.all_items
         all_items = backup_dataset.all_items if backup_dataset else []
 
         for dataset_item in all_items:
@@ -117,13 +135,12 @@ class BaseModel:
 
     def update_history(self, input_msg, output_msg, attachments: list[Attachment] = []):
         """
-        Updates the chat history with the input and output messages.
+        Update the history of the model with the input message, output message, and attachments.
 
         Args:
             input_msg (str): The input message.
             output_msg (str): The output message.
-            path (str): The path associated with the message.
-            type (str): The type of the message.
+            attachments (list[Attachment], optional): List of attachments. Defaults to [].
         """
 
         inputParts = [input_msg]
@@ -145,9 +162,20 @@ class BaseModel:
         if not exists:
             self.dataset.addItem("user", inputParts)
 
-            self.dataset.addItem("model", [output_msg])
+        self.dataset.addItem("model", [output_msg])
 
     def send_message(self, input_msg, attachments: list[Attachment] = []):
+        """
+        Sends a message to the conversation.
+
+        Args:
+            input_msg (str): The message to be sent.
+            attachments (list[Attachment], optional): List of attachments to be sent with the message. Defaults to [].
+
+        Returns:
+            str: The output message received from the conversation.
+        """
+
         if attachments:
             self.convo.send_message(
                 [input_msg] + [attachment.url for attachment in attachments]
@@ -160,18 +188,29 @@ class BaseModel:
     def handle_output(
         self, input_msg: str, output_msg: str, attachments: list[Attachment] = []
     ):
+        """
+        Handles the output of the model.
+
+        Args:
+            input_msg (str): The input message.
+            output_msg (str): The output message.
+            attachments (list[Attachment], optional): List of attachments. Defaults to [].
+        """
+
         raise NotImplementedError("Subclasses must implement this method")
 
     def parse_output(self, output):
         """
-        Splits the output string and returns the JSON data.
+        Parses the output and returns a dictionary.
 
         Args:
-            output (str): The output string to split.
+            output (str): The output to be parsed.
 
         Returns:
-            str: The JSON data extracted from the output.
+            dict: The parsed output as a dictionary. If parsing fails, a dictionary with a single key "response" is returned,
+                  with the value being the original output.
         """
+
         try:
             return json.loads(output)
         except:
@@ -179,12 +218,20 @@ class BaseModel:
 
     def save_command(self, file_name, command_content, directory: Directory = None):
         """
-        Saves the command content to a file.
+        Saves the command content to a file in the specified directory.
 
         Args:
             file_name (str): The name of the file to save the command to.
-            command_content (str): The content of the command to save.
+            command_content (str): The content of the command to be saved.
+            directory (Directory, optional): The directory to save the file in. If not provided, the default directory is used.
+
+        Returns:
+            str: The path of the saved file.
+
+        Raises:
+            Exception: If an error occurs while saving the command.
         """
+
         try:
             directory = directory or self.directory
             # Write command content to a temporary Python script
@@ -198,12 +245,25 @@ class BaseModel:
 
     def run_command(self, file_name, code, directory: Directory = None, shell=False):
         """
-        Runs the command by saving it to a file and executing it.
+        Executes a command by saving the code to a file, running it using subprocess,
+        and returning the output.
 
         Args:
-            file_name (str): The name of the file to save the command to.
-            code (str): The code to execute.
+            file_name (str): The name of the file to save the code.
+            code (str): The code to be executed.
+            directory (Directory, optional): The directory where the file will be saved.
+                If not provided, the default directory will be used.
+            shell (bool, optional): Specifies whether to run the command in a shell.
+                Defaults to False.
+
+        Returns:
+            str: The output of the executed script, or None if there is no output.
+
+        Raises:
+            Exception: If the command execution fails.
+
         """
+
         directory = directory or self.directory
         path = self.save_command(file_name, code, directory)
         print(path)
@@ -224,11 +284,17 @@ class BaseModel:
 
     def fix_error(self, issue, directory: Directory = None):
         """
-        Fixes the error by running the error fixer.
+        Fixes the specified error by creating a FixError instance and sending a message.
 
         Args:
-            issue (str): The error message.
+            issue (str): The issue to be fixed.
+            directory (Directory, optional): The directory to fix the error in. If not provided, the default directory will be used.
+
+        Returns:
+            str: The response message from the FixError instance.
+
         """
+
         from src.fix_error import FixError
 
         fixer = FixError(f"fix issue: {issue}", directory or self.directory)

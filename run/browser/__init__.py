@@ -1,10 +1,9 @@
 import base64
-import time
 import eel
+import time
 import os
 import shutil
 
-# from gtts import gTTS
 import pyautogui
 
 from models.attachment import Attachment
@@ -20,12 +19,33 @@ logger = BrowserLogger(eel)
 
 
 def start():
+    """
+    Initializes the browser module, sets up the web directory path, and starts the browser window.
+
+    Parameters:
+        None
+
+    Returns:
+        None
+    """
+
     eel.init(os.path.join(Env.base_path, "run/browser/web"))
     w, h = pyautogui.size()
     eel.start("index.html", app_mode=True, size=(w * 0.6, h), close_callback=on_close)
 
 
 def on_close(page, sockets):
+    """
+    Perform necessary actions when the browser page is closed.
+
+    Args:
+        page: The browser page that is being closed.
+        sockets: The sockets associated with the page.
+
+    Returns:
+        None
+    """
+
     if streaming_record:
         streaming_record.stop()
 
@@ -40,6 +60,16 @@ current_conversation: AIConversation = None
 
 @eel.expose
 def create_conversation(name):
+    """
+    Create a new conversation with the given name.
+
+    Args:
+        name (str): The name of the conversation.
+
+    Returns:
+        dict: A dictionary representation of the created conversation.
+    """
+
     global current_conversation
 
     current_conversation = AIConversation.new(name, logger=logger)
@@ -49,6 +79,16 @@ def create_conversation(name):
 
 @eel.expose
 def delete_conversation(conversation_id):
+    """
+    Deletes a conversation based on the given conversation_id.
+
+    Args:
+        conversation_id (int): The ID of the conversation to be deleted.
+
+    Returns:
+        bool: True if the conversation is successfully deleted, False otherwise.
+    """
+
     global current_conversation
 
     if current_conversation and current_conversation.id == conversation_id:
@@ -63,6 +103,13 @@ def delete_conversation(conversation_id):
 
 @eel.expose
 def load_conversations():
+    """
+    Load conversations from AIConversation.all() in descending order.
+
+    Returns:
+        list: A list of dictionaries representing the conversations.
+    """
+
     return [
         item.__dict__() for item in AIConversation.all(logger=logger, order_type="DESC")
     ]
@@ -70,6 +117,18 @@ def load_conversations():
 
 @eel.expose
 def load_conversation(conversation_id):
+    """
+    Load a conversation by its ID.
+
+    Args:
+        conversation_id (str): The ID of the conversation to load.
+
+    Returns:
+        list: A list of dictionaries representing the messages in the loaded conversation.
+              Each dictionary contains the attributes of a message.
+
+    """
+
     global current_conversation
 
     current_conversation = AIConversation.find(conversation_id, logger=logger)
@@ -81,6 +140,17 @@ def load_conversation(conversation_id):
 
 @eel.expose
 def message_received(message_data: dict):
+    """
+    Process a received message and handle attachments.
+
+    Args:
+        message_data (dict): The data of the received message.
+
+    Returns:
+        dict: A dictionary containing the processed message and answer.
+
+    """
+
     print("Message received:", message_data)
     if not current_conversation:
         return None
@@ -103,10 +173,6 @@ def message_received(message_data: dict):
         message_data["content"], attachments
     )
 
-    # gTTS(answer.content, lang="en").save(
-    #     os.path.join(current_conversation.directory.path, f"answer-{answer.id}.mp3")
-    # )
-
     if streaming_record:
         streaming_record.start()
 
@@ -114,11 +180,21 @@ def message_received(message_data: dict):
 
 
 @eel.expose
-def upload_file(file_content):
-    filename = f"tmp-{time.strftime('%Y%m%d-%H%M%S')}"
+def upload_file(base64_data, mime_type):
+    """
+    Uploads a file with the given base64 data and mime type.
+
+    Args:
+        base64_data (str): The base64 encoded data of the file.
+        mime_type (str): The mime type of the file.
+
+    Returns:
+        str: The filename of the uploaded file.
+    """
+
+    filename = f"tmp-{time.strftime('%Y%m%d-%H%M%S')}.${mime_type.split('/')[1]}"
     path = os.path.join(Env.base_path, "run/browser/tmp", filename)
-    header, encoded = file_content.split(",", 1)
-    data = base64.b64decode(encoded)
+    data = base64.b64decode(base64_data)
     with open(path, "wb") as f:
         f.write(data)
     return filename
@@ -129,6 +205,23 @@ current_recording = None
 
 @eel.expose
 def start_recording():
+    """
+    Starts the recording process.
+
+    This function initializes the recording process and starts recording audio.
+    It checks if there is an ongoing conversation and if the recording is not already in progress.
+    If streaming_record is enabled, it plays the "start-stream-recording.wav" audio effect.
+    Otherwise, it plays the "start-recording.wav" audio effect.
+    The recording process is handled by the AudioRecorder class.
+    The recording will stop automatically if streaming_record is not None and silence is detected.
+
+    Parameters:
+        None
+
+    Returns:
+        None
+    """
+
     global current_recording
 
     if not current_recording and current_conversation:
@@ -147,6 +240,12 @@ def start_recording():
 
 @eel.expose
 def stop_recording():
+    """
+    Stops the current recording.
+
+    This function stops the current recording if there is one in progress.
+    """
+
     global current_recording
 
     if current_recording:
@@ -155,6 +254,16 @@ def stop_recording():
 
 
 def on_recording_finished(filename):
+    """
+    Callback function called when a recording is finished.
+
+    Args:
+        filename (str): The filename of the recorded audio.
+
+    Returns:
+        None
+    """
+
     global current_recording
 
     eel.stopRecording(filename)
@@ -167,6 +276,13 @@ streaming_record = None
 
 @eel.expose
 def streaming_recording():
+    """
+    Start or stop the streaming recording.
+
+    Returns:
+        bool: True if the streaming recording is started, False otherwise.
+    """
+
     global streaming_record
 
     if not current_conversation:

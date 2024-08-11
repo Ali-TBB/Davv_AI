@@ -10,6 +10,16 @@ chunk = 1024
 
 
 def play(filename):
+    """
+    Play the audio file specified by the filename.
+
+    Args:
+        filename (str): The path to the audio file.
+
+    Returns:
+        None
+    """
+
     file = wave.open(
         os.path.join(Env.base_path, "run/browser/web/src/media", filename), "rb"
     )

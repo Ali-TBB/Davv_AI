@@ -5,12 +5,11 @@ from src.data_types.find_requirements import FindRequirementsDataType
 
 class FindRequirements(BaseModel):
     """
-    A class that represents the FindRequirements model.
+    Class representing the FindRequirements functionality.
 
-
-    Methods:
-        Run(input_msg) -> tuple: Runs the model with the given input message and returns the output message and action.
-
+    Attributes:
+        backup_name (str): The name of the backup.
+        data_type (FindRequirementsDataType): The data type for FindRequirements.
     """
 
     backup_name = "find_requirement"
@@ -19,6 +18,18 @@ class FindRequirements(BaseModel):
     def handle_output(
         self, input_msg: str, output_msg: str, attachments: list[Attachment] = []
     ):
+        """
+        Handles the output of the FindRequirements functionality.
+
+        Args:
+            input_msg (str): The input message.
+            output_msg (str): The output message.
+            attachments (list[Attachment], optional): The list of attachments. Defaults to [].
+
+        Returns:
+            tuple: A tuple containing the action and the input message.
+        """
+
         self.update_history(input_msg, output_msg, attachments)
         json_data = self.parse_output(output_msg)
         if "action" in json_data:

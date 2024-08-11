@@ -8,14 +8,12 @@ from utils.storage import Directory
 
 class DivideToSimple(BaseModel):
     """
-    A class that represents the DivideToSimple model.
+    This class represents the DivideToSimple model.
 
-
-    Methods:
-        __init__(self): Initializes the DivideToSimple object.
-        run(self, input_msg=None, path=None, type=None, mime_type=None): Runs the model with the given input.
-        create_file(self, file_name, code): Creates a file with the given name and code.
-        open_file(self, file_name): Opens the file with the given name.
+    Attributes:
+        backup_name (str): The name of the backup.
+        data_type (DivideToSimpleDataType): The data type of the model.
+        project_dir (Directory): The project directory.
     """
 
     backup_name = "divide_to_simple"
@@ -23,16 +21,25 @@ class DivideToSimple(BaseModel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.project_dir = Directory(
-            os.path.join(
-                "C:/Users/abdo_pr/Desktop/davv_ai",
-                f"project-{time.strftime('%Y%m%d-%H%M%S')}",
-            )
+        self.project_dir = self.directory.directory(
+            f"project-{time.strftime('%Y%m%d-%H%M%S')}"
         )
 
     def handle_output(
         self, input_msg: str, output_msg: str, attachments: list[Attachment] = []
     ):
+        """
+        Handles the output of the model.
+
+        Args:
+            input_msg (str): The input message.
+            output_msg (str): The output message.
+            attachments (list[Attachment], optional): The list of attachments. Defaults to [].
+
+        Returns:
+            str: The result message.
+        """
+
         self.update_history(input_msg, output_msg, attachments)
         json_data = self.parse_output(output_msg)
         for step in json_data["steps"]:
@@ -43,8 +50,11 @@ class DivideToSimple(BaseModel):
                     self.run_command("run.py", step["code"], self.project_dir)
                 elif step["language"] == "shell":
                     import platform
+
                     ext = {"Windows": "bat", "Linux": "sh"}[platform.system()]
-                    self.run_command(f"run.{ext}", step["code"], self.project_dir, shell=True)
+                    self.run_command(
+                        f"run.{ext}", step["code"], self.project_dir, shell=True
+                    )
             if step["action"] == "open_file":
                 self.open_file(step["file_name"])
         return "Done"
@@ -57,6 +67,7 @@ class DivideToSimple(BaseModel):
             file_name (str): The name of the file.
             code (str): The code to be written in the file.
         """
+
         project_path = self.project_dir.path
         try:
             # Write command content to a temporary Python script
@@ -73,4 +84,5 @@ class DivideToSimple(BaseModel):
         Args:
             file_name (str): The name of the file.
         """
+
         pass
