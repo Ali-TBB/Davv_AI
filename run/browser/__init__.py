@@ -4,7 +4,7 @@ import eel
 import os
 import shutil
 
-from gtts import gTTS
+# from gtts import gTTS
 import pyautogui
 
 from models.attachment import Attachment
@@ -26,8 +26,6 @@ def start():
 
 
 def on_close(page, sockets):
-    print("Closing page", page, sockets)
-
     if streaming_record:
         streaming_record.stop()
 
@@ -105,9 +103,9 @@ def message_received(message_data: dict):
         message_data["content"], attachments
     )
 
-    gTTS(answer.content, lang="en").save(
-        os.path.join(current_conversation.directory.path, f"answer-{answer.id}.mp3")
-    )
+    # gTTS(answer.content, lang="en").save(
+    #     os.path.join(current_conversation.directory.path, f"answer-{answer.id}.mp3")
+    # )
 
     if streaming_record:
         streaming_record.start()

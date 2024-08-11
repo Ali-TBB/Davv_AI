@@ -11,7 +11,7 @@ class AudioRecorder:
 
     # TODO; set to 20
     MAX_RECORDING_TIME = 10  # Max recording time in seconds
-    MIN_RECORDING_TIME = 2  # Min recording time in seconds
+    MIN_RECORDING_TIME = 1  # Min recording time in seconds
     MIN_VOICE_THRESHOLD = 500  # Threshold for detecting voice
     HIGH_VOLUME_THRESHOLD = 1000  # RMS threshold for high volume
 
@@ -74,15 +74,15 @@ class AudioRecorder:
 
         output_file = None
 
-        if start_time - last_voice_time > self.MIN_RECORDING_TIME:
-            output_file = f"rec-{time.strftime('%Y%m%d-%H%M%S')}.wav"
-            with wave.open(
-                os.path.join(Env.base_path, "run/browser/tmp", output_file), "wb"
-            ) as wave_file:
-                wave_file.setnchannels(CHANNELS)
-                wave_file.setsampwidth(audio.get_sample_size(FORMAT))
-                wave_file.setframerate(RATE)
-                wave_file.writeframes(b"".join(frames))
+        # if start_time - last_voice_time > self.MIN_RECORDING_TIME:
+        output_file = f"rec-{time.strftime('%Y%m%d-%H%M%S')}.wav"
+        with wave.open(
+            os.path.join(Env.base_path, "run/browser/tmp", output_file), "wb"
+        ) as wave_file:
+            wave_file.setnchannels(CHANNELS)
+            wave_file.setsampwidth(audio.get_sample_size(FORMAT))
+            wave_file.setframerate(RATE)
+            wave_file.writeframes(b"".join(frames))
 
         self.on_recording_finished(output_file)
 

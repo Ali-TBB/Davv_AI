@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 
 import google.generativeai as genai
@@ -176,7 +177,7 @@ class BaseModel:
         except:
             return {"response": output}
 
-    def save_command(self, file_name, command_content):
+    def save_command(self, file_name, command_content, directory: Directory = None):
         """
         Saves the command content to a file.
 
@@ -185,8 +186,9 @@ class BaseModel:
             command_content (str): The content of the command to save.
         """
         try:
+            directory = directory or self.directory
             # Write command content to a temporary Python script
-            file: File = self.directory.file(file_name)
+            file: File = directory.file(file_name)
             file.set(command_content)
             return file.path
 
@@ -194,7 +196,7 @@ class BaseModel:
         except Exception as e:
             print(f"An error occurred while saving the command: {e}")
 
-    def run_command(self, file_name, code):
+    def run_command(self, file_name, code, directory: Directory = None, shell=False):
         """
         Runs the command by saving it to a file and executing it.
 
@@ -202,21 +204,25 @@ class BaseModel:
             file_name (str): The name of the file to save the command to.
             code (str): The code to execute.
         """
-        path = self.save_command(file_name, code)
+        directory = directory or self.directory
+        path = self.save_command(file_name, code, directory)
+        print(path)
+        os.chdir(directory.path)
         print("Operation is running ...")
         # Execute the command using subprocess
-        result = subprocess.run(["python", path], capture_output=True)
+        result = subprocess.run(["start" if shell else "python", path], capture_output=True)
+        os.chdir(Env.base_path)
         # Check the return code of the subprocess
         if result.returncode != 0:
             print(f"Command execution failed with return code {result.returncode}")
             # If there is an error, pass it to the Error method
-            return self.fix_error(result.stderr.decode("utf-8"))
+            return self.fix_error(result.stderr.decode("utf-8"), directory)
         else:
             # Print the output of the executed script
             output = result.stdout.decode("utf-8")
             return output if output else None
 
-    def fix_error(self, issue):
+    def fix_error(self, issue, directory: Directory = None):
         """
         Fixes the error by running the error fixer.
 
@@ -225,5 +231,5 @@ class BaseModel:
         """
         from src.fix_error import FixError
 
-        fixer = FixError(f"fix issue: {issue}", self.directory)
+        fixer = FixError(f"fix issue: {issue}", directory or self.directory)
         return fixer.send_message(issue)

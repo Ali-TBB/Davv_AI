@@ -94,10 +94,10 @@ class AIConversation(Conversation):
         filename = f"{time.strftime('%y_%m_%d_%H%M%S')}.png"
         file = self.directory.file(filename)
 
-        self.logger.window_down()
+        # self.logger.window_down()
         screenshot = pyautogui.screenshot()
         screenshot.save(file.path)
-        self.logger.window_up()
+        # self.logger.window_up()
 
         self.logger.info("Screenshot saved successfully!")
 

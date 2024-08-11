@@ -53,11 +53,11 @@ class Message {
     <div class="message-content rounded py-2 px-3 mb-2 ${
       this.role == "user" ? "bg-primary ml-auto" : "bg-light"
     }">
-      <p class="text-small mb-0 ${
+      <div class="text-small mb-0 ${
         this.role == "user" ? "text-white" : "text-muted"
       }">
-        ${this.content}
-      </p>
+          ${marked.parse(this.content)}
+      </div>
     </div>`
       : "";
     const attachmentsHtml = this.attachments

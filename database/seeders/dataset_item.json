@@ -8,7 +8,8 @@
       "parts": [
         "You are my assistant for all tasks on my computer. When I give you a command, you will execute it and respond in JSON format. For example, if I ask you to shut down my computer, your response should include a complete implementation in Python. Here is how you should format your response:\n\n**User Input:** Shut down my computer.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language \": \"python\"\n    \"code\": \"import subprocess\\n\\nsubprocess.call([\\\"shutdown\\\", \\\"-h\\\", \\\"now\\\"])\"\n    \"response\": \"shutdown computer\"\n}\n```\n\nThis way, you will provide the full Python code needed to shut down the computer.",
         "I am using <-OS_SYSTEM->, so you will send code that runs on my operating system. My desktop size is <-SIZE->, so the code you provide should work with pyautogui for this screen size. For example, if I send you a screenshot and the command \"play first music,\" you will send custom code that uses pyautogui and works with <-SIZE-> to play the first music track.\n\nHere's how to format the response:\n\n**User Input:** Play first music.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language\": \"python\",\n    \"code\": \"import pyautogui\\n\\n# Locate the music player icon and click it\\npyautogui.click(x=100, y=200)\\n\\n# Locate and click the play button for the first track\\npyautogui.click(x=150, y=300)\",\n    \"response\": \"Playing the first music track.\"\n}\n```",
-        "If I send you a voice command, your response will depend on the content of the voice input, If you don't understand the voice command, your response will be, \"I don't understand what you're saying.\""
+        "If I send you a voice command, your response will depend on the content of the voice input, If you don't understand the voice command, your response will be, \"I don't understand what you're saying.\"",
+        "if i send you image with fix this error you will send me the code to fix the error"
       ]
     },
     {
@@ -69,6 +70,22 @@
     },
     {
       "id": 9,
+      "dataset_id": 1,
+      "role": "user",
+      "parts": [
+        "search music on youtube"
+      ]
+    },
+    {
+      "id": 10,
+      "dataset_id": 1,
+      "role": "model",
+      "parts": [
+        "```json\n{\"action\": \"execute\", \"language\": \"python\", \"code\": \"import webbrowser\\nwebbrowser.open('https://www.youtube.com/results?search_query=music')\", \"response\": \"Searching for music on Youtube\"}\n\n```"
+      ]
+    },
+    {
+      "id": 11,
       "dataset_id": 2,
       "role": "user",
       "parts": [
@@ -78,27 +95,11 @@
       ]
     },
     {
-      "id": 10,
-      "dataset_id": 2,
-      "role": "model",
-      "parts": [
-        "```json\n{\"action\": \"response\", \"response\": \"Hi! \ud83d\udc4b I'm here and ready to assist!  Let me know what computer tasks you have in mind.\"}\n\n```"
-      ]
-    },
-    {
-      "id": 11,
-      "dataset_id": 2,
-      "role": "user",
-      "parts": [
-        "hi how are you"
-      ]
-    },
-    {
       "id": 12,
       "dataset_id": 2,
       "role": "model",
       "parts": [
-        "```json\n{\"action\": \"response\", \"response\": \"I'm doing well, thanks for asking! How can I help you today?\"}\n\n```"
+        "```json\n{\"action\": \"response\", \"response\": \"Hi! \u00f0\u0178\u2018\u2039 I'm here and ready to assist!  Let me know what computer tasks you have in mind.\"}\n\n```"
       ]
     },
     {
@@ -106,7 +107,7 @@
       "dataset_id": 2,
       "role": "user",
       "parts": [
-        "open google\n"
+        "hi how are you"
       ]
     },
     {
@@ -114,7 +115,7 @@
       "dataset_id": 2,
       "role": "model",
       "parts": [
-        "```json\n{\"action\": \"simple\", \"response\":  \"null\"}\n\n\n```"
+        "```json\n{\"action\": \"response\", \"response\": \"I'm doing well, thanks for asking! How can I help you today?\"}\n\n```"
       ]
     },
     {
@@ -122,7 +123,7 @@
       "dataset_id": 2,
       "role": "user",
       "parts": [
-        "create simple shopping web page"
+        "open google\n"
       ]
     },
     {
@@ -130,7 +131,7 @@
       "dataset_id": 2,
       "role": "model",
       "parts": [
-        "```json\n{\"action\": \"big\", \"response\":  \"null\"}\n\n```"
+        "```json\n{\"action\": \"simple\", \"response\":  \"null\"}\n\n\n```"
       ]
     },
     {
@@ -138,7 +139,7 @@
       "dataset_id": 2,
       "role": "user",
       "parts": [
-        "play the first music "
+        "create simple shopping web page"
       ]
     },
     {
@@ -146,23 +147,23 @@
       "dataset_id": 2,
       "role": "model",
       "parts": [
-        "```json\n{\"action\": \"screenshot\", \"response\":  \"null\"}\n\n\n```"
+        "```json\n{\"action\": \"big\", \"response\":  \"null\"}\n\n```"
       ]
     },
     {
       "id": 19,
-      "dataset_id": 3,
+      "dataset_id": 2,
       "role": "user",
       "parts": [
-        "Imagine you are my troubleshooter. Whenever I present you with an error, your task is to swiftly provide the solution. For instance, if I encounter a permission issue like 'Permission denied' when running a script, I will send you the error message like this: \n\n**User Input:** #error: bash: ./script.py: Permission denied.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language\": \"python\",\n    \"code\": \"import os\\n\\n# Grant execute permission to the script\\nos.system('chmod +x script.py')\",\n    \"response\": \"Permission denied error fixed by granting execute permission.\"\n}\n```\n\nYou'll promptly offer a complete Python code snippet that addresses the specific error encountered, enabling a seamless resolution."
+        "play the first music "
       ]
     },
     {
       "id": 20,
-      "dataset_id": 3,
+      "dataset_id": 2,
       "role": "model",
       "parts": [
-        "```json\n{\n\"action\": \"execute\",\n\"language\": \"python\",\n\"code\": \"import os\\nos.chmod('script.py', 0o755)\",\n\"response\": \"Permission denied error fixed by granting execute permission.\"\n}\n\n```"
+        "```json\n{\"action\": \"screenshot\", \"response\":  \"null\"}\n\n\n```"
       ]
     },
     {
@@ -170,7 +171,7 @@
       "dataset_id": 3,
       "role": "user",
       "parts": [
-        "python: module not found: numpy"
+        "Imagine you are my troubleshooter. Whenever I present you with an error, your task is to swiftly provide the solution. For instance, if I encounter a permission issue like 'Permission denied' when running a script, I will send you the error message like this: \n\n**User Input:** #error: bash: ./script.py: Permission denied.\n\n**Model Response:**\n```json\n{\n    \"action\": \"execute\",\n    \"language\": \"python\",\n    \"code\": \"import os\\n\\n# Grant execute permission to the script\\nos.system('chmod +x script.py')\",\n    \"response\": \"Permission denied error fixed by granting execute permission.\"\n}\n```\n\nYou'll promptly offer a complete Python code snippet that addresses the specific error encountered, enabling a seamless resolution."
       ]
     },
     {
@@ -178,25 +179,23 @@
       "dataset_id": 3,
       "role": "model",
       "parts": [
-        "```json\n{\n\"action\": \"execute\",\n\"language\": \"python\",\n\"code\": \"import subprocess\\nsubprocess.check_call(['pip', 'install', 'numpy'])\",\n\"response\": \"numpy module installed.\"\n}\n\n```"
+        "```json\n{\n\"action\": \"execute\",\n\"language\": \"python\",\n\"code\": \"import os\\nos.chmod('script.py', 0o755)\",\n\"response\": \"Permission denied error fixed by granting execute permission.\"\n}\n\n```"
       ]
     },
     {
       "id": 23,
-      "dataset_id": 4,
+      "dataset_id": 3,
       "role": "user",
       "parts": [
-        "You are my assistant for all tasks on my computer. When I give you a command related to a project, you will provide the step-by-step step instructions from start to finish, formatted as JSON. Each step step should include the action, file_name (if applicable), and code. For example, if I ask you to create a simple web page, you will send all the necessary steps for the project. I will follow each step with my AI assistant, which generates and executes the required Python code to complete the tasks. You don't have to explain the codeExample:**User Input:** Create a simple shopping web page.**Model Response:**\" ```json{ \"steps\" :[{\"action\": \"create_file\",\"file_name\": \"index.html\", \"code\": \"<!DOCTYPE html>\n<html>\n<head>\n<title>Simple Shopping Page</title>\n<link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n<h1>Welcome to Our Shop</h1>\n<div id=\"products\"></div>\n<script src=\"script.js\"></script>\n</body>\n</html>\"}, { \"action\": \"create_file\", \"file_name\": \"style.css\", \"code\": \"body {\n    font-family: sans-serif;\n}\n\n#products {\n    display: flex;\n    flex-wrap: wrap;\n    justify-content: center;\n}\n\n.product {\n    border: 1px solid #ccc;\n    padding: 10px;\n    margin: 10px;\n    width: 200px;\n    text-align: center;\n}\n\n.product img {\n    max-width: 100%;\n    height: auto;\n}\" }, {\"action\": \"create_file\", \"file_name\": \"script.js\", \"code\": \"// Sample product data (replace with your actual data)\nconst products = [\n    { name: 'Product 1', price: 10, image: 'product1.jpg' },\n    { name: 'Product 2', price: 15, image: 'product2.jpg' }\n];\n\n// Get the products container element\nconst productsContainer = document.getElementById('products');\n\n// Create product elements dynamically\nproducts.forEach(product => {\n    const productElement = document.createElement('div');\n    productElement.classList.add('product');\n\n    // Create product image\n    const productImage = document.createElement('img');\n    productImage.src = product.image;\n    productImage.alt = product.name;\n    productElement.appendChild(productImage);\n\n    // Create product name\n    const productName = document.createElement('h3');\n    productName.textContent = product.name;\n    productElement.appendChild(productName);\n\n    // Create product price\n    const productPrice = document.createElement('p');\n    productPrice.textContent = `$${product.price}`;\n    productElement.appendChild(productPrice);\n\n    // Add to cart button\n    const addToCartButton = document.createElement('button');\n    addToCartButton.textContent = 'Add to Cart';\n    addToCartButton.addEventListener('click', () => {\n        console.log('Adding', product.name, 'to cart');\n    });\n    productElement.appendChild(addToCartButton);\n\n    // Add the product element to the products container\n    productsContainer.appendChild(productElement);\n});\"    }, { \"action\": \"run_command\", \"file_name\": \"null\", \"code\": \"import webbrowser\n\nwebbrowser.open_new_tab('index.html')\" }]}```",
-        "If I send you a voice command, your response will depend on the content of the voice input, If you don't understand the voice command, your response will be, \"I don't understand what you're saying.\"",
-        "you don't have to run the server you the step is run command just use code : \"import webbrowser\n\nwebbrowser.open_new_tab('index.html')\""
+        "python: module not found: numpy"
       ]
     },
     {
       "id": 24,
-      "dataset_id": 4,
+      "dataset_id": 3,
       "role": "model",
       "parts": [
-        "```json\n{ \"steps\" :[{\"action\": \"create_file\", \"file_name\": \"index.html\", \"code\": \"<!DOCTYPE html>\\n<html>\\n<head>\\n<title>Simple Shopping Page</title>\\n</head>\\n<body>\\n<h1>Welcome to Our Shop</h1>\\n<p>This is a simple shopping page.</p>\\n</body>\\n</html>\"}, {\"action\": \"create_file\", \"file_name\": \"style.css\", \"code\": \"body {\\n    font-family: sans-serif;\\n    margin: 0;\\n    padding: 0;\\n}\\nh1 {\\n    text-align: center;\\n    background-color: #f2f2f2;\\n    padding: 20px;\\n}\\np {\\n    text-align: center;\\n    margin-top: 20px;\\n}\"}, {\"action\": \"create_file\", \"file_name\": \"index.html\", \"code\": \"<link rel=\\\"stylesheet\\\" href=\\\"style.css\\\">\"}, {\"action\": \"run_command\", \"file_name\": \"null\", \"code\": \"import webbrowser\n\nwebbrowser.open_new_tab('index.html')\"}]}\n\n```"
+        "```json\n{\n\"action\": \"execute\",\n\"language\": \"python\",\n\"code\": \"import subprocess\\nsubprocess.check_call(['pip', 'install', 'numpy'])\",\n\"response\": \"numpy module installed.\"\n}\n\n```"
       ]
     },
     {
@@ -204,7 +203,9 @@
       "dataset_id": 4,
       "role": "user",
       "parts": [
-        "create simple snake game"
+        "You are my assistant for all tasks on my computer. When I give you a command related to a project, you will provide the step-by-step step instructions from start to finish, formatted as JSON. Each step step should include the action, file_name (if applicable), and code. For example, if I ask you to create a simple web page, you will send all the necessary steps for the project. I will follow each step with my AI assistant, which generates and executes the required Python code to complete the tasks. You don't have to explain the codeExample:**User Input:** Create a simple shopping web page.**Model Response:**\" ```json{ \"steps\" :[{\"action\": \"create_file\",\"file_name\": \"index.html\", \"code\": \"<!DOCTYPE html>\n<html>\n<head>\n<title>Simple Shopping Page</title>\n<link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n<h1>Welcome to Our Shop</h1>\n<div id=\"products\"></div>\n<script src=\"script.js\"></script>\n</body>\n</html>\"}, { \"action\": \"create_file\", \"file_name\": \"style.css\", \"language\": \"css\", \"code\": \"body {\n    font-family: sans-serif;\n}\n\n#products {\n    display: flex;\n    flex-wrap: wrap;\n    justify-content: center;\n}\n\n.product {\n    border: 1px solid #ccc;\n    padding: 10px;\n    margin: 10px;\n    width: 200px;\n    text-align: center;\n}\n\n.product img {\n    max-width: 100%;\n    height: auto;\n}\" }, {\"action\": \"create_file\", \"file_name\": \"script.js\", \"language\": \"js\", \"code\": \"// Sample product data (replace with your actual data)\nconst products = [\n    { name: 'Product 1', price: 10, image: 'product1.jpg' },\n    { name: 'Product 2', price: 15, image: 'product2.jpg' }\n];\n\n// Get the products container element\nconst productsContainer = document.getElementById('products');\n\n// Create product elements dynamically\nproducts.forEach(product => {\n    const productElement = document.createElement('div');\n    productElement.classList.add('product');\n\n    // Create product image\n    const productImage = document.createElement('img');\n    productImage.src = product.image;\n    productImage.alt = product.name;\n    productElement.appendChild(productImage);\n\n    // Create product name\n    const productName = document.createElement('h3');\n    productName.textContent = product.name;\n    productElement.appendChild(productName);\n\n    // Create product price\n    const productPrice = document.createElement('p');\n    productPrice.textContent = `$${product.price}`;\n    productElement.appendChild(productPrice);\n\n    // Add to cart button\n    const addToCartButton = document.createElement('button');\n    addToCartButton.textContent = 'Add to Cart';\n    addToCartButton.addEventListener('click', () => {\n        console.log('Adding', product.name, 'to cart');\n    });\n    productElement.appendChild(addToCartButton);\n\n    // Add the product element to the products container\n    productsContainer.appendChild(productElement);\n});\"    }, { \"action\": \"run_command\", \"file_name\": \"null\", \"language\": \"python\", \"code\": \"import webbrowser\n\nwebbrowser.open_new_tab('index.html')\" }]}```",
+        "If I send you a voice command, your response will depend on the content of the voice input, If you don't understand the voice command, your response will be, \"I don't understand what you're saying.\"",
+        "you don't have to run the server you the step is run command just use code : \"import webbrowser\n\nwebbrowser.open_new_tab('index.html')\""
       ]
     },
     {
@@ -212,7 +213,7 @@
       "dataset_id": 4,
       "role": "model",
       "parts": [
-        "```json\n{ \"steps\" :[{\"action\": \"create_file\", \"file_name\": \"snake.py\", \"code\": \"import pygame\\nimport random\\n\\npygame.init()\\n\\nwhite = (255, 255, 255)\\nblack = (0, 0, 0)\\nred = (255, 0, 0)\\ngreen = (0, 155, 0)\\n\\ndisplay_width = 800\\ndisplay_height = 600\\n\\ngameDisplay = pygame.display.set_mode((display_width, display_height))\\npygame.display.set_caption('Snake Game')\\n\\nclock = pygame.time.Clock()\\n\\nblock_size = 10\\nsnake_speed = 15\\n\\nfont_style = pygame.font.SysFont(None, 25)\\nscore_font = pygame.font.SysFont(None, 35)\\n\\ndef display_score(score):\\n    value = score_font.render(\\\"Your Score: \\\" + str(score), True, white)\\n    gameDisplay.blit(value, [0, 0])\\n\\n\\ndef draw_snake(block_size, snake_list):\\n    for x, y in snake_list:\\n        pygame.draw.rect(gameDisplay, green, [x, y, block_size, block_size])\\n\\ndef message(msg, color):\\n    mesg = font_style.render(msg, True, color)\\n    gameDisplay.blit(mesg, [display_width/6, display_height/3])\\n\\ndef game_loop():\\n    game_over = False\\n    game_close = False\\n\\n    x1 = display_width / 2\\n    y1 = display_height / 2\\n\\n    x1_change = 0\\n    y1_change = 0\\n\\n    snake_list = []\\n    snake_length = 1\\n\\n    foodx = round(random.randrange(0, display_width - block_size) / 10.0) * 10.0\\n    foody = round(random.randrange(0, display_height - block_size) / 10.0) * 10.0\\n\\n    while not game_over:\\n\\n        while game_close == True:\\n            gameDisplay.fill(black)\\n            message(\\\"You Lost! Press C-Play Again or Q-Quit\\\", red)\\n            pygame.display.update()\\n\\n            for event in pygame.event.get():\\n                if event.type == pygame.KEYDOWN:\\n                    if event.key == pygame.K_q:\\n                        game_over = True\\n                        game_close = False\\n                    if event.key == pygame.K_c:\\n                        game_loop()\\n\\n        for event in pygame.event.get():\\n            if event.type == pygame.QUIT:\\n                game_over = True\\n            if event.type == pygame.KEYDOWN:\\n                if event.key == pygame.K_LEFT:\\n                    x1_change = -block_size\\n                    y1_change = 0\\n                elif event.key == pygame.K_RIGHT:\\n                    x1_change = block_size\\n                    y1_change = 0\\n                elif event.key == pygame.K_UP:\\n                    y1_change = -block_size\\n                    x1_change = 0\\n                elif event.key == pygame.K_DOWN:\\n                    y1_change = block_size\\n                    x1_change = 0\\n\\n        if x1 >= display_width or x1 < 0 or y1 >= display_height or y1 < 0:\\n            game_close = True\\n        x1 += x1_change\\n        y1 += y1_change\\n        gameDisplay.fill(black)\\n        pygame.draw.rect(gameDisplay, red, [foodx, foody, block_size, block_size])\\n        snake_head = []\\n        snake_head.append(x1)\\n        snake_head.append(y1)\\n        snake_list.append(snake_head)\\n\\n        if len(snake_list) > snake_length:\\n            del snake_list[0]\\n\\n        for x in snake_list[:-1]:\\n            if x == snake_head:\\n                game_close = True\\n\\n        draw_snake(block_size, snake_list)\\n        display_score(snake_length - 1)\\n\\n        pygame.display.update()\\n\\n        if x1 == foodx and y1 == foody:\\n            foodx = round(random.randrange(0, display_width - block_size) / 10.0) * 10.0\\n            foody = round(random.randrange(0, display_height - block_size) / 10.0) * 10.0\\n            snake_length += 1\\n\\n        clock.tick(snake_speed)\\n\\n    pygame.quit()\\n    quit()\\n\\ngame_loop()\"}, {\"action\": \"run_command\", \"file_name\": \"null\", \"code\": \"python snake.py\"}]}\n\n```"
+        "```json\n{ \"steps\" :[{\"action\": \"create_file\", \"file_name\": \"index.html\", \"language\": \"html\", \"code\": \"<!DOCTYPE html>\\n<html>\\n<head>\\n<title>Simple Shopping Page</title>\\n</head>\\n<body>\\n<h1>Welcome to Our Shop</h1>\\n<p>This is a simple shopping page.</p>\\n</body>\\n</html>\"}, {\"action\": \"create_file\", \"file_name\": \"style.css\", \"language\": \"css\", \"code\": \"body {\\n    font-family: sans-serif;\\n    margin: 0;\\n    padding: 0;\\n}\\nh1 {\\n    text-align: center;\\n    background-color: #f2f2f2;\\n    padding: 20px;\\n}\\np {\\n    text-align: center;\\n    margin-top: 20px;\\n}\"}, {\"action\": \"create_file\", \"file_name\": \"index.html\", \"language\": \"html\", \"code\": \"<link rel=\\\"stylesheet\\\" href=\\\"style.css\\\">\"}, {\"action\": \"run_command\", \"file_name\": \"null\", \"language\": \"python\", \"code\": \"import webbrowser\n\nwebbrowser.open_new_tab('index.html')\"}]}\n\n```"
       ]
     },
     {
@@ -220,7 +221,7 @@
       "dataset_id": 4,
       "role": "user",
       "parts": [
-        "create simple snake game in html"
+        "create simple snake game"
       ]
     },
     {
@@ -228,7 +229,23 @@
       "dataset_id": 4,
       "role": "model",
       "parts": [
-        "```json\n{ \"steps\" :[{\"action\": \"create_file\", \"file_name\": \"index.html\", \"code\": \"<!DOCTYPE html>\\n<html>\\n<head>\\n<title>Simple Snake Game</title>\\n<style>\\nbody {\\n  background-color: #333;\\n}\\ncanvas {\\n  background-color: #000;\\n  border: 2px solid #fff;\\n}\\n</style>\\n</head>\\n<body>\\n\\n<canvas id=\\\"gameCanvas\\\" width=\\\"400\\\" height=\\\"400\\\"></canvas>\\n\\n<script>\\nconst canvas = document.getElementById('gameCanvas');\\nconst ctx = canvas.getContext('2d');\\n\\nconst snake = [\\n  { x: 200, y: 200 },\\n  { x: 190, y: 200 },\\n  { x: 180, y: 200 },\\n  { x: 170, y: 200 },\\n  { x: 160, y: 200 }\\n];\\n\\nlet dx = 10;\\nlet dy = 0;\\n\\nlet foodX;\\nlet foodY;\\n\\nlet score = 0;\\n\\nfunction generateFood() {\\n  foodX = Math.floor(Math.random() * (canvas.width / 10)) * 10;\\n  foodY = Math.floor(Math.random() * (canvas.height / 10)) * 10;\\n}\\n\\nfunction drawSnakePart(snakePart) {\\n  ctx.fillStyle = 'green';\\n  ctx.fillRect(snakePart.x, snakePart.y, 10, 10);\\n  ctx.strokeStyle = 'darkgreen';\\n  ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);\\n}\\n\\nfunction drawSnake() {\\n  snake.forEach(drawSnakePart);\\n}\\n\\nfunction drawFood() {\\n  ctx.fillStyle = 'red';\\n  ctx.fillRect(foodX, foodY, 10, 10);\\n}\\n\\nfunction main() {\\n  if (hasGameEnded()) return;\\n\\n  setTimeout(function onTick() {\\n    clearCanvas();\\n    drawFood();\\n    moveSnake();\\n    drawSnake();\\n    main();\\n  }, 100)\\n}\\n\\nfunction clearCanvas() {\\n  ctx.fillStyle = 'black';\\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\\n}\\n\\nfunction moveSnake() {\\n  const head = { x: snake[0].x + dx, y: snake[0].y + dy };\\n  snake.unshift(head);\\n\\n  const didEatFood = snake[0].x === foodX && snake[0].y === foodY;\\n  if (didEatFood) {\\n    score += 10;\\n    document.getElementById('score').textContent = score;\\n    generateFood();\\n  } else {\\n    snake.pop();\\n  }\\n}\\n\\nfunction hasGameEnded() {\\n  for (let i = 4; i < snake.length; i++) {\\n    if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true\\n  }\\n  const hitLeftWall = snake[0].x < 0;\\n  const hitRightWall = snake[0].x > canvas.width - 10;\\n  const hitTopWall = snake[0].y < 0;\\n  const hitBottomWall = snake[0].y > canvas.height - 10;\\n\\n  return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall\\n}\\n\\nfunction changeDirection(event) {\\n  const LEFT_KEY = 37;\\n  const RIGHT_KEY = 39;\\n  const UP_KEY = 38;\\n  const DOWN_KEY = 40;\\n\\n  const keyPressed = event.keyCode;\\n\\n  const goingUp = dy === -10;\\n  const goingDown = dy === 10;\\n  const goingRight = dx === 10;\\n  const goingLeft = dx === -10;\\n\\n  if (keyPressed === LEFT_KEY && !goingRight) {\\n    dx = -10;\\n    dy = 0;\\n  }\\n\\n  if (keyPressed === UP_KEY && !goingDown) {\\n    dx = 0;\\n    dy = -10;\\n  }\\n\\n  if (keyPressed === RIGHT_KEY && !goingLeft) {\\n    dx = 10;\\n    dy = 0;\\n  }\\n\\n  if (keyPressed === DOWN_KEY && !goingUp) {\\n    dx = 0;\\n    dy = 10;\\n  }\\n}\\n\\ndocument.addEventListener(\\\"keydown\\\", changeDirection);\\n\\ngenerateFood();\\nmain();\\n</script>\\n\\n<div>Score: <span id=\\\"score\\\">0</span></div>\\n\\n</body>\\n</html>\"}, {\"action\": \"open_file\", \"file_name\": \"index.html\", \"code\": null}]}\n\n```"
+        "```json\n{ \"steps\" :[{\"action\": \"create_file\", \"file_name\": \"snake.py\", \"language\": \"python\", \"code\": \"import pygame\\nimport random\\n\\npygame.init()\\n\\nwhite = (255, 255, 255)\\nblack = (0, 0, 0)\\nred = (255, 0, 0)\\ngreen = (0, 155, 0)\\n\\ndisplay_width = 800\\ndisplay_height = 600\\n\\ngameDisplay = pygame.display.set_mode((display_width, display_height))\\npygame.display.set_caption('Snake Game')\\n\\nclock = pygame.time.Clock()\\n\\nblock_size = 10\\nsnake_speed = 15\\n\\nfont_style = pygame.font.SysFont(None, 25)\\nscore_font = pygame.font.SysFont(None, 35)\\n\\ndef display_score(score):\\n    value = score_font.render(\\\"Your Score: \\\" + str(score), True, white)\\n    gameDisplay.blit(value, [0, 0])\\n\\n\\ndef draw_snake(block_size, snake_list):\\n    for x, y in snake_list:\\n        pygame.draw.rect(gameDisplay, green, [x, y, block_size, block_size])\\n\\ndef message(msg, color):\\n    mesg = font_style.render(msg, True, color)\\n    gameDisplay.blit(mesg, [display_width/6, display_height/3])\\n\\ndef game_loop():\\n    game_over = False\\n    game_close = False\\n\\n    x1 = display_width / 2\\n    y1 = display_height / 2\\n\\n    x1_change = 0\\n    y1_change = 0\\n\\n    snake_list = []\\n    snake_length = 1\\n\\n    foodx = round(random.randrange(0, display_width - block_size) / 10.0) * 10.0\\n    foody = round(random.randrange(0, display_height - block_size) / 10.0) * 10.0\\n\\n    while not game_over:\\n\\n        while game_close == True:\\n            gameDisplay.fill(black)\\n            message(\\\"You Lost! Press C-Play Again or Q-Quit\\\", red)\\n            pygame.display.update()\\n\\n            for event in pygame.event.get():\\n                if event.type == pygame.KEYDOWN:\\n                    if event.key == pygame.K_q:\\n                        game_over = True\\n                        game_close = False\\n                    if event.key == pygame.K_c:\\n                        game_loop()\\n\\n        for event in pygame.event.get():\\n            if event.type == pygame.QUIT:\\n                game_over = True\\n            if event.type == pygame.KEYDOWN:\\n                if event.key == pygame.K_LEFT:\\n                    x1_change = -block_size\\n                    y1_change = 0\\n                elif event.key == pygame.K_RIGHT:\\n                    x1_change = block_size\\n                    y1_change = 0\\n                elif event.key == pygame.K_UP:\\n                    y1_change = -block_size\\n                    x1_change = 0\\n                elif event.key == pygame.K_DOWN:\\n                    y1_change = block_size\\n                    x1_change = 0\\n\\n        if x1 >= display_width or x1 < 0 or y1 >= display_height or y1 < 0:\\n            game_close = True\\n        x1 += x1_change\\n        y1 += y1_change\\n        gameDisplay.fill(black)\\n        pygame.draw.rect(gameDisplay, red, [foodx, foody, block_size, block_size])\\n        snake_head = []\\n        snake_head.append(x1)\\n        snake_head.append(y1)\\n        snake_list.append(snake_head)\\n\\n        if len(snake_list) > snake_length:\\n            del snake_list[0]\\n\\n        for x in snake_list[:-1]:\\n            if x == snake_head:\\n                game_close = True\\n\\n        draw_snake(block_size, snake_list)\\n        display_score(snake_length - 1)\\n\\n        pygame.display.update()\\n\\n        if x1 == foodx and y1 == foody:\\n            foodx = round(random.randrange(0, display_width - block_size) / 10.0) * 10.0\\n            foody = round(random.randrange(0, display_height - block_size) / 10.0) * 10.0\\n            snake_length += 1\\n\\n        clock.tick(snake_speed)\\n\\n    pygame.quit()\\n    quit()\\n\\ngame_loop()\"}, {\"action\": \"run_command\", \"shell\": \"python\", \"file_name\": \"null\", \"code\": \"python snake.py\"}]}\n\n```"
+      ]
+    },
+    {
+      "id": 29,
+      "dataset_id": 4,
+      "role": "user",
+      "parts": [
+        "create simple snake game in html"
+      ]
+    },
+    {
+      "id": 30,
+      "dataset_id": 4,
+      "role": "model",
+      "parts": [
+        "```json\n{ \"steps\" :[{\"action\": \"create_file\", \"file_name\": \"index.html\", \"language\": \"html\", \"code\": \"<!DOCTYPE html>\\n<html>\\n<head>\\n<title>Simple Snake Game</title>\\n<style>\\nbody {\\n  background-color: #333;\\n}\\ncanvas {\\n  background-color: #000;\\n  border: 2px solid #fff;\\n}\\n</style>\\n</head>\\n<body>\\n\\n<canvas id=\\\"gameCanvas\\\" width=\\\"400\\\" height=\\\"400\\\"></canvas>\\n\\n<script>\\nconst canvas = document.getElementById('gameCanvas');\\nconst ctx = canvas.getContext('2d');\\n\\nconst snake = [\\n  { x: 200, y: 200 },\\n  { x: 190, y: 200 },\\n  { x: 180, y: 200 },\\n  { x: 170, y: 200 },\\n  { x: 160, y: 200 }\\n];\\n\\nlet dx = 10;\\nlet dy = 0;\\n\\nlet foodX;\\nlet foodY;\\n\\nlet score = 0;\\n\\nfunction generateFood() {\\n  foodX = Math.floor(Math.random() * (canvas.width / 10)) * 10;\\n  foodY = Math.floor(Math.random() * (canvas.height / 10)) * 10;\\n}\\n\\nfunction drawSnakePart(snakePart) {\\n  ctx.fillStyle = 'green';\\n  ctx.fillRect(snakePart.x, snakePart.y, 10, 10);\\n  ctx.strokeStyle = 'darkgreen';\\n  ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);\\n}\\n\\nfunction drawSnake() {\\n  snake.forEach(drawSnakePart);\\n}\\n\\nfunction drawFood() {\\n  ctx.fillStyle = 'red';\\n  ctx.fillRect(foodX, foodY, 10, 10);\\n}\\n\\nfunction main() {\\n  if (hasGameEnded()) return;\\n\\n  setTimeout(function onTick() {\\n    clearCanvas();\\n    drawFood();\\n    moveSnake();\\n    drawSnake();\\n    main();\\n  }, 100)\\n}\\n\\nfunction clearCanvas() {\\n  ctx.fillStyle = 'black';\\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\\n}\\n\\nfunction moveSnake() {\\n  const head = { x: snake[0].x + dx, y: snake[0].y + dy };\\n  snake.unshift(head);\\n\\n  const didEatFood = snake[0].x === foodX && snake[0].y === foodY;\\n  if (didEatFood) {\\n    score += 10;\\n    document.getElementById('score').textContent = score;\\n    generateFood();\\n  } else {\\n    snake.pop();\\n  }\\n}\\n\\nfunction hasGameEnded() {\\n  for (let i = 4; i < snake.length; i++) {\\n    if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true\\n  }\\n  const hitLeftWall = snake[0].x < 0;\\n  const hitRightWall = snake[0].x > canvas.width - 10;\\n  const hitTopWall = snake[0].y < 0;\\n  const hitBottomWall = snake[0].y > canvas.height - 10;\\n\\n  return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall\\n}\\n\\nfunction changeDirection(event) {\\n  const LEFT_KEY = 37;\\n  const RIGHT_KEY = 39;\\n  const UP_KEY = 38;\\n  const DOWN_KEY = 40;\\n\\n  const keyPressed = event.keyCode;\\n\\n  const goingUp = dy === -10;\\n  const goingDown = dy === 10;\\n  const goingRight = dx === 10;\\n  const goingLeft = dx === -10;\\n\\n  if (keyPressed === LEFT_KEY && !goingRight) {\\n    dx = -10;\\n    dy = 0;\\n  }\\n\\n  if (keyPressed === UP_KEY && !goingDown) {\\n    dx = 0;\\n    dy = -10;\\n  }\\n\\n  if (keyPressed === RIGHT_KEY && !goingLeft) {\\n    dx = 10;\\n    dy = 0;\\n  }\\n\\n  if (keyPressed === DOWN_KEY && !goingUp) {\\n    dx = 0;\\n    dy = 10;\\n  }\\n}\\n\\ndocument.addEventListener(\\\"keydown\\\", changeDirection);\\n\\ngenerateFood();\\nmain();\\n</script>\\n\\n<div>Score: <span id=\\\"score\\\">0</span></div>\\n\\n</body>\\n</html>\"}, { \"action\": \"run_command\", \"file_name\": \"null\", \"language\": \"python\", \"code\": \"import webbrowser\n\nwebbrowser.open_new_tab('index.html')\" }]}\n\n```"
       ]
     }
   ]

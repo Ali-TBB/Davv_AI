@@ -73,7 +73,9 @@ class Conversation {
 
       this.scrollDown();
 
-      playAudio(`/storage/conv-${this.id}/answer-${result.answer.id}.mp3`);
+      speech(answer.content);
+
+      // playAudio(`/storage/conv-${this.id}/answer-${result.answer.id}.mp3`);
     }
 
     $(".input-group input").attr("disabled", false);
@@ -129,7 +131,7 @@ class Conversation {
     $(`.conversation-item`).removeClass("text-white");
     $(`.conversation-item`).addClass("list-group-item-light");
 
-    $(".conversation-box .header h3").text(this.name);
+    // $(".conversation-box .header h3").text(this.name);
 
     await this.loadMessages();
 
