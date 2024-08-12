@@ -47,20 +47,5 @@ pip install -r requirements.txt
 sudo python main.py
 ```
 
-## Future Development
 
-While Daav_AI is already capable of simplifying coding tasks, there are exciting plans for future enhancements:
-
-1. **Handling Complex Projects**: Daav_AI will be trained with new datasets to handle larger and more complex projects. This will involve breaking down big tasks into smaller, more manageable steps, enabling developers to work on projects incrementally.
-
-2. **Improved Error Handling**: Enhancements in error handling capabilities will ensure Daav_AI can diagnose and fix errors more effectively. This includes the integration of advanced error detection algorithms and automatic resolution strategies.
-
-3. **Integration of GUI Interaction**: Daav_AI will gain the ability to interact with Graphical User Interfaces (GUIs) using tools like pyautogui. This will enable the assistant to resolve certain types of errors that require GUI manipulation, such as clicking buttons or entering text.
-
-4. **Enhanced User Environment Interaction**: Daav_AI will gather more information from the user's environment, such as system configurations and user preferences. This data will be used to tailor generated code to specific machine requirements, ensuring compatibility and optimal performance.
-
-5. **Integration with Gemini Vision**: Daav_AI will be connected with Gemini Vision to enable advanced image recognition capabilities. This integration will allow Daav_AI to capture screenshots, extract relevant data from images, and use it to assist in problem-solving and code generation.
-
-6. **Continuous Learning and Improvement**: Daav_AI will undergo continuous learning and improvement through user feedback and iterative updates. This ensures that the assistant remains adaptive and responsive to the evolving needs of developers.
-
-These planned enhancements aim to make Daav_AI even more versatile, efficient, and indispensable for developers, empowering them to tackle complex coding tasks with ease.
+  
